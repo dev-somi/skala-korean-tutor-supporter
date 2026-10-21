@@ -49,12 +49,23 @@ class GrammarAnswer(BaseModel):
     ai_note: str = Field(default="", description="근거 자료에 없지만 보충한 내용. 없으면 빈 문자열")
 
 
+SENSE_NO = re.compile(r"\d+(?:\(\d+\))?$")  # 표준 목록의 뜻 번호: "-다가1(1)", "-다가1(2)"
+ALT_FORM = re.compile(r"^([^()]+)\(([가-힣]{2,})\)$")  # 다른 꼴: "에서부터(서부터)" ("-(으)면"의 (으)는 아님)
+
+
+def standard_forms(form: str) -> list[str]:
+    """표준 목록의 표제 형태 → 형태 키로 바꿀 수 있는 꼴들"""
+    form = SENSE_NO.sub("", form)
+    match = ALT_FORM.match(form)
+    return [match.group(1), match.group(2)] if match else [form]
+
+
 @lru_cache
 def _standard_by_key() -> dict[str, list[dict]]:
     """형태 키 → 표준 문법 항목들 (등급이 낮은 것부터). 등급 표시용일 뿐 검색 키가 아니다 (기술 ADR-0025 결정 6)."""
     table: dict[str, list[dict]] = {}
     for item in sorted(grammar_items(), key=lambda i: i["level"]):
-        for form in [item["form"], *item["related"]]:
+        for form in [alt for f in [item["form"], *item["related"]] for alt in standard_forms(f)]:
             for key in form_keys(form):
                 if item not in table.setdefault(key, []):
                     table[key].append(item)

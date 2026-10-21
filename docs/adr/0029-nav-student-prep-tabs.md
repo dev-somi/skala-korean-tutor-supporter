@@ -1,6 +1,6 @@
 # ADR-0029: 주 메뉴를 "학생 / 수업 준비"로 나누고, 수업 준비 결과는 브리핑부터 보여 준다
 - 상태: Accepted (2026-10-21)
-- 관련 모듈: `frontend/src/App.vue`, `frontend/src/router.ts`, `frontend/src/pages/PrepPage.vue`, `frontend/src/components/PrepDialog.vue`, `frontend/src/pages/LessonReviewPage.vue`, `frontend/src/pages/StudentDetailPage.vue`, `frontend/src/pages/LessonRecordPage.vue`
+- 관련 모듈: `ai-server/app/api/textbook.py`, `backend/.../textbook/TextbookController.java`, `frontend/src/stores/itemLabels.ts`, `frontend/src/components/ItemChips.vue`, `frontend/src/App.vue`, `frontend/src/router.ts`, `frontend/src/pages/PrepPage.vue`, `frontend/src/components/PrepDialog.vue`, `frontend/src/pages/LessonReviewPage.vue`, `frontend/src/pages/StudentDetailPage.vue`, `frontend/src/pages/LessonRecordPage.vue`
 - 관련 ADR: [기획 ADR-0008](../planning-adr/0008-dashboard-plus-chat.md) (대시보드 + 채팅), [기획 ADR-0026](../planning-adr/0026-transcript-text-upload.md) (녹취록 텍스트 올리기)
 
 ## 배경 (Context)
@@ -16,6 +16,7 @@
    - 수업 전체 목록 API는 만들지 않는다. 학생별 `GET /students/{id}/lessons`를 모아서 쓴다 (학생 3~10명).
    - 준비 폼은 `PrepDialog` 하나로 만들어 학생 상세와 수업 준비 탭이 같이 쓴다. `?student=<id>`로 그 학생의 준비 폼을 바로 열 수 있다.
 4. **수업 준비 결과 화면 순서: 학생 요약 한 줄 → 브리핑(문법 설명 포인트·모국어별 실수·예상 질문) → 7단계 흐름 → 범주 검토.**
+5. **화면에는 교재 항목 ID(u03-v01) 대신 이름(노래, -습니다, 을)을 보여 준다.** `GET /textbook/items`(ai-server, 교재 JSON에서 만듦) → `GET /api/textbook/items`(Spring 전달)로 한 번 받아 `useItemLabels()`로 같이 쓴다. 문법은 강조 칩, 어휘는 일반 칩으로 나누고, ID와 뜻은 마우스를 올리면 보인다. 데이터와 API는 계속 ID를 쓴다. 이름을 못 불러오면 ID를 그대로 보여 준다.
 
 ## 검토한 대안 (Alternatives)
 | 대안 | 설명 | 장점 | 기각 이유 |
@@ -28,7 +29,7 @@
 
 ## 결과 / 트레이드오프 (Consequences)
 - 좋은 점: 선생님 하루 흐름(수업 전 → 수업 준비 탭, 수업 후 → 학생 탭)과 메뉴가 맞는다.
-- 좋은 점: 백엔드·AI 서버 변경이 없다.
+- 좋은 점: 메뉴·화면 구성 변경은 프론트만 바꾼다. 항목 이름표만 읽기 전용 API 하나를 더했다.
 - 대가: 수업 준비 탭을 열 때 학생 수만큼 요청이 나간다. 학생이 수십 명이 되면 C로 바꾼다.
 - 대가: 자주 안 쓰는 페이지는 한 번 더 눌러야 한다.
 

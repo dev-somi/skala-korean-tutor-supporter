@@ -4,7 +4,7 @@
 요구사항은 [PRD.md](PRD.md), 설계 결정은 [docs/adr/](docs/adr/README.md), 기획 결정은 [docs/planning-adr/](docs/planning-adr/README.md).
 
 ```
-학생 등록 → 수업 준비(7단계 수업안 + 지침서 근거 브리핑) → 수업 → 수업 후 기록 → 프로필 갱신 ─┐
+학생 등록 → 수업 준비(15장 슬라이드 구성안 + 지침서 근거 브리핑) → 수업 → 수업 후 기록 → 프로필 갱신 ─┐
     ▲                                                                                  │
     └──────────────────────────────── 다음 수업 준비 ◀──────────────────────────────────┘
 ```
@@ -14,7 +14,7 @@
 |---|---|
 | 학생 등록 | 폼 입력, 또는 자연어 설명 → AI가 칸을 채운 초안 → 선생님이 확인 후 저장. **현재 수준(표준 등급 0~6)은 필수**, 학습 목적은 선생님이 고른다 (AI는 추천만, [기획 ADR-0018](docs/planning-adr/0018-level-from-trial-test-persona-by-teacher.md)) |
 | 체험수업 레벨테스트 | 한글 읽기 + 1~6급 문법 질문·어휘를 국립국어원 표준 등급 목록에 묶어 제시, 맞음/틀림을 누르면 코드가 추천 등급을 계산. **학생 화면** 창을 따로 열어 화상수업에서 공유한다(문항만 보이고 예시 답·판정은 숨김). [결과 저장] → 선생님이 확인하면 새 학생 등록 또는 기존 학생 카드에 반영 ([기획 ADR-0021](docs/planning-adr/0021-student-screen-level-test-saved-result.md)) |
-| 수업 준비 | **고정된 7단계 수업 틀**(워밍업 → 복습 → 도입 → 통제된 연습 → 활용 → 오류 피드백 → 마무리)에 내용을 채운 수업안, 도입 단계의 **문화 포인트**(「세종한국문화」·지침서에서 찾은 후보 + 학생 나라 비교 질문), 복습/새 어휘/새 문법/숙제 구성안(코드 규칙), 개인화 설명·대본, **선생님 브리핑**(세종학당 교원용 지침서 근거의 문법 설명 포인트 + 출처 쪽수, 모국어 화자가 자주 틀리는 점, 예상 질문, 워밍업 질문, 맞춤 활용 활동), 범주별 승인·직접 수정·피드백. PPT는 만들지 않는다 ([기획 ADR-0015](docs/planning-adr/0015-no-ppt-fixed-lesson-frame.md)) |
+| 수업 준비 | **15장 슬라이드 구성안**(수업 목표·최종 미션 + 장마다 학생 화면 문구·교사 노트·숙제, [참고 문서](docs/reference/온라인_한국어_1대1_수업_PPT_제작_기준.md) 기준), **문화 포인트**(「세종한국문화」·지침서에서 찾은 후보 + 학생 나라 비교 질문), 복습/새 어휘/새 문법/숙제 구성안(코드 규칙), 개인화 설명·대본, **선생님 브리핑**(세종학당 교원용 지침서 근거의 문법 설명 포인트 + 출처 쪽수, 모국어 화자가 자주 틀리는 점, 예상 질문, 워밍업 질문, 맞춤 활용 활동), 범주별 승인·직접 수정·피드백. PPT는 만들지 않는다 ([기획 ADR-0015](docs/planning-adr/0015-no-ppt-fixed-lesson-frame.md), [기획 ADR-0032](docs/planning-adr/0032-slide-plan-from-reference.md)) |
 | 수업 후 기록 | 짧은 메모 → 다룬 교재 항목, 잘한 점·틀린 점, 약점 추가·해결, 숙제, 학생에게 보낼 메시지(일본어·영어 + 한국어 번역) → **항목별 승인 후에만 반영** |
 | 대시보드 | 할 일(미처리 기록, 승인 대기 수업안, 기록을 쓸 수업), 학생 카드, 시간 요약 |
 | 학생 | 상단 [학생]. 학생 프로필 카드 목록(이름 검색, 상태·모국어·학습 목적 필터) → 카드를 누르면 학생 상세에서 프로필 보기·[정보 수정] |
@@ -61,7 +61,7 @@
 │  ├─ app/
 │  │  ├─ api/           엔드포인트 (prep, post_lesson, intake, grammar_qa, level_test, report, traces …)
 │  │  ├─ agent/
-│  │  │  ├─ lesson_prep/   수업 준비 그래프 (7단계 수업안 + 브리핑, 승인에서 멈춤)
+│  │  │  ├─ lesson_prep/   수업 준비 그래프 (15장 슬라이드 구성안 + 브리핑, 승인에서 멈춤)
 │  │  │  ├─ post_lesson/   수업 후 기록 추출 그래프
 │  │  │  ├─ intake.py      자연어 → 학생 등록 초안
 │  │  │  └─ grammar_qa.py  교재 근거 문법 질문
@@ -126,8 +126,26 @@ uv run python -m app.rag.pdfs scan ~/Desktop/한국어          # 쪽 수·파�
 uv run python -m app.rag.pdfs register ko1_guide "<pdf 경로>"   # 한 권만 직접 등록
 ```
 처음 누르면 macOS가 "터미널이 Google Chrome을 제어하려고 합니다" 권한을 물을 수 있다. 허용해야 쪽 이동이 된다.
-새 PDF를 넣으려면 `app/rag/chunk.py`의 `BOOKS`에 한 줄 추가하고 같은 순서로 돌린다. 지금 `BOOKS`에는 기획 ADR-0025의 1순위 자료 24권이 있다 (지침서·매뉴얼·핸드북·문화 지침서). 글자 층이 있는 지침서(입문, 5A~6B)는 `textlayer`로, 나머지는 `ocr`로 뽑는다.
+**나머지 자료 일괄 색인** ([기획 ADR-0028](docs/planning-adr/0028-index-all-materials.md), [ADR-0031](docs/adr/0031-catalog-batch-and-embed-cache.md)): `app/rag/catalog.json`의 책(본책·익힘책·비즈니스 등 111권)을 한 권씩 뽑는다. 전부 약 12시간. 끊겨도 같은 명령을 다시 실행하면 이어서 한다.
+```bash
+caffeinate -is uv run python -m app.rag.batch run ~/Desktop/한국어 --index   # 잠자기 막고 실행. 진행: data/rag/batch/batch.log
+uv run python -m app.rag.batch status                                        # 책마다 done / running / failed / pending
+```
+`ollama serve`가 떠 있어야 마지막 색인 단계가 된다. 색인은 임베딩 캐시(`data/rag/embed_cache/`)를 써서 이미 임베딩한 조각은 다시 하지 않는다.
+
+새 PDF를 넣으려면 `app/rag/chunk.py`의 `BOOKS`(형식을 맞춘 책)나 `catalog.json`(한 쪽 = 한 조각)에 한 줄 추가하고 같은 순서로 돌린다. `BOOKS`에는 기획 ADR-0025의 1순위 자료 24권이 있다 (지침서·매뉴얼·핸드북·문화 지침서). 글자 층이 있는 지침서(입문, 5A~6B)는 `textlayer`로, 나머지는 `ocr`로 뽑는다.
 문법 질문은 청크에 붙은 형태 키 태그(teaches/mentions)로 근거를 찾는다. 새 책은 `BOOKS`에 `kind`와 `teaches` 규칙을 적는다. 형식을 모르는 책은 `layout: "ocr_page"`(또는 `"text_page"`)로 한 쪽씩 넣으면 mentions만 붙는다. 같은 시리즈 핸드북의 영어판·일본어판은 색인에서 한 덩어리로 합쳐진다 ([ADR-0025](docs/adr/0025-form-key-tags-and-merged-editions.md)).
+
+### 단원 시트 만들기 ([기획 ADR-0030](docs/planning-adr/0030-unit-sheets-from-materials.md), [ADR-0032](docs/adr/0032-unit-sheets-and-standard-ids.md))
+수업 준비는 교재·과마다 "가르칠 문법·어휘·예문" 시트를 읽는다 (`ai-server/data/curriculum/<교재>/unit_NN.json`, git 밖). 지침서 색인이 있어야 만들 수 있다.
+```bash
+cd ai-server
+uv run python -m app.curriculum.build ko1            # 「세종학당 한국어 1」 20과 초안 (status: draft). 검수된 시트는 덮어쓰지 않는다
+uv run python -m app.curriculum.build ko2
+uv run python -m app.curriculum.convert_textbook      # 손으로 만든 data/textbook/ 2~4과 → 검수된 시트 (status: reviewed)
+uv run python -m app.curriculum.evaluate ko1          # 초안을 2~4과 정답과 비교 (정밀도·재현율)
+```
+선생님이 확인한 시트는 파일의 `"status"`를 `"reviewed"`로 바꾼다 (검수 화면은 아직 없음).
 
 ### 표준 등급 목록 ([기획 ADR-0016](docs/planning-adr/0016-persona-anchor-textbook-standard-levels.md), [ADR-0016](docs/adr/0016-standard-level-list-and-item-ids.md))
 국립국어원 「국제 통용 한국어 표준 교육과정 적용 연구(4단계)」(2017)의 어휘·문법 등급 목록(1~6급, 문법 336개, 어휘 10,635개)을 학생 수준·예문 수준의 공통 기준으로 쓴다.
@@ -143,7 +161,7 @@ uv run python -c "from app.standard.levels import sentence_level; print(sentence
 ## 데모 시나리오 (PRD 5장)
 0. **레벨테스트** — 상단 [더보기] → [레벨테스트] → [학생 화면 열기]로 뜬 창을 옆에 둔다 → 한글 단어를 누르면 학생 창에 크게 뜨는지 확인 → 한글 5개, 1급 문항을 맞음으로, 2급 문항 몇 개를 틀림으로 누른다(누를 때마다 학생 창이 다음 문항으로) → 오른쪽 추천이 "표준 2급"으로 바뀌는지 확인 → [결과 저장] → 학생 창이 "수고했어요"로 바뀜 → 결과 카드에서 [새 학생으로 등록]
 1. **S1 학생 등록** — (레벨테스트에서 넘어왔거나) [학생 등록] → 왼쪽에 "일본인 대학생 유이, 한글은 읽음, 드라마 좋아하고 내년에 서울 여행 가고 싶대. 받침 발음이 약함" → [초안 만들기] → 칸 확인 → 저장
-2. **S2 수업 준비** — 상단 [수업 준비] → 일정 순 학생 카드에서 유이의 [수업 준비] (학생 화면 [다음 수업 준비]도 같음) → 진행 단계 표시 → 학생 요약 줄·브리핑(지침서 출처)·7단계 수업 진행·4개 범주 확인 → 한 범주에 피드백 → 다시 만든 범주 승인 → [글로 복사]로 수업안을 자기 자료에 붙여 넣기. 유이(ja, 1급·여행)와 Jay(en, 입문·회화)를 준비해 브리핑 차이를 비교한다
+2. **S2 수업 준비** — 상단 [수업 준비] → 일정 순 학생 카드에서 유이의 [수업 준비] (학생 화면 [다음 수업 준비]도 같음) → 진행 단계 표시 → 학생 요약 줄·브리핑(지침서 출처)·15장 구성안·4개 범주 확인 → 한 범주에 피드백 → 다시 만든 범주 승인 → [글로 복사]로 수업안을 자기 자료에 붙여 넣기. 유이(ja, 1급·여행)와 Jay(en, 입문·회화)를 준비해 브리핑 차이를 비교한다
 3. **S3 수업 후 기록** — [수업 후 기록] → "3과 1~10 단어 함. -습니다 잘함. 을/를 받침 구분 계속 틀림. 숙제는 연습문제 2번" → [AI로 정리하기] → 항목 체크 (녹취록으로 해 보려면 [녹취록 파일 불러오기 (.txt)]로 `ai-server/data/samples/transcript_sample_ja.txt`) → 메시지 복사 → [승인하고 반영] → 학생 화면에서 약점 변화 확인
 4. **S4 채팅** — "유이 요즘 약한 거 뭐야?" / "유이 다음 수업 40분으로 준비해줘" → [수업 준비 화면 열기]
 5. **진도 리포트** — 학생 화면 [진도 리포트] → 기간 [전체] → 새로 배운 것·해결한 약점 확인 → 학생 언어 메시지를 고쳐 [복사]
@@ -159,7 +177,7 @@ curl -X POST localhost:8080/api/students/1/lessons -H 'Content-Type: application
 curl -N -X POST localhost:8080/api/lessons/1/prep            # SSE … review_required 에서 멈춤
 curl -N -X POST localhost:8080/api/lessons/1/prep/review -H 'Content-Type: application/json' \
   -d '{"decisions":{"review":{"action":"approve"},"new_vocab":{"action":"approve"},"new_grammar":{"action":"approve"},"homework":{"action":"approve"}}}'
-curl localhost:8080/api/lessons/1                            # briefing.lesson_frame 에 7단계 수업안
+curl localhost:8080/api/lessons/1                            # briefing.slide_plan 에 15장 슬라이드 구성안
 ```
 
 ## 테스트와 평가

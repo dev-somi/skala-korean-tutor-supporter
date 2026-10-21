@@ -64,12 +64,13 @@ class ReportRequest(BaseModel):
 
 
 def _learned(lessons: list[ReportLesson]) -> tuple[dict[str, dict], dict[str, dict]]:
-    """다룬 교재 항목 → ({표준 문법 ID: 항목}, {어휘 글자: {word, level}})"""
+    """다룬 항목(단원 시트 ID, 옛 교재 ID도 받는다) → ({표준 문법 ID: 항목}, {어휘 글자: {word, level}})"""
     textbook = load_all_items()
     grammar, vocab = {}, {}
     for lesson in lessons:
         for item_id in lesson.covered_item_ids:
-            for sid in standard_ids(item_id):
+            # 단원 시트 문법 하나가 표준 항목 여럿을 다룰 수 있다 (-습니다/-습니까)
+            for sid in textbook.get(item_id, {}).get("standard_ids") or standard_ids(item_id):
                 item = get_item(sid)
                 if sid.startswith("std-g-") and item:
                     grammar[sid] = item

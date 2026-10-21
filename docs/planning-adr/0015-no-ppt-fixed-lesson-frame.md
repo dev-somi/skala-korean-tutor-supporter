@@ -1,5 +1,5 @@
 # ADR-0015: PPT는 만들지 않고, 고정된 7단계 수업 틀에 정확한 내용만 채워 내놓는다
-- 상태: Accepted (2026-10-20)
+- 상태: Superseded by [ADR-0032](0032-slide-plan-from-reference.md) (2026-10-21) — "PPT를 만들지 않는다"는 유지, 7단계 틀은 15장 슬라이드 구성안으로 바뀜
 - 관련 모듈: `ai-server/app/agent/lesson_prep/` (graph, lesson_frame), `frontend` (수업안 검토 화면)
 - 관련 ADR: [ADR-0001](0001-extend-existing-agent.md), [ADR-0014](0014-personalization-scope.md)
 

@@ -118,6 +118,12 @@ public class AiServerClient {
                 .retrieve().bodyToMono(MAP_TYPE).retryWhen(CONNECT_RETRY).block(Duration.ofSeconds(10)));
     }
 
+    /** 교재 항목 ID → 화면에 보일 이름 (기술 ADR-0029) */
+    public Map<String, Object> textbookItems() {
+        return call(() -> webClient.get().uri("/textbook/items")
+                .retrieve().bodyToMono(MAP_TYPE).retryWhen(CONNECT_RETRY).block(Duration.ofSeconds(10)));
+    }
+
     /** LangSmith 실행 기록 목록 (기술 ADR-0028). 키는 ai-server에만 있어서 ai-server가 대신 읽는다 */
     public Map<String, Object> traces(Map<String, String> params) {
         return call(() -> webClient.get().uri(b -> {
@@ -132,6 +138,12 @@ public class AiServerClient {
     public Map<String, Object> trace(java.util.UUID traceId) {
         return call(() -> webClient.get().uri("/traces/{id}", traceId)
                 .retrieve().bodyToMono(MAP_TYPE).retryWhen(CONNECT_RETRY).block(Duration.ofSeconds(30)));
+    }
+
+    /** 단원 시트 목록: 교재마다 과 번호·제목·검수 상태 (기술 ADR-0032) */
+    public Map<String, Object> curriculum() {
+        return call(() -> webClient.get().uri("/curriculum")
+                .retrieve().bodyToMono(MAP_TYPE).retryWhen(CONNECT_RETRY).block(Duration.ofSeconds(10)));
     }
 
     /** 원본 PDF가 등록된 교재 목록 (기술 ADR-0030) */

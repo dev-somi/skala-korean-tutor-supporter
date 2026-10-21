@@ -33,7 +33,8 @@ export const PERSONA_TEXTBOOKS: Record<Persona, string> = {
   travel: '여행 한국어',
   business: '비즈니스 한국어 1~2',
 }
-export const ITEM_ID_PATTERN = /^u\d{2}-[vgdre]\d{2}$/
+// shared/constraints.json 의 item_id_pattern: 표준 ID(std-g-007), 교재 안 ID(ko1-u02-d01), 옛 교재 ID(u02-g01) (기술 ADR-0032)
+export const ITEM_ID_PATTERN = /^(std-[gv]-\d{3,5}|[a-z0-9]+-u\d{2}-[vgdrex]\d{2}|u\d{2}-[vgdre]\d{2})$/
 export const LESSON_STATUS_NAMES: Record<string, string> = {
   planned: '준비 전',
   prepared: '수업안 확정',
@@ -62,6 +63,8 @@ export interface StudentRequest {
   persona: Persona | null
   goals: string[]
   interests: string[]
+  /** 다음에 배울 교재 시리즈 (ko1, ko2). 비우면 서버가 그대로 둔다 */
+  nextBook?: string
   nextUnit: number
   lessonMinutesDefault: number
   notes: string
@@ -82,6 +85,7 @@ export interface StudentSummary {
   level: string
   standardLevel: number | null
   persona: Persona | null
+  nextBook: string
   nextUnit: number
   status: string
   lastLessonDate: string | null
@@ -120,7 +124,49 @@ export interface CategoryDraft extends CategoryPlan {
   script: string
 }
 
-/** 고정된 7단계 수업 틀의 한 단계 (기획 ADR-0015). categories의 내용은 drafts에서 꺼낸다 */
+/** 슬라이드 레이아웃 5가지 (기준 문서 §5) */
+export const SLIDE_LAYOUT_NAMES: Record<string, string> = {
+  question: '질문·도입',
+  vocab: '어휘',
+  expression: '표현 설명',
+  practice: '연습·활동',
+  closing: '피드백·마무리',
+}
+
+/** 슬라이드 하나의 교사용 발표자 노트 (소요 시간은 슬라이드의 minutes) */
+export interface SlideNote {
+  goal: string
+  procedure: string
+  qa: { question: string; answer: string }[]
+  if_struggle: string
+  if_good: string
+  source: string
+}
+
+/** 15장 슬라이드 구성안의 한 장 (기획 ADR-0032). 번호·단계·시간은 코드, 문구와 노트는 LLM */
+export interface Slide {
+  no: number
+  stage: string
+  name: string
+  layout: string
+  minutes: number
+  categories: Category[]
+  student_screen: string[]
+  activity: string
+  note: SlideNote
+  needs_check: string[]
+}
+
+export interface SlidePlan {
+  lesson_goal: string
+  final_mission: string
+  slides: Slide[]
+  homework: { pages: string; items: string; how: string; example: string }
+  needs_check: string[]
+  checks: { name: string; passed: boolean; reason: string }[]
+}
+
+/** (예전 수업) 고정된 7단계 수업 틀의 한 단계 (기획 ADR-0015). slide_plan이 없는 수업만 쓴다 */
 export interface FrameStep {
   key: string
   name: string
@@ -152,9 +198,14 @@ export interface Briefing {
   practice_activity?: string
   /** 근거로 쓴 교원용 지침서 구역 (코드가 붙인 출처) */
   references?: { source: string; section: string; book?: string; pages?: number[] }[]
+  /** 15장 슬라이드 구성안 (기획 ADR-0032) */
+  slide_plan?: SlidePlan
+  /** (예전 수업) 7단계 수업 틀. slide_plan이 없을 때만 보여 준다 */
   lesson_frame?: FrameStep[]
   /** 모국어 칸(자주 틀리는 점, 예상 질문)의 출처: reviewed = 선생님 검수, draft = Claude 초안, llm = 실행 중 생성 (기술 ADR-0022) */
   l1_sources?: { form: string; origin: 'reviewed' | 'draft' | 'llm' }[]
+  /** 이번 과의 단원 시트. draft = 자료에서 자동으로 만듦(검수 전) (기획 ADR-0030) */
+  unit_sheet?: { book: string; unit_no: number; status: 'draft' | 'reviewed'; notes: string[] }
   culture?: CultureNote[]
 }
 
@@ -165,6 +216,7 @@ export interface LessonView {
   lessonNo: number
   lessonDate: string | null
   minutes: number
+  book: string
   unitNo: number
   targetLang: Lang
   status: 'planned' | 'prepared' | 'done' | 'recorded'
@@ -230,8 +282,22 @@ export interface FeedbackMessage {
   korean_text: string
 }
 
+// 다룬 항목별 이해도 (기획 ADR-0029, 기술 ADR-0033): AI가 장면을 인용하고 코드가 판정한다
+export type UnderstandingLevel = 'confused' | 'shaky' | 'ok'
+export const UNDERSTANDING_NAMES: Record<UnderstandingLevel, string> = { confused: '헷갈림', shaky: '조금 헷갈림', ok: '괜찮음' }
+export const EPISODE_NAMES: Record<string, string> = {
+  error: '틀림', asked_again: '다시 물어봄', hesitation: '망설임', re_explained: '다시 설명함', self_corrected: '스스로 고침', correct: '바로 맞힘',
+}
+export interface ItemUnderstanding {
+  item_id: string
+  level: UnderstandingLevel
+  score: number
+  episodes: { kind: string; quote: string }[]
+}
+
 export interface RecordDraft {
   covered_item_ids: string[]
+  understanding?: ItemUnderstanding[] // 이 기능 전에 만든 초안에는 없다
   strengths: string[]
   errors: LessonError[]
   weakness_changes: WeaknessChangeDraft[]
@@ -263,6 +329,7 @@ export interface ApproveRequest {
   nextLessonNote: string
   feedbackMessage: FeedbackMessage
   nextUnit: number | null
+  understanding: Record<string, UnderstandingLevel>
 }
 
 export interface Todos {
@@ -551,4 +618,28 @@ export interface MaterialOpenResult {
   opened: boolean
   page?: number | null
   message?: string
+}
+
+// 교재 항목 ID(u03-v01)를 화면에서 이름("노래")으로 보여 주기 위한 정보 (기술 ADR-0029)
+export interface TextbookItem {
+  kind: 'vocab' | 'grammar' | 'dialogue' | 'reading' | 'exercise'
+  label: string
+  meaning: string | null
+  unit_no: number
+}
+
+/** 교재 시리즈 ID → 화면 이름 (단원 시트, 기술 ADR-0032) */
+export const BOOK_NAMES: Record<string, string> = { ko1: '한국어 1', ko2: '한국어 2' }
+export const bookName = (id: string | undefined | null) => BOOK_NAMES[id ?? 'ko1'] ?? id ?? ''
+
+/** 단원 시트 목록 (기술 ADR-0032). 수업 준비에서 교재·과를 고른다 */
+export interface CurriculumUnit {
+  unit_no: number
+  title: string
+  status: 'draft' | 'reviewed'
+}
+export interface CurriculumBook {
+  id: string
+  title: string
+  units: CurriculumUnit[]
 }

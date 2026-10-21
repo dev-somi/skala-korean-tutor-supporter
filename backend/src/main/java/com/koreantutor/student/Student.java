@@ -33,6 +33,7 @@ public class Student extends BaseTimeEntity {
     @JdbcTypeCode(SqlTypes.JSON)
     private List<String> interests = new ArrayList<>();
 
+    private String nextBook = "ko1";  // 다음에 배울 교재 시리즈 (단원 시트, 기술 ADR-0032). nextUnit은 이 교재의 과
     private int nextUnit = 1;
     private int lessonMinutesDefault = 50;
     private String notes = "";
@@ -78,6 +79,8 @@ public class Student extends BaseTimeEntity {
     public void setGoals(List<String> goals) { this.goals = new ArrayList<>(goals); }
     public List<String> getInterests() { return interests; }
     public void setInterests(List<String> interests) { this.interests = new ArrayList<>(interests); }
+    public String getNextBook() { return nextBook; }
+    public void setNextBook(String nextBook) { this.nextBook = nextBook; }
     public int getNextUnit() { return nextUnit; }
     public void setNextUnit(int nextUnit) { this.nextUnit = nextUnit; }
     public int getLessonMinutesDefault() { return lessonMinutesDefault; }

@@ -31,7 +31,7 @@ public class StudentService {
         return students.findAllByOrderByStatusAscNameAsc().stream()
                 .map(s -> new StudentSummary(s.getId(), s.getName(), s.getNativeLanguage(), s.getLevel(),
                         s.getStandardLevel(), s.getPersona(),
-                        s.getNextUnit(), s.getStatus(),
+                        s.getNextBook(), s.getNextUnit(), s.getStatus(),
                         lessons.lastLessonDate(s.getId()).orElse(null),
                         s.activeWeaknesses().stream().limit(MAIN_WEAKNESS_COUNT).map(Weakness::getDescription).toList()))
                 .toList();
@@ -81,6 +81,7 @@ public class StudentService {
         s.setPersona(req.persona());
         s.setGoals(Objects.requireNonNullElse(req.goals(), List.of()));
         s.setInterests(Objects.requireNonNullElse(req.interests(), List.of()));
+        if (req.nextBook() != null) s.setNextBook(req.nextBook());
         if (req.nextUnit() != null) s.setNextUnit(req.nextUnit());
         if (req.lessonMinutesDefault() != null) s.setLessonMinutesDefault(req.lessonMinutesDefault());
         s.setNotes(Objects.requireNonNullElse(req.notes(), ""));

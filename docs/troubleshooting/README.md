@@ -7,3 +7,4 @@
 | [0001](0001-grammar-qa-shorthand-and-invented-form.md) | 문법 질문이 질문에 없던 -어/아서를 "근거 없음"으로 돌려줬다 | 2026-10-21 | 기술 0025, 0027 |
 | [0002](0002-open-drops-page-fragment.md) | `open -a`로 넘긴 PDF URL의 `#page`가 버려져 첫 쪽으로 열렸다 | 2026-10-21 | 기술 0030 |
 | [0003](0003-printed-page-collision.md) | 인쇄 33쪽이 PDF 33쪽(과 표지)으로 바뀌어 엉뚱한 쪽이 열렸다 | 2026-10-21 | 기술 0030 |
+| [0004](0004-irregular-verb-tags-dropped.md) | 불규칙 용언(춥다·덥다·듣다)이 Kiwi 태그 VA-I·VV-I라서 예문 어휘 등급에서 빠졌다 | 2026-10-21 | 기술 0016, 0032 |

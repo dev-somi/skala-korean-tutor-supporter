@@ -65,6 +65,12 @@ SERIES_TITLES = {
 for _series, _title in SERIES_TITLES.items():
     BOOKS[f"{_series}_handbook"] = {"title": _title, "layout": "merged", "lang": "ko", "kind": "handbook", "series": _series}
 
+# 일괄 색인 목록 (app.rag.batch, 기술 ADR-0031). 형식을 아직 맞추지 않은 책이라 한 쪽 = parent 하나로 넣는다.
+#   index=False: 같은 책의 영어·일본어판. 글자만 뽑아 두고, 언어판 합치기를 만들기 전까지 색인에서 뺀다 (검색 결과가 겹친다)
+CATALOG = json.loads(Path(__file__).with_name("catalog.json").read_text(encoding="utf-8"))
+for _entry in CATALOG["books"]:
+    BOOKS.setdefault(_entry["id"], {key: _entry[key] for key in ("title", "layout", "lang", "kind", "index")})
+
 # 지침서의 구역 제목. OCR 줄이 이 모양과 정확히 같으면 새 구역이 시작된다.
 SECTION_PATTERN = re.compile(
     r"^(?:\d\s*)?(학습\s?목표|학습 내용|수업 개요|수업 절차|도입|어휘 및 표현(?:_.+)?|문법 ?[12]|"

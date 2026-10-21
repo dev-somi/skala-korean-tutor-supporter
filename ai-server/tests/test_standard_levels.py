@@ -152,3 +152,10 @@ def test_api_marks_homonyms_only_when_word_repeats(client):
     grammar = client.get("/standard/grammar", params={"q": "은"}).json()["items"]
     assert [g["has_homonyms"] for g in grammar if g["form"] == "-은"] == [True, True]  # -은 2급 관형사형 / -은 2급
     assert [g["has_homonyms"] for g in grammar if g["form"] == "은"] == [False]  # 조사 은1은 목록에 한 번뿐
+
+
+def test_irregular_predicates_are_counted():
+    """Kiwi는 불규칙 활용을 VA-I·VV-I로 표시한다. 빠지면 '날씨가 더워요'의 덥다가 등급 계산에서 사라진다 (TS-0004)."""
+    assert ("덥다", "형용사") in levels.content_words("날씨가 더워요.")
+    assert ("듣다", "동사") in levels.content_words("음악을 들어요.")
+    assert levels.sentence_level("떡볶이가 매워요.")["level"] is not None

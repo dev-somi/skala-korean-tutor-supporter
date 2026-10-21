@@ -20,9 +20,9 @@ PROFILE = {
     "level": "초급 1",
     "goals": ["여행"],
     "interests": ["K-pop"],
-    "weaknesses": ["u02-g01"],
+    "weaknesses": ["std-g-001"],
     "weakness_notes": ["받침 발음"],
-    "lesson_history": [{"lesson_no": 1, "unit_no": 2, "item_ids": ["u02-g01", "u02-v05"]}],
+    "lesson_history": [{"lesson_no": 1, "unit_no": 2, "item_ids": ["std-g-001", "std-v-00142"]}],
     "next_unit": 3,
     "notes": "",
 }
@@ -48,8 +48,8 @@ def test_intake_gate_removes_unknown_ids(client):
     assert res.status_code == 200
     body = res.json()
     ids = [w["item_id"] for w in body["draft"]["weaknesses"]]
-    assert ids == [None, "u02-g01", None]  # 없는 ID만 지워지고 설명은 남는다
-    assert any("u99-g99" in w for w in body["warnings"])
+    assert ids == [None, "std-g-001", None]  # 없는 ID만 지워지고 설명은 남는다
+    assert any("std-g-999" in w for w in body["warnings"])
 
 
 def test_intake_gate_clears_unsupported_language(client, monkeypatch):
@@ -90,9 +90,10 @@ def test_prep_streams_until_review(client, fake_llm):
     finished = [data["node"] for name, data in events if name == "node_finished"]
     assert finished[:2] == ["load_profile", "load_textbook"]
     assert "briefing" in finished
+    assert "write_slides" in finished
 
     payload = events[-1][1]
-    assert payload["briefing"]["grammar_points"][0]["item_id"] == "u03-g01"
+    assert payload["briefing"]["grammar_points"][0]["item_id"] == "std-g-030"
     assert set(payload["drafts"]) == set(CATEGORIES)
     # 파일이 아니라 요청으로 받은 프로필을 썼다
     personal_values = next(values for name, values in fake_llm.calls if name == "briefing_personal")
@@ -111,7 +112,7 @@ def test_resume_to_done(client):
     done = events[-1][1]
     assert done["pptx_file"] is None  # PPT는 만들지 않는다 (ADR-0015)
     assert set(done["plan"]) == set(CATEGORIES)
-    assert [s["key"] for s in done["briefing"]["lesson_frame"]][0] == "warmup"
+    assert [s["stage"] for s in done["briefing"]["slide_plan"]["slides"]][0] == "warmup"
     assert client.get("/prep/lesson-1/state").json()["status"] == "done"
 
 

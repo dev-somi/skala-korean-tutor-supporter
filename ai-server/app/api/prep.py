@@ -29,6 +29,7 @@ NODE_LABELS = {
     "write_scripts": "대본 쓰기",
     "auto_review": "자동 검토",
     "briefing": "선생님 브리핑 만들기",
+    "write_slides": "15장 슬라이드 구성안 쓰기",
     "human_review": "선생님 검토 반영",
 }
 
@@ -86,6 +87,7 @@ async def start(req: PrepStartRequest, request: Request):
     initial = make_initial_state(
         student_id=req.profile.student_id,
         unit_no=req.unit_no,
+        book=req.book,
         target_lang=req.target_lang,
         lesson_minutes=req.lesson_minutes,
         profile=req.profile.model_dump(),

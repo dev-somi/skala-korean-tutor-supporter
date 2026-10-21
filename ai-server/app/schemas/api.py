@@ -35,6 +35,7 @@ class GrammarQaRequest(BaseModel):
 class PrepStartRequest(BaseModel):
     thread_id: str = Field(pattern=SAFE_ID, description="Spring이 만든 수업 준비 thread ID")
     profile: StudentProfile
+    book: str | None = Field(default=None, pattern=r"^[a-z0-9]+$", description="교재 시리즈 (ko1, ko2). 없으면 profile.next_book")
     unit_no: int | None = None
     lesson_minutes: int = Field(default=50, ge=10, le=180)
     target_lang: Literal["ja", "en"]

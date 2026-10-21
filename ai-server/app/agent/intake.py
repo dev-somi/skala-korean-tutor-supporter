@@ -10,7 +10,7 @@ from langsmith import traceable
 from pydantic import BaseModel, Field
 
 from app.agent.lesson_prep import llm
-from app.agent.lesson_prep.textbook import format_item, load_all_items
+from app.agent.lesson_prep.textbook import load_all_items
 
 SUPPORTED_LANGS = ("ja", "en")  # shared/constraints.json 의 native_languages 와 같아야 한다
 # shared/constraints.json 의 personas 와 같아야 한다 (기획 ADR-0016, ADR-0018)
@@ -51,14 +51,14 @@ class IntakeResult(BaseModel):
 
 
 def textbook_catalog(items: dict) -> str:
-    """프롬프트에 넣을 교재 어휘·문법 목록 (ID와 한 줄 요약)."""
+    """
+    프롬프트에 넣을 문법 목록 (ID와 한 줄 요약). 약점은 대부분 문법이라 문법만 넣는다.
+    단원 시트가 생기면서 어휘까지 넣으면 수백 줄이 되어 작은 모델이 ID를 잘못 고른다 (기술 ADR-0032).
+    """
     lines = []
     for item_id, item in items.items():
-        if item["kind"] == "vocab":
-            lines.append(f"[{item_id}] {format_item(item)[0]}")
-        elif item["kind"] == "grammar":
-            # 문법 형태만으로는 알아보기 어려워서(예: "이") 교재 설명 앞부분을 붙인다
-            lines.append(f"[{item_id}] 문법: {item['form']} — {item['description'][:80]}")
+        if item["kind"] == "grammar":
+            lines.append(f"[{item_id}] 문법: {item['form']} ({item['book']} {item['unit_no']}과)")
     return "\n".join(lines)
 
 

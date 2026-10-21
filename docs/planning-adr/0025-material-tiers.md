@@ -1,5 +1,5 @@
 # ADR-0025: 색인할 세종학당 자료를 3순위로 나눈다 — 교사용 설명 먼저, 본책 다음, 연습 자료는 나중
-- 상태: Accepted (2026-10-21)
+- 상태: Superseded by [ADR-0028](0028-index-all-materials.md) (2026-10-21) — 순위는 돌리는 순서로만 남는다
 - 관련 모듈: `ai-server/app/rag/` (BOOKS 목록)
 - 기술 설계: [docs/adr/0025](../adr/0025-form-key-tags-and-merged-editions.md)
 - 관련 ADR: [ADR-0013](0013-sejong-public-materials.md), [ADR-0024](0024-grammar-qa-chat-p0.md)

@@ -3,24 +3,24 @@
 from eval.scoring import score_case, summarize
 
 EXPECTED = {
-    "covered_item_ids": ["u03-v01", "u03-g02"],
-    "optional_covered_item_ids": ["u03-g03"],
+    "covered_item_ids": ["std-v-00136", "std-g-007"],
+    "optional_covered_item_ids": ["std-g-006"],
     "weakness_changes": [
         {"action": "resolve", "weakness_id": 11},
-        {"action": "add", "item_id": "u03-g02", "keywords": ["을/를"]},
+        {"action": "add", "item_id": "std-g-007", "keywords": ["을/를"]},
     ],
-    "homework_item_ids": ["u03-e02"],
+    "homework_item_ids": ["ko1-u03-e02"],
 }
 
 
 def predicted(**over):
     base = {
-        "covered_item_ids": ["u03-v01", "u03-g02"],
+        "covered_item_ids": ["std-v-00136", "std-g-007"],
         "weakness_changes": [
             {"action": "add", "item_id": None, "description": "을/를 받침 구분"},  # ID 없어도 키워드로 일치
             {"action": "resolve", "weakness_id": 11, "description": "이/가"},
         ],
-        "homework": [{"item_id": "u03-e02", "description": "연습 2"}],
+        "homework": [{"item_id": "ko1-u03-e02", "description": "연습 2"}],
     }
     return {**base, **over}
 
@@ -31,18 +31,18 @@ def test_exact_match_passes():
 
 
 def test_optional_item_is_not_penalized():
-    s = score_case("c", EXPECTED, predicted(covered_item_ids=["u03-v01", "u03-g02", "u03-g03"]))
+    s = score_case("c", EXPECTED, predicted(covered_item_ids=["std-v-00136", "std-g-007", "std-g-006"]))
     assert s.covered_exact and s.passed
 
 
 def test_extra_item_and_missing_item():
-    s = score_case("c", EXPECTED, predicted(covered_item_ids=["u03-v01", "u03-v05"]))
+    s = score_case("c", EXPECTED, predicted(covered_item_ids=["std-v-00136", "std-v-00709"]))
     assert (s.covered_tp, s.covered_fp, s.covered_fn) == (1, 1, 1)
     assert not s.passed
 
 
 def test_extra_weakness_change_fails():
-    changes = predicted()["weakness_changes"] + [{"action": "add", "item_id": "u03-g01", "description": "습니다"}]
+    changes = predicted()["weakness_changes"] + [{"action": "add", "item_id": "std-g-030", "description": "습니다"}]
     s = score_case("c", EXPECTED, predicted(weakness_changes=changes))
     assert not s.changes_exact and len(s.changes_extra) == 1
 

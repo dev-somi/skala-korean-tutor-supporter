@@ -135,7 +135,7 @@ function submit() {
     <div class="field md:col-span-2">
       <span>약점 (교재 항목 ID는 있으면 적고, 없으면 설명만)</span>
       <div v-for="(w, i) in form.weaknesses" :key="w.id ?? 'new' + i" class="flex flex-wrap items-center gap-2">
-        <InputText :model-value="w.itemId ?? ''" placeholder="u03-g02" @update:model-value="v => (w.itemId = v || null)" class="w-28" :invalid="!!w.itemId && !ITEM_ID_PATTERN.test(w.itemId)" />
+        <InputText :model-value="w.itemId ?? ''" placeholder="std-g-007" @update:model-value="v => (w.itemId = v || null)" class="w-28" :invalid="!!w.itemId && !ITEM_ID_PATTERN.test(w.itemId)" />
         <InputText v-model="w.description" placeholder="예: 받침 발음" class="min-w-48 flex-1" :invalid="!w.description.trim()" />
         <label class="flex items-center gap-1 text-sm"><Checkbox v-model="w.resolved" binary /> 해결됨</label>
         <Button icon="pi pi-trash" severity="secondary" text aria-label="약점 삭제" @click="removeWeakness(w)" />

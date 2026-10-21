@@ -108,6 +108,7 @@ class LessonRecord(BaseModel):
     lesson_no: int  # 몇 번째 수업인지
     unit_no: int  # 그날 배운 과
     item_ids: list[str]  # 그날 배운 교재 항목 ID 목록
+    understanding: dict[str, str] = {}  # 항목 ID -> confused | shaky | ok (선생님이 승인한 이해도, 기술 ADR-0033)
 
 
 class StudentProfile(BaseModel):
@@ -127,6 +128,7 @@ class StudentProfile(BaseModel):
     standard_level: int | None = None  # 지금 배울 표준 등급 0~6 (기획 ADR-0018)
     target_level: int | None = None  # 목표 표준 등급 1~6
     persona: str | None = None  # 학습 목적 → 중심 교재 (기획 ADR-0016)
+    next_book: str = "ko1"  # 다음에 배울 교재 시리즈 (단원 시트, 기술 ADR-0032). next_unit은 이 교재의 과
 
 
 # ---------------------------------------------------------------------------
@@ -248,8 +250,54 @@ class BriefingCulture(BaseModel):
 class TeacherBriefing(BriefingGrammar, BriefingLearner, BriefingPersonal):
     """
     선생님이 수업 전에 읽는 브리핑 = 세 호출 결과를 합친 것.
-    근거 자료의 출처(references)와 7단계 수업 틀(lesson_frame)은 briefing 노드가 코드로 덧붙인다.
+    근거 자료의 출처(references)는 briefing 노드가 코드로 덧붙이고, 15장 슬라이드 구성안(slide_plan)은 write_slides 노드가 붙인다.
     """
+
+
+# ---------------------------------------------------------------------------
+# 4-2. 15장 슬라이드 구성안 (write_slides 노드의 출력, 한국어로 작성, 기획 ADR-0032)
+#      번호·단계·레이아웃·시간은 lesson_frame이 코드로 붙인다. LLM은 내용만 쓴다.
+# ---------------------------------------------------------------------------
+
+
+class SlideNote(BaseModel):
+    """슬라이드 하나의 교사용 발표자 노트 (기준 §6). [소요 시간]은 틀의 값을 쓴다."""
+
+    goal: str = Field(description="[목표] 학생이 이 활동에서 해야 할 일")
+    procedure: str = Field(description="[진행] 교사 시범, 학생 답변, 역할 바꾸기 등 실제 진행 순서")
+    qa: list[ExpectedQA] = Field(description="[기본 질문 / 예상 답변] 교사가 쓸 질문과 가능한 답 예시")
+    if_struggle: str = Field(description="[어려워하면] 선택지, 그림, 문장 틀 등 제공할 도움")
+    if_good: str = Field(description="[잘하면] 힌트 제거, 추가 질문, 역할 바꾸기 등 확장 방법")
+    source: str = Field(description="[출처] 입력에 있는 교재명·쪽수만. 모르면 빈 문자열")
+
+
+class SlideContent(BaseModel):
+    """슬라이드 하나의 내용"""
+
+    no: int = Field(description="슬라이드 번호 (1~15)")
+    student_screen: list[str] = Field(description="학생 화면에 보이는 실제 문구. 한 줄이 한 항목")
+    activity: str = Field(description="이 슬라이드에서 하는 활동 한 문장")
+    note: SlideNote
+    needs_check: list[str] = Field(description="입력에 없어서 만들지 않고 선생님이 확인해야 하는 것 (쪽수, 음원 번호 등). 없으면 빈 목록")
+
+
+class HomeworkPlan(BaseModel):
+    """15장에 들어가는 숙제 안내"""
+
+    pages: str = Field(description="교재 쪽수. 입력에 없으면 빈 문자열")
+    items: str = Field(description="문항 번호나 범위. 입력에 없으면 빈 문자열")
+    how: str = Field(description="과제 수행 방법")
+    example: str = Field(description="완료 예시")
+
+
+class SlidePlanOutput(BaseModel):
+    """호출 결과: 수업 목표 + 최종 미션 + 슬라이드 15장의 내용 + 숙제"""
+
+    lesson_goal: str = Field(description="학생이 수업 끝에 할 수 있어야 하는 행동 한 문장")
+    final_mission: str = Field(description="완료 여부를 확인할 수 있는 최종 말하기 미션 한 문장")
+    slides: list[SlideContent] = Field(description="1번부터 15번까지 15개")
+    homework: HomeworkPlan
+    needs_check: list[str] = Field(description="수업 전체에서 선생님이 확인해야 하는 것. 숙제 쪽수·문항이 없으면 '숙제 쪽수 확인 필요'를 넣는다")
 
 
 # ---------------------------------------------------------------------------

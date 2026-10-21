@@ -71,6 +71,7 @@ public class RecordService {
 
             Map<String, Object> info = new LinkedHashMap<>();
             info.put("lesson_no", lesson.getLessonNo());
+            info.put("book", lesson.getBook());
             info.put("unit_no", lesson.getUnitNo());
             info.put("minutes", lesson.getMinutes());
             info.put("target_lang", lesson.getTargetLang());
@@ -107,7 +108,7 @@ public class RecordService {
     }
 
     /**
-     * 선생님이 승인한 항목만 반영한다: 다룬 항목 → 수업 이력, 약점 추가·해결 → 프로필, 수업 상태 → recorded.
+     * 선생님이 승인한 항목만 반영한다: 다룬 항목·이해도 → 수업 이력, 약점 추가·해결 → 프로필, 수업 상태 → recorded.
      * 권위 게이트 2단계: 해결할 약점이 정말 이 학생의 것인지 여기서 한 번 더 확인한다.
      */
     @Transactional
@@ -131,6 +132,7 @@ public class RecordService {
         }
 
         lesson.setCoveredItemIds(req.coveredItemIds());
+        lesson.setUnderstanding(Objects.requireNonNullElse(req.understanding(), Map.of()));
         lesson.setStatus(Lesson.RECORDED);
         if (req.nextUnit() != null) student.setNextUnit(req.nextUnit());
 

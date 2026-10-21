@@ -10,7 +10,7 @@
 import json
 from functools import lru_cache
 
-from app.agent.lesson_prep.textbook import get_data_dir
+from app.agent.lesson_prep.textbook import get_data_dir, load_all_items
 from app.standard.levels import standard_ids
 
 
@@ -28,7 +28,8 @@ def notes_for_item(textbook_item_id: str) -> list[dict]:
     어휘로 이어진 구문 노트(예: 이/가 아니다 → std-v 아니다)가 있으면 그것만 쓴다.
     "이/가 아니다"가 "이/가" 노트까지 함께 끌어오지 않게 하려는 것이다.
     """
-    ids = set(standard_ids(textbook_item_id))
+    # 단원 시트 문법은 standard_ids에 표준 항목을 모두 갖고 있다 (-습니다/-습니까)
+    ids = set(load_all_items().get(textbook_item_id, {}).get("standard_ids") or standard_ids(textbook_item_id))
     matched = [note for note in _notes() if ids & set(note["std_ids"])]
     constructions = [note for note in matched if any(i.startswith("std-v-") for i in note["std_ids"])]
     return constructions or matched

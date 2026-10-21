@@ -1,5 +1,5 @@
 # ADR-0026: 수업 후 기록에 녹취록 텍스트 파일(.txt)도 받는다 — STT는 서비스 밖에서
-- 상태: Accepted (2026-10-21)
+- 상태: Accepted (2026-10-21), 4번 글자 수 상한만 Superseded by [ADR-0029](0029-understanding-from-transcript-drives-review.md) (2026-10-21)
 - 관련 모듈: `frontend/src/pages/LessonRecordPage.vue`, `ai-server/prompts/extract_record.md`
 - 기술 설계: [docs/adr/0029](../adr/0029-nav-student-prep-tabs.md) (화면 구성)
 - 관련 ADR: [ADR-0003](0003-lesson-record-input.md) (P2 녹음 파일 항목을 이 ADR이 대체), [ADR-0009](0009-hitl-on-all-writes.md), [ADR-0011](0011-virtual-data-only.md)

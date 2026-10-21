@@ -8,7 +8,7 @@ import Skeleton from 'primevue/skeleton'
 import ErrorBox from '../components/ErrorBox.vue'
 import PrepDialog from '../components/PrepDialog.vue'
 import { lessonsApi, studentsApi } from '../api/endpoints'
-import { LANG_NAMES, PERSONA_NAMES, levelName, type LessonView, type StudentSummary } from '../api/types'
+import { LANG_NAMES, PERSONA_NAMES, levelName, type LessonView, type StudentSummary, bookName } from '../api/types'
 import { formatDate, toUiError, type UiError } from '../utils'
 
 const route = useRoute()
@@ -67,7 +67,7 @@ function dayLabel(date: string | null) {
   <div class="mb-1 flex flex-wrap items-center gap-2">
     <h1 class="m-0 text-xl font-bold">수업 준비</h1>
   </div>
-  <p class="mt-0 text-sm text-surface-500">다음 수업이 가까운 학생부터 보여요. 준비하면 AI가 그 학생에게 맞춘 문법 브리핑(교재 근거)과 7단계 수업안을 만들어요.</p>
+  <p class="mt-0 text-sm text-surface-500">다음 수업이 가까운 학생부터 보여요. 준비하면 AI가 그 학생에게 맞춘 문법 브리핑(교재 근거)과 15장 슬라이드 구성안을 만들어요.</p>
   <ErrorBox :error="error" @retry="load" />
 
   <div v-if="!students" class="grid gap-3"><Skeleton v-for="i in 3" :key="i" height="6rem" /></div>
@@ -93,8 +93,8 @@ function dayLabel(date: string | null) {
           <span v-if="s.persona" class="text-sm text-surface-500">· {{ PERSONA_NAMES[s.persona] }}</span>
         </div>
         <div class="mt-1 text-sm text-surface-600">
-          <template v-if="next">{{ next.lessonNo }}회차 · {{ next.unitNo }}과 · {{ next.minutes }}분</template>
-          <template v-else>다음 {{ s.nextUnit }}과</template>
+          <template v-if="next">{{ next.lessonNo }}회차 · {{ bookName(next.book) }} {{ next.unitNo }}과 · {{ next.minutes }}분</template>
+          <template v-else>다음 {{ bookName(s.nextBook) }} {{ s.nextUnit }}과</template>
           <span v-if="s.mainWeaknesses.length" class="text-orange-700"> · 약점 {{ s.mainWeaknesses.slice(0, 2).join(', ') }}</span>
         </div>
       </div>

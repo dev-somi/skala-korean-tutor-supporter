@@ -98,8 +98,15 @@ def format_item_for_prompt(item: dict) -> str:
 
 
 def load_all_items() -> dict:
-    """교재 폴더의 모든 과를 읽어 {ID: 항목} dict로 돌려준다. (교재 ID 존재 검사용)"""
+    """
+    모든 단원 시트의 항목 {ID: 항목} (ID 존재 검사·화면 이름표·리포트용, 기술 ADR-0032).
+    ID는 표준 ID(std-g-007)·교재 안 ID(ko1-u02-d01). 같은 표준 항목이 여러 과에 나오면 먼저 나온 과(책 순서 → 과 순서)를 쓴다.
+    항목마다 kind, unit_no, book이 붙는다.
+    """
+    from app.curriculum.sheets import all_sheets  # 순환 import 방지 (curriculum이 이 모듈을 쓴다)
+
     items = {}
-    for path in sorted((get_data_dir() / "textbook").glob("unit_*.json")):
-        items.update(collect_items(load_unit(int(path.stem.split("_")[1]))))
+    for sheet in all_sheets():
+        for item_id, item in collect_items(sheet).items():
+            items.setdefault(item_id, {**item, "book": sheet["book"]})
     return items

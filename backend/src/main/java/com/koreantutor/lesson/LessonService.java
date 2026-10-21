@@ -38,6 +38,7 @@ public class LessonService {
         Student s = students.find(studentId);
         Lesson lesson = new Lesson(s,
                 lessons.maxLessonNo(studentId) + 1,
+                Objects.requireNonNullElse(req.book(), s.getNextBook()),
                 Objects.requireNonNullElse(req.unitNo(), s.getNextUnit()),
                 Objects.requireNonNullElse(req.minutes(), s.getLessonMinutesDefault()),
                 Objects.requireNonNullElse(req.targetLang(), s.getNativeLanguage()),
@@ -86,6 +87,7 @@ public class LessonService {
         Map<String, Object> body = new LinkedHashMap<>();
         body.put("thread_id", threadId);
         body.put("profile", profiles.assemble(s));
+        body.put("book", lesson.getBook());
         body.put("unit_no", lesson.getUnitNo());
         body.put("lesson_minutes", lesson.getMinutes());
         body.put("target_lang", lesson.getTargetLang());

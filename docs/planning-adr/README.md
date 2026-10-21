@@ -30,7 +30,7 @@ PRD(`../PRD.md`)를 쓰기 전에 기획 확정 질문을 하고 답을 받았�
 | [0012](0012-frontend-stack.md) | 프론트엔드 스택 | Proposed | PRD 열린 질문 1 |
 | [0013](0013-sejong-public-materials.md) | 교재 범위를 세종학당 공개 자료(교재·지침서·핸드북)로 넓힌다 | Accepted (2026-10-20), 기준 교재 항목만 Superseded by 0016 | 기획 재검토 |
 | [0014](0014-personalization-scope.md) | 수업 준비의 핵심은 맞춤 설명, 개인화 축은 모국어·수준·관심사 | Superseded by 0016, 0017 (2026-10-20) | 기획 재검토 |
-| [0015](0015-no-ppt-fixed-lesson-frame.md) | PPT는 만들지 않고, 고정된 7단계 수업 틀에 내용만 채운다 | Accepted (2026-10-20) | 기획 재검토 |
+| [0015](0015-no-ppt-fixed-lesson-frame.md) | PPT는 만들지 않고, 고정된 7단계 수업 틀에 내용만 채운다 | Superseded by 0032 (2026-10-21) | 기획 재검토 |
 | [0016](0016-persona-anchor-textbook-standard-levels.md) | 페르소나가 중심 교재를 정하고, 국립국어원 표준 등급 목록을 공통 기준으로 둔다 | Accepted (2026-10-20), 체계적 학습 교재 줄만 Superseded by 0022 | 기획 재검토 |
 | [0017](0017-examples-from-materials-not-generated.md) | 예문은 만들지 않고 세종학당 자료에서 찾고, 학생 등급을 넘는 예문은 거른다 | Accepted (2026-10-20) | 기획 재검토 |
 | [0018](0018-level-from-trial-test-persona-by-teacher.md) | 현재 수준은 체험수업 레벨테스트로 정한 표준 등급을 필수로, 학습 목적은 선생님이 고른다 | Accepted (2026-10-20), 레벨테스트 결과 처리만 Superseded by 0021 | 기획 재검토 |
@@ -40,9 +40,14 @@ PRD(`../PRD.md`)를 쓰기 전에 기획 확정 질문을 하고 답을 받았�
 | [0022](0022-structured-persona-uses-sejong-korean-1-6.md) | "체계적 학습 · TOPIK 준비"의 중심 교재를 「세종학당 한국어 1~6」으로 | Accepted (2026-10-20) | 온라인 세종학당 커리큘럼 확인 |
 | [0023](0023-culture-point-from-sejong-materials.md) | 매 수업에 문화 포인트 — 진도는 교재, 문화는 세종학당 자료에서 RAG로 골라 정리, 비교는 질문으로 | Accepted (2026-10-20) | 문화 필수 |
 | [0024](0024-grammar-qa-chat-p0.md) | 교재 근거 문법 질문 챗봇을 P0로 — "이거랑 이거 뭐가 달라?"에 교재로 답한다, 멀티 에이전트는 쓰지 않는다 | Accepted (2026-10-21) | 발표 스토리 재정리 |
-| [0025](0025-material-tiers.md) | 색인할 세종학당 자료를 3순위로 — 교사용 설명 먼저, 본책 다음, 연습 자료는 나중, 근로자용·EPS 제외 | Accepted (2026-10-21) | 지도교수 의견 (전부 텍스트화) |
-| [0026](0026-transcript-text-upload.md) | 수업 후 기록에 녹취록 텍스트 파일(.txt)도 받는다 — STT는 서비스 밖에서 | Accepted (2026-10-21) | 수업 녹음 활용 |
+| [0025](0025-material-tiers.md) | 색인할 세종학당 자료를 3순위로 — 교사용 설명 먼저, 본책 다음, 연습 자료는 나중, 근로자용·EPS 제외 | Superseded by 0028 (2026-10-21) | 지도교수 의견 (전부 텍스트화) |
+| [0026](0026-transcript-text-upload.md) | 수업 후 기록에 녹취록 텍스트 파일(.txt)도 받는다 — STT는 서비스 밖에서 | Accepted (2026-10-21), 4번 글자 수 상한만 Superseded by 0029 (2026-10-21) | 수업 녹음 활용 |
 | [0027](0027-open-source-pdf.md) | 출처 옆 "원문"을 누르면 선생님 컴퓨터의 원본 PDF가 그 쪽으로 열린다 | Accepted (2026-10-21) | 원문 확인이 번거롭다 |
+| [0028](0028-index-all-materials.md) | 받아 둔 자료를 전부 색인 — 순위는 돌리는 순서로만, 중복판 제외, 영어·일본어판은 글자만 먼저 | Accepted (2026-10-21) | 모든 PDF 기반 수업 자료 |
+| [0029](0029-understanding-from-transcript-drives-review.md) | 녹취록에서 항목별로 "헷갈려 보인 것"을 찾아 다음 수업 복습에 반영한다 | Accepted (2026-10-21) | 진도 조정·맞춤 복습 |
+| [0030](0030-unit-sheets-from-materials.md) | 이번 과에 가르칠 것을 자료에서 자동으로(검수 전 표시), 진도·약점은 표준 항목으로 센다 | Accepted (2026-10-21) | 모든 자료로 수업 준비 |
+| [0031](0031-learning-plan-and-pace-suggestions.md) | 학생마다 학습 계획(목표·경로·속도)을 두고, 수업 기록의 이해도로 "천천히 / 빨리 / 계획 다시 보기"를 제안한다 (구현은 단원 시트 "책 + 과" 전환 뒤) | Accepted (2026-10-21) | 목표·교재·진도 조정 |
+| [0032](0032-slide-plan-from-reference.md) | 수업 준비 결과를 15장 슬라이드 구성안(학생 화면 문구 + 교사 노트 7칸)으로 낸다 — 7단계 틀 대체, PPT는 여전히 만들지 않는다 | Accepted (2026-10-21) | 참고 문서 `docs/reference/온라인_한국어_1대1_수업_PPT_제작_기준.md` |
 
 ## 아직 정하지 않은 것 (PRD 13장)
 

@@ -18,8 +18,8 @@
 | [0012](0012-local-ollama-for-dev.md) | 개발 중에는 로컬 Ollama(qwen3:8b), 데모·평가만 Anthropic | Accepted, 데모·평가 항목만 Superseded by 0020 |
 | [0013](0013-process-over-model.md) | 좋은 모델보다 정형화된 절차 — LLM은 작은 칸만 채운다 | Accepted |
 | [0014](0014-teaching-material-rag.md) | 교수 자료 RAG — Vision OCR + Parent-Child + 파일 색인 | Accepted |
-| [0015](0015-lesson-prep-ends-at-approval.md) | 수업 준비 그래프는 승인에서 끝나고, 7단계 틀은 briefing 노드가 붙인다 | Accepted |
-| [0016](0016-standard-level-list-and-item-ids.md) | 표준 등급 목록은 ai-server 파일 데이터 + 교재 대응표, 예문 등급은 Kiwi로 판정 | Accepted (2026-10-20) |
+| [0015](0015-lesson-prep-ends-at-approval.md) | 수업 준비 그래프는 승인에서 끝나고, 7단계 틀은 briefing 노드가 붙인다 | Accepted (7단계 틀 부분은 0034가 대체) |
+| [0016](0016-standard-level-list-and-item-ids.md) | 표준 등급 목록은 ai-server 파일 데이터 + 교재 대응표, 예문 등급은 Kiwi로 판정 | Accepted (2026-10-20), 결정 4만 Superseded by 0032 |
 | [0017](0017-student-level-fields-and-level-test.md) | 학생 수준 칸은 DB nullable·API 필수, 레벨테스트 문항과 판정은 ai-server | Accepted (2026-10-20), 결정 7·8(결과 저장 안 함, 쿼리로 등록)만 Superseded by 0019 |
 | [0018](0018-progress-report-computed-in-ai-server.md) | 진도 리포트는 Spring이 기록을 모아 보내고 ai-server가 계산 (저장 안 함, 템플릿 문장) | Accepted (2026-10-20) |
 | [0019](0019-level-test-student-screen-and-results.md) | 학생 화면은 BroadcastChannel 별도 창, 레벨테스트 결과는 `level_test_result`에 저장하고 apply로 반영 | Accepted (2026-10-20) |
@@ -34,3 +34,7 @@
 | [0028](0028-langsmith-tracing-and-trace-page.md) | ai-server 실행을 LangSmith로 추적하고, "AI 추적" 탭에서 Spring을 거쳐 트리로 본다 (Spring AI 채팅은 아직 제외) | Accepted (2026-10-21) |
 | [0029](0029-nav-student-prep-tabs.md) | 주 메뉴를 "학생 / 수업 준비"로 나누고, 수업 준비 결과는 브리핑부터 보여 준다 | Accepted (2026-10-21) |
 | [0030](0030-local-pdf-open-via-ai-server.md) | 출처의 원본 PDF는 로컬 ai-server가 Chrome으로 그 쪽을 연다 — 등록부 pdfs.json + 인쇄 쪽→PDF 쪽 변환 | Accepted (2026-10-21) |
+| [0031](0031-catalog-batch-and-embed-cache.md) | 일괄 색인 — catalog.json 책 목록 + 한 권씩 기록하며 이어서 도는 batch + 임베딩 캐시 | Accepted (2026-10-21) |
+| [0032](0032-unit-sheets-and-standard-ids.md) | 단원 시트 — 지침서에서 코드 규칙으로 뽑은 과별 데이터(draft/reviewed), 문법·어휘 ID는 표준 ID | Accepted (2026-10-21) |
+| [0033](0033-observe-judge-understanding.md) | 이해도는 LLM이 장면을 인용하고(observe) 코드가 판정한다(judge) — lesson.understanding에 저장해 복습 우선순위에 쓴다 | Accepted (2026-10-21) |
+| [0034](0034-slide-plan-node.md) | write_slides 노드 — 15장 슬라이드 구성안은 틀은 코드, 문구는 LLM 한 번, 승인 때 초안이 달라졌으면 다시 | Accepted (2026-10-21) |

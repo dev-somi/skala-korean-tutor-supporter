@@ -8,6 +8,7 @@ import org.hibernate.type.SqlTypes;
 
 import java.time.LocalDate;
 import java.util.ArrayList;
+import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -35,6 +36,7 @@ public class Lesson extends BaseTimeEntity {
     private int lessonNo;
     private LocalDate lessonDate;
     private int minutes;
+    private String book = "ko1";  // 교재 시리즈 (단원 시트, 기술 ADR-0032). unitNo는 이 교재의 과
     private int unitNo;
     private String targetLang;
     private String status = PLANNED;
@@ -52,15 +54,20 @@ public class Lesson extends BaseTimeEntity {
     @JdbcTypeCode(SqlTypes.JSON)
     private List<String> coveredItemIds = new ArrayList<>();
 
+    /** 다룬 항목별 이해도 {항목 ID: confused | shaky | ok}. 수업 후 기록 승인 때 확정 (기술 ADR-0033) */
+    @JdbcTypeCode(SqlTypes.JSON)
+    private Map<String, String> understanding = new LinkedHashMap<>();
+
     private String pptxFile;
     private String pdfFile;
 
     protected Lesson() {
     }
 
-    public Lesson(Student student, int lessonNo, int unitNo, int minutes, String targetLang, LocalDate lessonDate) {
+    public Lesson(Student student, int lessonNo, String book, int unitNo, int minutes, String targetLang, LocalDate lessonDate) {
         this.student = student;
         this.lessonNo = lessonNo;
+        this.book = book;
         this.unitNo = unitNo;
         this.minutes = minutes;
         this.targetLang = targetLang;
@@ -95,6 +102,7 @@ public class Lesson extends BaseTimeEntity {
     public void setLessonDate(LocalDate lessonDate) { this.lessonDate = lessonDate; }
     public int getMinutes() { return minutes; }
     public void setMinutes(int minutes) { this.minutes = minutes; }
+    public String getBook() { return book; }
     public int getUnitNo() { return unitNo; }
     public void setUnitNo(int unitNo) { this.unitNo = unitNo; }
     public String getTargetLang() { return targetLang; }
@@ -107,6 +115,8 @@ public class Lesson extends BaseTimeEntity {
     public Map<String, Object> getDrafts() { return drafts; }
     public List<String> getCoveredItemIds() { return coveredItemIds; }
     public void setCoveredItemIds(List<String> ids) { this.coveredItemIds = new ArrayList<>(ids); }
+    public Map<String, String> getUnderstanding() { return understanding; }
+    public void setUnderstanding(Map<String, String> understanding) { this.understanding = new LinkedHashMap<>(understanding); }
     public String getPptxFile() { return pptxFile; }
     public String getPdfFile() { return pdfFile; }
 }

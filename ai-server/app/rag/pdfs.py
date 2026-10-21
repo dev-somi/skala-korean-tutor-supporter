@@ -14,6 +14,7 @@
 
 import argparse
 import difflib
+import fcntl
 import json
 import os
 import re
@@ -37,9 +38,14 @@ def load() -> dict[str, str]:
 
 
 def register(book: str, pdf: Path) -> None:
-    registry = load() | {book: str(pdf.resolve())}
+    """한 줄 기록. 일괄 색인이 책 여러 권을 동시에 OCR하므로 파일을 잠그고 읽고-고치고-쓴다."""
     REGISTRY.parent.mkdir(parents=True, exist_ok=True)
-    REGISTRY.write_text(json.dumps(registry, ensure_ascii=False, indent=1) + "\n", encoding="utf-8")
+    with open(REGISTRY.with_suffix(".lock"), "w") as lock:
+        fcntl.flock(lock, fcntl.LOCK_EX)
+        registry = load() | {book: str(pdf.resolve())}
+        partial = REGISTRY.with_suffix(".part")
+        partial.write_text(json.dumps(registry, ensure_ascii=False, indent=1) + "\n", encoding="utf-8")
+        partial.replace(REGISTRY)
 
 
 def resolve(book: str) -> str | None:

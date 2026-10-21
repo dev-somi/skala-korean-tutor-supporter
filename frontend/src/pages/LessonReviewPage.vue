@@ -7,11 +7,12 @@ import Tag from 'primevue/tag'
 import ProgressSteps from '../components/ProgressSteps.vue'
 import BriefingPanel from '../components/BriefingPanel.vue'
 import LessonFrame from '../components/LessonFrame.vue'
+import SlidePlanView from '../components/SlidePlan.vue'
 import CategoryReviewCard from '../components/CategoryReviewCard.vue'
 import ErrorBox from '../components/ErrorBox.vue'
 import { lessonsApi, studentsApi } from '../api/endpoints'
 import {
-  CATEGORIES, LANG_NAMES, PERSONA_NAMES, levelName, type Category, type Decision, type LessonView, type ProgressEvent, type ReviewPayload, type StudentDetail,
+  CATEGORIES, LANG_NAMES, PERSONA_NAMES, levelName, type Category, type Decision, type LessonView, type ProgressEvent, type ReviewPayload, type StudentDetail, bookName,
 } from '../api/types'
 import { toUiError, type UiError } from '../utils'
 
@@ -125,7 +126,7 @@ const willRegenerate = computed(() => pending.value.some(c => decisions.value[c]
     <RouterLink to="/prep" class="text-sm">← 수업 준비</RouterLink>
     <h1 class="m-0 w-full text-xl font-bold">
       <RouterLink :to="`/students/${lesson.studentId}`" class="text-inherit">{{ lesson.studentName }}</RouterLink> {{ lesson.lessonNo }}회차 수업 준비
-      <span class="text-base font-normal text-surface-500">· {{ lesson.unitNo }}과 · {{ lesson.minutes }}분 · {{ LANG_NAMES[lesson.targetLang] }} 설명</span>
+      <span class="text-base font-normal text-surface-500">· {{ bookName(lesson.book) }} {{ lesson.unitNo }}과 · {{ lesson.minutes }}분 · {{ LANG_NAMES[lesson.targetLang] }} 설명</span>
     </h1>
     <!-- 학생 요약 한 줄: 이 준비가 누구를 위한 것인지 (기술 ADR-0029) -->
     <div v-if="student" class="flex w-full flex-wrap items-center gap-2 rounded-lg bg-surface-100 px-3 py-2 text-sm">
@@ -140,7 +141,7 @@ const willRegenerate = computed(() => pending.value.some(c => decisions.value[c]
   <ErrorBox :error="error" @retry="lastAction()" />
 
   <template v-if="phase === 'running'">
-    <ProgressSteps :steps="steps" running title="AI가 수업안을 만들고 있어요" hint="구성안 → 설명 → 대본 → 자동 검토 → 브리핑(지침서 근거) 순서로 진행돼요. 로컬 모델이라 몇 분 걸려요. 이 화면을 떠나면 중단돼요." />
+    <ProgressSteps :steps="steps" running title="AI가 수업안을 만들고 있어요" hint="구성안 → 설명 → 대본 → 자동 검토 → 브리핑(지침서 근거) → 15장 슬라이드 구성안 순서로 진행돼요. 로컬 모델이라 몇 분 걸려요. 이 화면을 떠나면 중단돼요." />
   </template>
 
   <template v-else-if="phase === 'stale'">
@@ -173,9 +174,10 @@ const willRegenerate = computed(() => pending.value.some(c => decisions.value[c]
       </template>
     </details>
 
-    <!-- 수업 전에 먼저 볼 것: 오늘 문법과 설명 포인트 → 7단계 흐름 → 범주별 검토 -->
+    <!-- 수업 전에 먼저 볼 것: 오늘 문법과 설명 포인트 → 15장 구성안 → 범주별 검토 -->
     <BriefingPanel :briefing="payload.briefing" />
-    <LessonFrame v-if="payload.briefing?.lesson_frame" :frame="payload.briefing.lesson_frame" :drafts="payload.drafts" :culture="payload.briefing.culture" />
+    <SlidePlanView v-if="payload.briefing?.slide_plan" :plan="payload.briefing.slide_plan" :culture="payload.briefing.culture" />
+    <p v-if="payload.briefing?.slide_plan" class="-mt-2 mb-4 text-xs text-surface-500">아래 범주를 고치거나 다시 만들면, 확정할 때 구성안도 그 내용에 맞게 한 번 더 만들어요.</p>
 
     <div class="space-y-4">
       <CategoryReviewCard
@@ -207,9 +209,10 @@ const willRegenerate = computed(() => pending.value.some(c => decisions.value[c]
       <div class="flex-1" />
       <RouterLink :to="`/lessons/${lesson.id}/record`"><Button label="수업 후 기록 쓰기" icon="pi pi-pencil" severity="secondary" outlined /></RouterLink>
     </div>
-    <!-- 수업 전에 먼저 볼 것: 오늘 문법과 설명 포인트 → 7단계 흐름 → 범주별 검토 -->
+    <!-- 수업 전에 먼저 볼 것: 오늘 문법과 설명 포인트 → 15장 구성안 → 범주별 검토 (예전 수업은 7단계 틀) -->
     <BriefingPanel :briefing="lesson.briefing" />
-    <LessonFrame v-if="lesson.briefing?.lesson_frame" :frame="lesson.briefing.lesson_frame" :drafts="lesson.drafts" :culture="lesson.briefing.culture" />
+    <SlidePlanView v-if="lesson.briefing?.slide_plan" :plan="lesson.briefing.slide_plan" :culture="lesson.briefing.culture" />
+    <LessonFrame v-else-if="lesson.briefing?.lesson_frame" :frame="lesson.briefing.lesson_frame" :drafts="lesson.drafts" :culture="lesson.briefing.culture" />
     <div v-if="lesson.drafts" class="space-y-4">
       <CategoryReviewCard
         v-for="c in CATEGORIES"

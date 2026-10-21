@@ -29,7 +29,8 @@ public class StudentProfileAssembler {
     public Map<String, Object> assemble(Student s) {
         List<Weakness> active = s.activeWeaknesses();
         List<Map<String, Object>> history = lessons.findByStudentIdAndStatusOrderByLessonNo(s.getId(), Lesson.RECORDED).stream()
-                .map(l -> Map.<String, Object>of("lesson_no", l.getLessonNo(), "unit_no", l.getUnitNo(), "item_ids", l.getCoveredItemIds()))
+                .map(l -> Map.<String, Object>of("lesson_no", l.getLessonNo(), "unit_no", l.getUnitNo(), "item_ids", l.getCoveredItemIds(),
+                        "understanding", l.getUnderstanding()))
                 .toList();
 
         Map<String, Object> profile = new LinkedHashMap<>();
@@ -46,6 +47,7 @@ public class StudentProfileAssembler {
         profile.put("weaknesses", active.stream().map(Weakness::getItemId).filter(Objects::nonNull).toList());
         profile.put("weakness_notes", active.stream().filter(w -> w.getItemId() == null).map(Weakness::getDescription).toList());
         profile.put("lesson_history", history);
+        profile.put("next_book", s.getNextBook());
         profile.put("next_unit", s.getNextUnit());
         profile.put("notes", s.getNotes());
         return profile;

@@ -1,5 +1,5 @@
 # ADR-0016: 표준 등급 목록은 ai-server 파일 데이터로 두고, 교재 항목과는 대응표로 잇고, 예문 등급은 Kiwi 형태소 분석으로 판정한다
-- 상태: Accepted (2026-10-20)
+- 상태: Accepted (2026-10-20), 결정 4(약점 ID는 교재 ID 유지)만 Superseded by [ADR-0032](0032-unit-sheets-and-standard-ids.md) (2026-10-21)
 - 관련 모듈: `ai-server/app/standard/` (`importer.py`, `levels.py`), `ai-server/data/standard/`, `ai-server/tests/test_standard_levels.py`
 - 관련 ADR: [기획 ADR-0016](../planning-adr/0016-persona-anchor-textbook-standard-levels.md), [기획 ADR-0017](../planning-adr/0017-examples-from-materials-not-generated.md), [ADR-0005](0005-data-access-ownership.md), [ADR-0013](0013-process-over-model.md), [ADR-0014](0014-teaching-material-rag.md)
 

@@ -6,17 +6,24 @@
   - 구성안은 코드 규칙이라 시간 합계가 항상 수업 시간과 같다
   - 한 범주에만 피드백을 주면 그 범주만 다시 만들어진다
   - 직접 수정한 내용이 최종 수업안에 그대로 들어간다
-  - 모두 승인하면 PPT 없이 끝나고, 브리핑에 7단계 수업 틀이 들어 있다
+  - 모두 승인하면 PPT 없이 끝나고, 브리핑에 15장 슬라이드 구성안이 들어 있다
+  - 승인 전에 초안을 고쳤으면 슬라이드를 한 번 더 만든다
 
 실행 방법: uv run pytest
 """
 
+import json
+
+import pytest
 from langgraph.checkpoint.memory import InMemorySaver
 from langgraph.types import Command
 
 from app.agent.lesson_prep import nodes
+
 from app.agent.lesson_prep.graph import build_graph, make_initial_state
 from app.agent.lesson_prep.schemas import CATEGORIES
+from app.agent.lesson_prep.textbook import get_data_dir
+from app.curriculum.sheets import sheet_path
 
 CONFIG = {"configurable": {"thread_id": "test"}}
 APPROVE_ALL = {category: {"action": "approve"} for category in CATEGORIES}
@@ -29,12 +36,12 @@ def start(fake_llm):
     return graph, result
 
 
-def test_end_to_end_ends_with_lesson_frame(fake_llm):
-    """자동 검토 통과 -> 모두 승인 -> 끝. PPT는 만들지 않고, 브리핑에 50분짜리 7단계 수업 틀이 있다."""
+def test_end_to_end_ends_with_slide_plan(fake_llm):
+    """자동 검토 통과 -> 모두 승인 -> 끝. PPT는 만들지 않고, 브리핑에 50분짜리 15장 슬라이드 구성안이 있다."""
     graph, result = start(fake_llm)
     payload = result["__interrupt__"][0].value  # human_review에서 멈춤
     assert payload["review_warning"] is False
-    assert payload["briefing"]["lesson_frame"]  # 검토 화면에서도 틀이 보인다
+    assert payload["briefing"]["slide_plan"]  # 검토 화면에서도 구성안이 보인다
 
     result = graph.invoke(Command(resume=APPROVE_ALL), CONFIG)
 
@@ -43,7 +50,12 @@ def test_end_to_end_ends_with_lesson_frame(fake_llm):
     for category in CATEGORIES:
         assert result["drafts"][category]["explanation"]
         assert result["drafts"][category]["script"]
-    assert sum(step["minutes"] for step in result["briefing"]["lesson_frame"]) == 50
+    plan = result["briefing"]["slide_plan"]
+    assert [s["no"] for s in plan["slides"]] == list(range(1, 16))
+    assert sum(s["minutes"] for s in plan["slides"]) == 50
+    assert all(check["passed"] for check in plan["checks"])
+    assert plan["lesson_goal"] and plan["final_mission"]
+    assert fake_llm.count("write_slides") == 1  # 초안을 고치지 않았으니 승인 때 다시 만들지 않는다
 
 
 def test_llm_review_fail_is_advice_only(fake_llm):
@@ -78,7 +90,7 @@ def test_plan_fits_any_lesson_minutes(fake_llm):
 
     payload = result["__interrupt__"][0].value
     assert all(check["passed"] for check in payload["review_result"]["checks"])
-    assert sum(step["minutes"] for step in payload["briefing"]["lesson_frame"]) == 40
+    assert sum(s["minutes"] for s in payload["briefing"]["slide_plan"]["slides"]) == 40
 
 
 def test_feedback_regenerates_only_that_category(fake_llm):
@@ -126,6 +138,8 @@ def test_edit_goes_into_final_plan_as_is(fake_llm):
 
     # 수정한 범주는 LLM을 다시 부르지 않는다 (범주 4개 x 처음 1번씩만)
     assert fake_llm.count("write_explanation") == 4
+    assert fake_llm.count("write_slides") == 2  # 초안이 달라졌으니 승인 때 슬라이드를 한 번 더 만든다
+    assert result["briefing"]["slide_plan"]
     assert result["drafts"]["new_grammar"]["explanation"] == "先生が直接書いた説明です。"
     assert result["drafts"]["new_grammar"]["script"] == "先生が直接書いた台本です。"
 
@@ -137,8 +151,6 @@ def test_culture_point_from_materials(fake_llm):
 
     assert [c["source"] for c in briefing["culture"]] == ["세종한국문화 1 1과 「문화」 22~23쪽"]  # 2번은 요약이 비어 빠짐
     assert briefing["culture"][0]["question_l1"] == "日本でも一緒に歌いますか？"
-    present = next(s for s in briefing["lesson_frame"] if s["key"] == "present")
-    assert present["culture"] == 0
 
 
 def test_no_culture_found_keeps_preparing(fake_llm, monkeypatch):
@@ -149,4 +161,43 @@ def test_no_culture_found_keeps_preparing(fake_llm, monkeypatch):
 
     assert fake_llm.count("briefing_culture") == 0
     assert briefing["culture"] == []
-    assert next(s for s in briefing["lesson_frame"] if s["key"] == "present")["culture"] is None
+
+
+def test_missing_homework_pages_is_flagged(fake_llm):
+    """교재에서 숙제 쪽수를 못 찾으면 지어내지 않고 확인 필요로 남긴다 (기준 §4)."""
+    fake_llm.homework_pages = ""
+    graph, result = start(fake_llm)
+    plan = result["__interrupt__"][0].value["briefing"]["slide_plan"]
+
+    assert plan["homework"]["pages"] == ""
+    assert plan["needs_check"] == ["숙제 쪽수 확인 필요"]
+    assert next(c for c in plan["checks"] if c["name"] == "숙제 정보")["passed"]
+
+
+def test_first_lesson_keeps_review_slide_as_level_check(fake_llm):
+    """복습할 항목이 없으면 복습 시간은 그대로 두고 수준 확인 질문으로 쓴다. 지난 수업 내용을 지어내지 않는다 (기준 §3)."""
+    profile = json.loads((get_data_dir() / "students" / "student_sample.json").read_text(encoding="utf-8"))
+    profile["lesson_history"], profile["weaknesses"] = [], []
+    graph = build_graph(InMemorySaver())
+    result = graph.invoke(make_initial_state("student_sample", profile=profile), CONFIG)
+    payload = result["__interrupt__"][0].value
+    values = next(v for n, v in fake_llm.calls if n == "write_slides")
+    slides = payload["briefing"]["slide_plan"]["slides"]
+
+    assert payload["drafts"]["review"]["item_ids"] == []
+    assert payload["drafts"]["review"]["minutes"] == 0  # 범주는 0분
+    assert "수준 확인" in values["review_state"]
+    assert slides[1]["minutes"] == 3  # 2번 슬라이드는 같은 시간에 수준 확인 질문
+    assert sum(s["minutes"] for s in slides) == 50
+    assert all(check["passed"] for check in payload["review_result"]["checks"])
+
+
+@pytest.mark.skipif(not sheet_path("ko1", 5).exists(), reason="단원 시트(data/curriculum, git 밖)가 있어야 한다")
+def test_draft_unit_sheet_runs_to_review_with_notice(fake_llm):
+    """자동으로 만든 시트(ko1 5과, 연습 없음)로도 선생님 검토까지 가고, 브리핑에 "검수 전" 표시가 붙는다 (기술 ADR-0032)."""
+    graph = build_graph(InMemorySaver())
+    result = graph.invoke(make_initial_state("student_sample", unit_no=5, book="ko1"), CONFIG)
+    payload = result["__interrupt__"][0].value
+    assert payload["briefing"]["unit_sheet"]["status"] == "draft"
+    assert payload["drafts"]["new_grammar"]["item_ids"]  # 지침서에서 뽑은 문법
+    assert payload["drafts"]["homework"]["item_ids"] == []  # 연습은 본책 색인 전이라 없다

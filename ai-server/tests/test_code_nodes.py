@@ -18,7 +18,7 @@ def make_state(tmp_path, monkeypatch, explanation="説明です。") -> dict:
     state = {"student_id": "student_sample", "unit_no": None, "lesson_minutes": 50, "target_lang": "ja"}
     state.update(nodes.load_profile(state))
     state.update(nodes.load_textbook(state))
-    item_ids = {"review": ["u02-g01"], "new_vocab": ["u03-v01"], "new_grammar": ["u03-g01"], "homework": ["u03-e01"]}
+    item_ids = {"review": ["std-g-001"], "new_vocab": ["std-v-00136"], "new_grammar": ["std-g-030"], "homework": ["ko1-u03-e01"]}
     minutes = {"review": 10, "new_vocab": 15, "new_grammar": 20, "homework": 5}
     state["drafts"] = {}
     for category in CATEGORIES:
@@ -124,7 +124,7 @@ def test_plan_lesson_follows_rules():
     plan = nodes.plan_lesson(state)["plan"]
     unit = state["textbook_unit"]
 
-    assert plan["review"]["item_ids"][:3] == ["u02-g01", "u02-g02", "u02-v05"]  # 프로필의 약점이 먼저
+    assert plan["review"]["item_ids"][:3] == ["std-g-001", "std-g-037", "std-v-00142"]  # 프로필의 약점이 먼저
     assert len(plan["review"]["item_ids"]) <= nodes.MAX_REVIEW_ITEMS
     assert plan["new_vocab"]["item_ids"] == [v["id"] for v in unit["vocabulary"]]
     assert plan["new_grammar"]["item_ids"] == [g["id"] for g in unit["grammar"]]
@@ -133,27 +133,76 @@ def test_plan_lesson_follows_rules():
 
 @pytest.mark.parametrize("lesson_minutes", [30, 40, 50, 60, 90])
 def test_frame_minutes_always_add_up(lesson_minutes):
-    """어떤 수업 길이든 7단계 시간 합계 = 수업 시간, 범주 시간 + 틀 전용 단계 = 수업 시간."""
+    """어떤 수업 길이든 단계 시간 합계 = 수업 시간, 범주 시간 + 틀 전용 단계 = 수업 시간, 슬라이드 시간 합계도 같다."""
+    steps = lesson_frame.step_minutes(lesson_minutes)
+    assert sum(steps.values()) == lesson_minutes
+    assert sum(lesson_frame.slide_minutes(steps).values()) == lesson_minutes
     for has_review in (True, False):
-        steps = lesson_frame.step_minutes(lesson_minutes, has_review)
-        assert sum(steps.values()) == lesson_minutes
-        cats = lesson_frame.category_minutes(steps)
-        assert sum(cats.values()) + lesson_frame.frame_only_minutes(steps) == lesson_minutes
-    assert lesson_frame.step_minutes(lesson_minutes, has_review=False)["review"] == 0
+        cats = lesson_frame.category_minutes(steps, has_review)
+        assert sum(cats.values()) + lesson_frame.frame_only_minutes(steps, has_review) == lesson_minutes
+    assert lesson_frame.category_minutes(steps, has_review=False)["review"] == 0
 
 
-def test_assemble_fills_frame():
-    """틀의 7단계 순서는 고정이고, 워밍업·활용 활동에는 브리핑 내용이 들어간다."""
-    drafts = {"review": {"item_ids": ["u02-g01"]}}
-    briefing = {"warmup_questions": ["주말에 뭐 했어요?"], "practice_activity": "카페 주문 롤플레이"}
-    frame = lesson_frame.assemble(50, drafts, briefing)
-
-    assert [s["key"] for s in frame] == ["warmup", "review", "present", "drill", "activity", "feedback", "wrapup"]
+def test_frame_has_15_slides_with_reference_times():
+    """50분 기본형은 15장이고 단계 시간은 기준 문서 §3과 같다 (4+3+3+6+6+10+12+3+3)."""
+    frame = lesson_frame.frame(50, has_review=True)
+    assert [s["no"] for s in frame] == list(range(1, 16))
+    assert [s["stage"] for s in frame][:3] == ["warmup", "review", "goal_dialog"]
     assert sum(s["minutes"] for s in frame) == 50
-    by_key = {s["key"]: s for s in frame}
-    assert by_key["warmup"]["items"] == ["주말에 뭐 했어요?"]
-    assert by_key["activity"]["items"] == ["카페 주문 롤플레이"]
-    assert by_key["present"]["categories"] == ["new_vocab", "new_grammar"]
+    assert lesson_frame.step_minutes(50) == {
+        "warmup": 4, "review": 3, "goal_dialog": 3, "vocab": 6, "expression": 6, "drill": 10, "activity": 12, "feedback": 3, "wrapup": 3,
+    }
+    assert {s["no"]: s["categories"] for s in frame}[2] == ["review"]
+    assert {s["no"]: s["categories"] for s in lesson_frame.frame(50, has_review=False)}[2] == []
+
+
+def slide_output(**changes) -> dict:
+    note = {"goal": "g", "procedure": "p", "qa": [], "if_struggle": "", "if_good": "", "source": ""}
+    slides = [{"no": n, "student_screen": ["문구"], "activity": "a", "note": note, "needs_check": []} for n in range(1, 16)]
+    output = {
+        "lesson_goal": "목표", "final_mission": "미션", "slides": slides,
+        "homework": {"pages": "p.40", "items": "1번", "how": "쓰기", "example": "예"}, "needs_check": [],
+    }
+    return output | changes
+
+
+def test_merge_keeps_code_values_and_flags_missing_slides():
+    """번호·시간·레이아웃은 틀의 값을 쓰고, LLM이 빠뜨린 슬라이드는 비워 두고 확인 필요로 표시한다."""
+    output = slide_output()
+    output["slides"] = [s for s in output["slides"] if s["no"] != 7]
+    plan = lesson_frame.merge(50, True, False, output)
+
+    assert [s["no"] for s in plan["slides"]] == list(range(1, 16))
+    seven = plan["slides"][6]
+    assert seven["layout"] == "expression" and seven["minutes"] == 3
+    assert seven["student_screen"] == [] and seven["needs_check"]
+    failed = {c["name"] for c in plan["checks"] if not c["passed"]}
+    assert failed == {"빈 슬라이드"}
+
+
+def test_slide_checks_catch_crowded_vocab_and_missing_homework_flag():
+    output = slide_output()
+    output["slides"][3]["student_screen"] = ["a", "b", "c", "d", "e"]  # 4번 어휘 5개
+    output["homework"]["pages"] = ""  # 쪽수가 없는데 확인 필요 표시도 없음
+    checks = {c["name"]: c["passed"] for c in lesson_frame.merge(50, True, False, output)["checks"]}
+
+    assert checks["어휘 슬라이드 분량"] is False
+    assert checks["숙제 정보"] is False
+    assert checks["슬라이드 구성"] is True and checks["시간 합계"] is True
+
+
+def test_feedback_slide_may_have_empty_screen():
+    """14번은 실제 발화가 없으면 학생 화면이 비어도 된다 (기준 §4)."""
+    output = slide_output()
+    output["slides"][13]["student_screen"] = []
+    checks = {c["name"]: c["passed"] for c in lesson_frame.merge(50, True, False, output)["checks"]}
+    assert checks["빈 슬라이드"] is True
+
+
+def test_drafts_fingerprint_changes_when_draft_changes():
+    drafts = {"review": {"script": "a"}}
+    assert lesson_frame.drafts_fingerprint(drafts) == lesson_frame.drafts_fingerprint({"review": {"script": "a"}})
+    assert lesson_frame.drafts_fingerprint(drafts) != lesson_frame.drafts_fingerprint({"review": {"script": "b"}})
 
 
 def test_weakness_without_history_is_reviewed():
@@ -164,5 +213,29 @@ def test_weakness_without_history_is_reviewed():
     state.update(nodes.load_textbook(state))
     plan = nodes.plan_lesson(state)["plan"]
 
-    assert plan["review"]["item_ids"] == ["u02-g01", "u02-g02", "u02-v05"]
+    assert plan["review"]["item_ids"] == ["std-g-001", "std-g-037", "std-v-00142"]
     assert plan["review"]["minutes"] > 0
+
+
+def test_confused_items_come_first_and_lengthen_review():
+    """직전 수업에서 헷갈린 항목이 복습 맨 앞에 오고, 복습 시간이 두 배가 된다 (기술 ADR-0033)."""
+    state = plan_state()
+    normal = nodes.plan_lesson(state)["plan"]
+    last = state["profile"]["lesson_history"][-1]
+    confused_id = next(i for i in reversed(last["item_ids"]) if i not in normal["review"]["item_ids"][:1])
+    last["understanding"] = {confused_id: "confused"}
+    plan = nodes.plan_lesson(state)["plan"]
+
+    assert plan["review"]["item_ids"][0] == confused_id
+    assert plan["review"]["reason"].startswith("지난 수업에서 헷갈림 1개")
+    assert plan["review"]["minutes"] == normal["review"]["minutes"] * 2
+    total = sum(plan[c]["minutes"] for c in plan)
+    steps = lesson_frame.step_minutes(50, long_review=True)
+    assert total + lesson_frame.frame_only_minutes(steps) == 50
+
+
+@pytest.mark.parametrize("lesson_minutes", [30, 40, 50, 60, 90])
+def test_long_review_minutes_add_up(lesson_minutes):
+    steps = lesson_frame.step_minutes(lesson_minutes, long_review=True)
+    assert sum(steps.values()) == lesson_minutes
+    assert steps["activity"] >= 1

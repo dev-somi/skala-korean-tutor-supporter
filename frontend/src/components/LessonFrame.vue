@@ -4,6 +4,8 @@ import { useToast } from 'primevue/usetoast'
 import Button from 'primevue/button'
 import { CATEGORY_NAMES, type Category, type CategoryDraft, type CultureNote, type FrameStep } from '../api/types'
 import SourceLink from './SourceLink.vue'
+import ItemChips from './ItemChips.vue'
+import { useItemLabels } from '../stores/itemLabels'
 
 // 고정된 7단계 수업 틀 (기획 ADR-0015). 범주 내용은 drafts에서, 문화는 culture에서 꺼내 보여 준다.
 const props = defineProps<{
@@ -12,6 +14,7 @@ const props = defineProps<{
   culture?: CultureNote[]
 }>()
 const toast = useToast()
+const { label } = useItemLabels()
 
 // 선생님이 고른 문화 후보 (기본은 1순위). 화면에서만 바꾸고 저장하지 않는다 (기술 ADR-0023)
 const picked = ref(props.frame.find(s => s.key === 'present')?.culture ?? 0)
@@ -30,7 +33,7 @@ function asText(): string {
     for (const c of s.categories) {
       const d = props.drafts?.[c]
       if (!d) continue
-      lines.push(`   [${CATEGORY_NAMES[c]}] ${d.item_ids.join(', ')}`)
+      lines.push(`   [${CATEGORY_NAMES[c]}] ${d.item_ids.map(label).join(', ')}`)
       for (const ex of examplesOf(c)) lines.push(`   예) ${ex}`)
     }
     if (s.culture !== undefined) {
@@ -66,10 +69,12 @@ async function copy() {
           <ul v-if="s.items.length" class="m-0 mt-2 space-y-1 pl-5 text-sm">
             <li v-for="(item, j) in s.items" :key="j">{{ item }}</li>
           </ul>
-          <div v-for="c in s.categories" :key="c" class="mt-2 text-sm">
-            <span class="mr-1 rounded bg-surface-100 px-1.5 py-0.5 text-xs font-semibold text-surface-700">{{ CATEGORY_NAMES[c] }}</span>
-            <span class="font-mono text-xs text-surface-500">{{ drafts?.[c]?.item_ids.join(', ') || '없음' }}</span>
-            <div v-if="examplesOf(c).length" class="mt-1 text-surface-700">예) {{ examplesOf(c).join(' / ') }}</div>
+          <div v-for="c in s.categories" :key="c" class="mt-2 grid gap-1 text-sm sm:grid-cols-[5.5rem_1fr]">
+            <span class="pt-0.5 text-xs font-semibold text-surface-500">{{ CATEGORY_NAMES[c] }}</span>
+            <div>
+              <ItemChips :ids="drafts?.[c]?.item_ids ?? []" />
+              <div v-if="examplesOf(c).length" class="mt-1 text-surface-600">예) {{ examplesOf(c).join(' / ') }}</div>
+            </div>
           </div>
           <div v-if="s.culture !== undefined" class="mt-2 rounded-lg border border-amber-200 bg-amber-50 p-3 text-sm">
             <div class="mb-1 flex flex-wrap items-center gap-2">

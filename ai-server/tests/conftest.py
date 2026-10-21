@@ -15,7 +15,7 @@ from app.agent.lesson_prep import llm, nodes, pptx_builder, render
 FAKE_BRIEFING = {
     "warmup_questions": ["주말에 뭐 했어요?"],
     "practice_activity": "좋아하는 드라마를 소개하는 말하기",
-    "grammar_points": [{"item_id": "u03-g01", "key_points": ["받침 유무에 따라 형태가 바뀐다"]}],
+    "grammar_points": [{"item_id": "std-g-030", "key_points": ["받침 유무에 따라 형태가 바뀐다"]}],
     "common_mistakes": ["を와 을/를을 그대로 대응시킨다"],
     "expected_qa": [{"question": "언제 습니다를 써요?", "answer": "격식 있는 자리에서 씁니다."}],
     "tips": ["드라마 장면으로 예문을 만든다"],
@@ -31,8 +31,8 @@ FAKE_INTAKE = {
     "interests": ["드라마"],
     "weaknesses": [
         {"item_id": None, "description": "받침 발음"},
-        {"item_id": "u02-g01", "description": "-이에요/예요"},
-        {"item_id": "u99-g99", "description": "없는 항목"},
+        {"item_id": "std-g-001", "description": "-이에요/예요"},
+        {"item_id": "std-g-999", "description": "없는 항목"},
     ],
     "next_unit": 3,
     "lesson_minutes_default": None,
@@ -45,18 +45,27 @@ FAKE_INTAKE = {
 
 # 가짜 LLM이 돌려줄 수업 후 기록. 권위 게이트가 고쳐야 할 값을 일부러 섞어 둔다.
 FAKE_EXTRACTION = {
-    "covered_item_ids": ["u03-v01", "u03-v02", "u03-v01", "u99-v99"],
+    "covered_item_ids": ["std-v-00136", "std-v-00185", "std-v-00136", "std-v-99999"],
     "strengths": ["-습니다를 잘 씀"],
-    "errors": [{"student_said": "밥를 먹습니다", "correction": "밥을 먹습니다", "item_id": "u03-g02", "note": ""}],
+    "errors": [{"student_said": "밥를 먹습니다", "correction": "밥을 먹습니다", "item_id": "std-g-007", "note": ""}],
     "weakness_changes": [
-        {"action": "add", "weakness_id": None, "item_id": "u03-g02", "description": "을/를 받침 구분"},
+        {"action": "add", "weakness_id": None, "item_id": "std-g-007", "description": "을/를 받침 구분"},
         {"action": "add", "weakness_id": None, "item_id": None, "description": "받침 발음"},  # 이미 있음
-        {"action": "resolve", "weakness_id": None, "item_id": "u02-g01", "description": "이/가"},  # id 없이 ID로 찾기
+        {"action": "resolve", "weakness_id": None, "item_id": "std-g-001", "description": "이/가"},  # id 없이 ID로 찾기
         {"action": "resolve", "weakness_id": 999, "item_id": None, "description": "없는 약점"},
     ],
-    "homework": [{"item_id": "u03-e02", "description": "연습문제 2번"}],
+    "homework": [{"item_id": "ko1-u03-e02", "description": "연습문제 2번"}],
     "next_lesson_note": "을/를 복습",
 }
+
+
+# 가짜 LLM이 돌려줄 학생 반응 장면. 판정(judge)이 버려야 할 장면을 일부러 섞어 둔다.
+FAKE_EPISODES = [
+    {"item_id": "std-v-00136", "kind": "error", "quote": "밥를 이라고 함"},
+    {"item_id": "std-v-00136", "kind": "asked_again", "quote": "메모에 없는 문장"},  # 원문에 없음
+    {"item_id": "std-g-007", "kind": "error", "quote": "밥를 이라고 함"},  # 다룬 항목이 아님
+    {"item_id": "std-v-00185", "kind": "correct", "quote": "3과 1~2   단어 함"},  # 공백만 다름
+]
 
 
 # 가짜 문화 후보 (세종한국문화 1에서 찾았다고 가정)
@@ -64,6 +73,28 @@ FAKE_CULTURE = [
     {"book": "culture1", "source": "세종한국문화 1 1과 「문화」 22~23쪽", "excerpt": "음악 방송에서는 매주 인기 있는 노래를 소개해요."},
     {"book": "ko1_guide", "source": "지침서 3과 「문법 1」 36~37쪽", "excerpt": "문법 형태를 판서하고 연습시킨다."},
 ]
+
+
+def fake_slides(homework_pages: str) -> dict:
+    """가짜 write_slides 결과: 15장 모두 채우고, 어휘 슬라이드는 단어 3개."""
+    note = {"goal": "목표", "procedure": "교사가 먼저 시범을 보인다.", "qa": [], "if_struggle": "선택지를 준다.", "if_good": "힌트를 없앤다.", "source": ""}
+    slides = [
+        {
+            "no": no,
+            "student_screen": [] if no == 14 else (["김치 — 김치를 좋아합니다.", "커피 — 커피를 마십니다.", "노래 — 노래가 좋습니다."] if no in (4, 5) else [f"{no}번 화면"]),
+            "activity": f"{no}번 활동",
+            "note": note,
+            "needs_check": [],
+        }
+        for no in range(1, 16)
+    ]
+    return {
+        "lesson_goal": "좋아하는 것을 두 문장으로 말할 수 있다.",
+        "final_mission": "선생님과 둘 다 좋아하는 것을 하나 찾는다.",
+        "slides": slides,
+        "homework": {"pages": homework_pages, "items": "1~2번" if homework_pages else "", "how": "문장을 소리 내어 읽고 쓴다.", "example": "저는 김치를 좋아합니다."},
+        "needs_check": [] if homework_pages else ["숙제 쪽수 확인 필요"],
+    }
 
 
 class FakeLLM:
@@ -75,6 +106,7 @@ class FakeLLM:
         self.counter = 0  # 생성할 때마다 다른 글이 나오도록 붙이는 번호
         self.tiers = []  # (프롬프트 이름, 모델 티어) 기록
         self.validator_fail_times = 0  # 피드백 Validator를 처음 몇 번 불합격시킬지
+        self.homework_pages = "p.40"  # 가짜 슬라이드 구성안의 숙제 쪽수 ("" 이면 확인 필요로 표시)
 
     def count(self, prompt_name: str) -> int:
         """해당 프롬프트가 몇 번 불렸는지 센다."""
@@ -100,11 +132,17 @@ class FakeLLM:
         if prompt_name == "briefing_personal":
             return {k: FAKE_BRIEFING[k] for k in ("warmup_questions", "practice_activity", "tips")}
 
+        if prompt_name == "write_slides":
+            return fake_slides(self.homework_pages)
+
         if prompt_name == "student_intake":
             return FAKE_INTAKE
 
         if prompt_name == "extract_record":
             return FAKE_EXTRACTION
+
+        if prompt_name == "observe_understanding":
+            return {"episodes": FAKE_EPISODES}
 
         if prompt_name == "write_feedback":
             self.counter += 1

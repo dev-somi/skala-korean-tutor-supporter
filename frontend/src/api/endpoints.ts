@@ -1,8 +1,8 @@
 import { del, get, post, put } from './http'
 import { streamSse, type SseHandler } from './sse'
 import type {
-  ApproveRequest, Category, Decision, IntakeResult, LessonView, LevelTest, LevelTestResult, LevelTestScore, MaterialOpenResult, PrepState, ProgressReport, QualityMetrics, RecordView,
-  StandardGrammar, StandardList, StandardVocab,
+  ApproveRequest, Category, CurriculumBook, Decision, IntakeResult, LessonView, LevelTest, LevelTestResult, LevelTestScore, MaterialOpenResult, PrepState, ProgressReport, QualityMetrics, RecordView,
+  StandardGrammar, StandardList, StandardVocab, TextbookItem,
   StudentDetail, StudentRequest, StudentSummary, TimeMetrics, Todos, TraceDetail, TraceList,
 } from './types'
 
@@ -39,10 +39,20 @@ const qs = (params: Record<string, string | number | null | undefined>) => {
   return s ? `?${s}` : ''
 }
 
+// 교재 항목 ID → 화면에 보일 이름 (기술 ADR-0029)
+export const textbookApi = {
+  items: () => get<{ items: Record<string, TextbookItem> }>('/textbook/items'),
+}
+
 export const standardApi = {
   grammar: (params: { level?: number | null; category?: string | null; q?: string }) => get<StandardList<StandardGrammar>>(`/standard/grammar${qs(params)}`),
   vocab: (params: { level?: number | null; pos?: string | null; q?: string; offset?: number; limit?: number }) =>
     get<StandardList<StandardVocab>>(`/standard/vocab${qs(params)}`),
+}
+
+/** 단원 시트 목록 (기술 ADR-0032) */
+export const curriculumApi = {
+  list: () => get<{ books: CurriculumBook[] }>('/curriculum'),
 }
 
 /** 교재 원본 PDF (기술 ADR-0030): 로컬 ai-server가 선생님 컴퓨터의 PDF를 그 쪽으로 연다 */
@@ -53,7 +63,7 @@ export const materialsApi = {
 
 export const lessonsApi = {
   listByStudent: (studentId: number) => get<LessonView[]>(`/students/${studentId}/lessons`),
-  create: (studentId: number, body: { unitNo?: number; minutes?: number; targetLang?: string; lessonDate?: string } = {}) =>
+  create: (studentId: number, body: { book?: string; unitNo?: number; minutes?: number; targetLang?: string; lessonDate?: string } = {}) =>
     post<LessonView>(`/students/${studentId}/lessons`, body),
   get: (id: number) => get<LessonView>(`/lessons/${id}`),
   prepState: (id: number) => get<PrepState>(`/lessons/${id}/prep/state`),

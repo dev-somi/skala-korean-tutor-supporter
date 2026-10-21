@@ -8,11 +8,13 @@ import Tag from 'primevue/tag'
 import Timeline from 'primevue/timeline'
 import StudentForm from '../components/StudentForm.vue'
 import PrepDialog from '../components/PrepDialog.vue'
+import ItemChips from '../components/ItemChips.vue'
+import { useItemLabels } from '../stores/itemLabels'
 import ErrorBox from '../components/ErrorBox.vue'
 import { lessonsApi, studentsApi } from '../api/endpoints'
 import {
   LANG_NAMES, LESSON_STATUS_NAMES, PERSONA_NAMES, PERSONA_TEXTBOOKS, levelName,
-  type LessonView, type StudentDetail, type StudentRequest,
+  type LessonView, type StudentDetail, type StudentRequest, bookName,
 } from '../api/types'
 import { formatDate, toUiError, type UiError } from '../utils'
 
@@ -20,6 +22,7 @@ const props = defineProps<{ id: number }>()
 const router = useRouter()
 const toast = useToast()
 const confirm = useConfirm()
+const { label } = useItemLabels()
 
 const student = ref<StudentDetail | null>(null)
 const lessons = ref<LessonView[]>([])
@@ -107,7 +110,7 @@ const statusSeverity: Record<string, string> = { planned: 'secondary', prepared:
           <dd class="m-0">{{ student.persona ? `${PERSONA_NAMES[student.persona]} (중심 교재: ${PERSONA_TEXTBOOKS[student.persona]})` : '-' }}</dd>
           <dt class="text-surface-500">목표</dt><dd class="m-0">{{ student.goals.join(' · ') || '-' }}</dd>
           <dt class="text-surface-500">관심사</dt><dd class="m-0">{{ student.interests.join(' · ') || '-' }}</dd>
-          <dt class="text-surface-500">다음 과</dt><dd class="m-0">{{ student.nextUnit }}과 · 기본 {{ student.lessonMinutesDefault }}분</dd>
+          <dt class="text-surface-500">다음 과</dt><dd class="m-0">{{ bookName(student.nextBook) }} {{ student.nextUnit }}과 · 기본 {{ student.lessonMinutesDefault }}분</dd>
           <dt class="text-surface-500">메모</dt><dd class="m-0 pre-line">{{ student.notes || '-' }}</dd>
         </dl>
       </section>
@@ -116,7 +119,7 @@ const statusSeverity: Record<string, string> = { planned: 'secondary', prepared:
         <ul class="m-0 list-none space-y-2 p-0 text-sm">
           <li v-for="w in active" :key="w.id!" class="flex items-start gap-2">
             <i class="pi pi-circle-fill mt-1 text-[0.5rem] text-orange-500" />
-            <span class="flex-1">{{ w.description }} <code v-if="w.itemId" class="text-xs text-surface-500">{{ w.itemId }}</code></span>
+            <span class="flex-1">{{ w.description }} <span v-if="w.itemId" class="text-xs text-surface-500" :title="w.itemId">· {{ label(w.itemId) }}</span></span>
             <span class="text-xs text-surface-400">{{ formatDate(w.createdAt) }}~</span>
           </li>
           <li v-if="!active.length" class="text-surface-400">남은 약점 없음</li>
@@ -146,12 +149,10 @@ const statusSeverity: Record<string, string> = { planned: 'secondary', prepared:
             <div class="mb-4">
               <div class="flex flex-wrap items-center gap-2">
                 <b>{{ item.lessonNo }}회차</b>
-                <span class="text-sm text-surface-500">{{ formatDate(item.lessonDate) }} · {{ item.unitNo }}과 · {{ item.minutes }}분</span>
+                <span class="text-sm text-surface-500">{{ formatDate(item.lessonDate) }} · {{ bookName(item.book) }} {{ item.unitNo }}과 · {{ item.minutes }}분</span>
                 <Tag :value="LESSON_STATUS_NAMES[item.status]" :severity="statusSeverity[item.status]" />
               </div>
-              <div v-if="item.coveredItemIds.length" class="mt-1 flex flex-wrap gap-1">
-                <code v-for="c in item.coveredItemIds" :key="c" class="rounded bg-surface-100 px-1 text-xs">{{ c }}</code>
-              </div>
+              <div v-if="item.coveredItemIds.length" class="mt-1"><ItemChips :ids="item.coveredItemIds" /></div>
               <div class="mt-2 flex flex-wrap gap-2">
                 <RouterLink v-if="item.status === 'planned' || item.plan" :to="`/lessons/${item.id}/review`">
                   <Button :label="item.status === 'planned' ? '수업 준비 / 검토' : '수업안 보기'" size="small" severity="secondary" outlined />
@@ -169,7 +170,7 @@ const statusSeverity: Record<string, string> = { planned: 'secondary', prepared:
         <p v-if="!materials.length" class="text-sm text-surface-400">아직 없음</p>
         <ul class="m-0 list-none space-y-2 p-0 text-sm">
           <li v-for="l in materials" :key="l.id" class="flex flex-wrap items-center gap-2">
-            <span class="flex-1">{{ l.lessonNo }}회차 · {{ l.unitNo }}과</span>
+            <span class="flex-1">{{ l.lessonNo }}회차 · {{ bookName(l.book) }} {{ l.unitNo }}과</span>
             <RouterLink :to="`/lessons/${l.id}/review`"><Button label="수업안 보기" icon="pi pi-eye" size="small" text /></RouterLink>
           </li>
         </ul>

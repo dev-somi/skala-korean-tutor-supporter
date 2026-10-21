@@ -21,6 +21,8 @@ router = APIRouter(tags=["post-lesson"])
 NODE_LABELS = {
     "extract": "수업 메모 정리",
     "gate": "교재 ID·약점 검사",
+    "observe": "학생 반응 장면 찾기",
+    "judge": "항목별 이해도 판정",
     "write_feedback": "피드백 메시지 쓰기",
     "validate": "피드백 메시지 검토",
 }
@@ -38,7 +40,11 @@ async def run_stream(graph, initial: dict):
         yield sse(
             "done",
             {
-                "record_draft": {**final["extraction"], "feedback_message": final["feedback_message"]},
+                "record_draft": {
+                    **final["extraction"],
+                    "understanding": final.get("understanding", []),
+                    "feedback_message": final["feedback_message"],
+                },
                 "warnings": final.get("warnings", []),
                 "validation": final.get("validation"),
                 "rewrite_count": final.get("rewrite_count", 0),

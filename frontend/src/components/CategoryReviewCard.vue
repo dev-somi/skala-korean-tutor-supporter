@@ -5,6 +5,7 @@ import Tag from 'primevue/tag'
 import SelectButton from 'primevue/selectbutton'
 import Textarea from 'primevue/textarea'
 import { CATEGORY_NAMES, type Category, type CategoryDraft, type Decision } from '../api/types'
+import ItemChips from './ItemChips.vue'
 
 // 범주 하나의 초안을 보여 주고, 선생님 결정(승인 / 직접 수정 / 피드백)을 받는다 (PRD F3-3)
 const props = defineProps<{ category: Category; draft: CategoryDraft; approved: boolean; decision: Decision }>()
@@ -41,10 +42,7 @@ function patch(field: 'explanation' | 'script' | 'feedback', value: string | und
       </div>
     </template>
     <template #subtitle>
-      <div class="flex flex-wrap gap-1">
-        <code v-for="id in draft.item_ids" :key="id" class="rounded bg-surface-100 px-1.5 py-0.5 text-xs">{{ id }}</code>
-        <span v-if="!draft.item_ids.length" class="text-xs">(교재 항목 없음)</span>
-      </div>
+      <ItemChips :ids="draft.item_ids" empty="(교재 항목 없음)" />
       <p class="mb-0 mt-2 text-sm">{{ draft.reason }}</p>
     </template>
     <template #content>

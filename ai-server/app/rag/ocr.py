@@ -95,7 +95,10 @@ def run(pdf: Path, book: str, first: int = 1, last: int | None = None, ja: bool 
         target = out_dir / f"p-{page:03d}.json"
         if target.exists():
             continue
-        target.write_text(json.dumps(ocr_page(pdf, page, binary, ja), ensure_ascii=False), encoding="utf-8")
+        # 임시 파일에 쓰고 이름을 바꾼다. 쓰는 도중에 끊겨도 반쯤 쓴 JSON이 "이미 OCR한 쪽"으로 남지 않는다
+        partial = target.with_suffix(".part")
+        partial.write_text(json.dumps(ocr_page(pdf, page, binary, ja), ensure_ascii=False), encoding="utf-8")
+        partial.replace(target)
         print(f"{book} {page}/{last}", flush=True)
     from app.rag.pdfs import register  # pdfs가 이 모듈을 가져다 써서 여기서 가져온다
 

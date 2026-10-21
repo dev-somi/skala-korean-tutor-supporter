@@ -12,7 +12,7 @@ pytestmark = pytest.mark.skipif(
     not (get_data_dir() / "textbook" / "unit_03.json").exists(), reason="교재 데이터가 없다 (저장소에 넣지 않는 데이터)"
 )
 
-ERROR = {"student_said": "드라마을 좋아해요", "correction": "드라마를 좋아해요", "item_id": "u03-g02", "note": ""}
+ERROR = {"student_said": "드라마을 좋아해요", "correction": "드라마를 좋아해요", "item_id": "std-g-007", "note": ""}
 
 
 def request(**overrides) -> ReportRequest:
@@ -22,21 +22,21 @@ def request(**overrides) -> ReportRequest:
         "date_to": "2026-10-31",
         "lessons": [
             # 기간 전 수업: 2과 (누적에만 들어간다)
-            {"lesson_no": 1, "date": "2026-09-20", "minutes": 50, "unit_no": 2, "covered_item_ids": ["u02-g01", "u02-v01", "u02-v02"]},
+            {"lesson_no": 1, "date": "2026-09-20", "minutes": 50, "unit_no": 2, "covered_item_ids": ["std-g-001", "std-v-00404", "std-v-00436"]},
             # 기간 안 수업 2회: 3과
             {
                 "lesson_no": 2, "date": "2026-10-05", "minutes": 50, "unit_no": 3,
-                "covered_item_ids": ["u03-g01", "u03-g02", "u03-v01", "u03-v02", "u03-v14"],
+                "covered_item_ids": ["std-g-030", "std-g-007", "std-v-00136", "std-v-00185", "ko1-u03-x01"],
                 "strengths": ["-습니다를 정확히 씀"], "errors": [ERROR],
             },
             {
                 "lesson_no": 3, "date": "2026-10-12", "minutes": 40, "unit_no": 3,
-                "covered_item_ids": ["u03-g02", "u03-v03"],
+                "covered_item_ids": ["std-g-007", "std-v-00521"],
                 "strengths": ["-습니다를 정확히 씀", "질문을 먼저 함"], "errors": [ERROR, {"student_said": "학교에서 가요", "correction": "학교에 가요"}],
             },
         ],
         "weaknesses": [
-            {"item_id": "u02-g01", "description": "이/가 구분", "resolved": True, "created_at": "2026-09-20", "resolved_at": "2026-10-12"},
+            {"item_id": "std-g-001", "description": "이/가 구분", "resolved": True, "created_at": "2026-09-20", "resolved_at": "2026-10-12"},
             {"description": "받침 발음", "created_at": "2026-09-20"},
         ],
     }
@@ -75,7 +75,7 @@ def test_remaining_to_target_excludes_learned():
 def test_repeated_errors_and_weakness_changes():
     report = build_report(request())
     assert report["repeated_errors"] == [
-        {"key": "u03-g02", "count": 2, "student_said": "드라마을 좋아해요", "correction": "드라마를 좋아해요", "item_id": "u03-g02"}
+        {"key": "std-g-007", "count": 2, "student_said": "드라마을 좋아해요", "correction": "드라마를 좋아해요", "item_id": "std-g-007"}
     ]
     assert report["resolved_weaknesses"] == ["이/가 구분"]
     assert report["open_weaknesses"] == ["받침 발음"]

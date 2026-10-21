@@ -5,7 +5,7 @@
 그래프에 연결하지 않고도 함수만 따로 불러서 시험해 볼 수 있다.
 
   코드 노드 (정해진 대로만 동작): load_profile, load_textbook, plan_lesson
-  LLM 노드 (LLM이 판단):          write_explanations, write_scripts, auto_review, briefing
+  LLM 노드 (LLM이 판단):          write_explanations, write_scripts, auto_review, briefing, write_slides
   사람 노드 (선생님이 판단):       human_review
 """
 
@@ -25,10 +25,13 @@ from app.agent.lesson_prep.schemas import (
     LessonPlan,
     ReviewResult,
     ScriptOutput,
+    SlidePlanOutput,
     StudentProfile,
     TeacherBriefing,
 )
-from app.agent.lesson_prep.textbook import all_items_by_id, collect_items, format_item_for_prompt, get_data_dir, load_unit
+from app.agent.lesson_prep.textbook import all_items_by_id, format_item_for_prompt, get_data_dir, load_all_items
+from app.curriculum.ids import to_new
+from app.curriculum.sheets import BOOK_SOURCES, load_sheet
 from app.rag import index as rag_index
 from app.standard import l1_notes
 
@@ -84,32 +87,45 @@ def load_profile(state: dict) -> dict:
     없으면(CLI·테스트) data/students/ 의 JSON 파일을 읽는다.
     """
     if state.get("profile"):
-        return {"profile": StudentProfile.model_validate(state["profile"]).model_dump()}
+        return {"profile": with_new_ids(StudentProfile.model_validate(state["profile"]).model_dump())}
     path = get_data_dir() / "students" / f"{state['student_id']}.json"
     with open(path, encoding="utf-8") as f:
         profile = StudentProfile.model_validate(json.load(f))  # 형식 검사
-    return {"profile": profile.model_dump()}
+    return {"profile": with_new_ids(profile.model_dump())}
+
+
+def with_new_ids(profile: dict) -> dict:
+    """옛 교재 ID(u02-g01)가 남아 있으면 단원 시트 ID로 바꾼다 (DB 이전 전 기록·샘플 프로필, 기술 ADR-0032)."""
+    profile["weaknesses"] = [to_new(i) for i in profile["weaknesses"]]
+    for record in profile["lesson_history"]:
+        record["item_ids"] = [to_new(i) for i in record["item_ids"]]
+        record["understanding"] = {to_new(k): v for k, v in record.get("understanding", {}).items()}
+    return profile
+
+
+class MissingUnitSheet(ValueError):
+    """고른 과의 단원 시트가 없다 (다시 해도 같다 → retryable=false)"""
 
 
 def load_textbook(state: dict) -> dict:
-    """이번에 배울 과의 교재 JSON을 읽고, 학생이 과거에 배운 항목(복습 후보)도 모은다."""
+    """
+    이번에 배울 과의 단원 시트를 읽고, 학생이 과거에 배운 항목(복습 후보)도 모은다 (기술 ADR-0032).
+    교재·과는 선생님이 실행할 때 고른 값, 없으면 프로필의 next_book·next_unit.
+    """
     profile = state["profile"]
-    # 선생님이 과 번호를 직접 줬으면 그것을, 아니면 프로필의 next_unit을 쓴다
+    book = state.get("book") or profile.get("next_book") or "ko1"
     unit_no = state.get("unit_no") or profile["next_unit"]
-    unit = load_unit(unit_no)
+    unit = load_sheet(book, unit_no)
+    if unit is None:
+        title = BOOK_SOURCES.get(book, {}).get("title", book)
+        raise MissingUnitSheet(f"「{title}」 {unit_no}과의 단원 시트가 없어요. python -m app.curriculum.build {book} 로 만들 수 있어요.")
 
-    # 과거에 배운 항목의 원문을 다른 과의 교재 파일에서 찾아온다
+    # 과거에 배운 항목의 원문을 다른 과의 시트에서 찾아온다 (같은 표준 항목은 이번 과의 것을 쓴다)
     learned = learned_ids(profile)
-    past_items = []
-    for path in sorted((get_data_dir() / "textbook").glob("unit_*.json")):
-        other_no = int(path.stem.split("_")[1])  # "unit_02" -> 2
-        if other_no == unit_no:
-            continue
-        for item_id, item in collect_items(load_unit(other_no)).items():
-            if item_id in learned:
-                past_items.append(item)
+    current = {item["id"] for kind in ("vocabulary", "grammar", "dialogues", "readings", "exercises") for item in unit[kind]}
+    past_items = [item for item_id, item in load_all_items().items() if item_id in learned and item_id not in current]
 
-    return {"unit_no": unit_no, "textbook_unit": unit, "past_items": past_items}
+    return {"book": book, "unit_no": unit_no, "textbook_unit": unit, "past_items": past_items}
 
 
 # ---------------------------------------------------------------------------
@@ -122,20 +138,40 @@ MAX_REVIEW_ITEMS = 5  # 복습에 넣을 최대 항목 수
 REVIEW_KINDS = ("vocab", "grammar")  # 복습은 어휘·문법만 (대화문·연습문제는 제외)
 
 
+def last_understanding(profile: dict) -> dict:
+    """직전 수업에서 선생님이 승인한 항목별 이해도 {항목 ID: confused | shaky | ok} (기술 ADR-0033)."""
+    return profile["lesson_history"][-1].get("understanding", {}) if profile["lesson_history"] else {}
+
+
+def long_review(profile: dict, review_ids: list[str]) -> bool:
+    """직전 수업에서 헷갈린 항목을 복습하면 복습 시간을 늘린다."""
+    understanding = last_understanding(profile)
+    return any(understanding.get(i) == "confused" for i in review_ids)
+
+
 def pick_review(profile: dict, past_items: dict) -> tuple[list[str], str]:
-    """약점(배운 것만) → 직전 수업의 문법 → 직전 수업의 어휘 순서로 복습 항목을 고른다."""
-    picked = []
-    weak = [i for i in profile["weaknesses"] if i in past_items and past_items[i]["kind"] in REVIEW_KINDS]
-    picked.extend(weak)
+    """
+    직전 수업에서 헷갈림 → 조금 헷갈림 → 약점(배운 것만) → 직전 수업의 문법 → 어휘 순서로 복습 항목을 고른다.
+    이해도는 수업 후 기록에서 선생님이 승인한 것이다 (기획 ADR-0029).
+    """
+    reviewable = lambda i: i in past_items and past_items[i]["kind"] in REVIEW_KINDS  # noqa: E731
+    understanding = last_understanding(profile)
+    confused = [i for i, level in understanding.items() if level == "confused" and reviewable(i)]
+    shaky = [i for i, level in understanding.items() if level == "shaky" and reviewable(i)]
+    weak = [i for i in profile["weaknesses"] if reviewable(i)]
 
     last_ids = profile["lesson_history"][-1]["item_ids"] if profile["lesson_history"] else []
-    for kind in ("grammar", "vocab"):
-        picked.extend(i for i in last_ids if i in past_items and past_items[i]["kind"] == kind)
+    rest = [i for kind in ("grammar", "vocab") for i in last_ids if reviewable(i) and past_items[i]["kind"] == kind]
 
-    picked = list(dict.fromkeys(picked))[:MAX_REVIEW_ITEMS]  # 순서를 지키며 중복 제거
-    n_weak = len([i for i in picked if i in weak])
-    reason = f"약점 {n_weak}개" + (f" + 직전 수업 항목 {len(picked) - n_weak}개" if len(picked) > n_weak else "")
-    return picked, reason
+    picked = list(dict.fromkeys(confused + shaky + weak + rest))[:MAX_REVIEW_ITEMS]  # 순서를 지키며 중복 제거
+    groups = [("지난 수업에서 헷갈림", confused), ("조금 헷갈림", shaky), ("약점", weak), ("직전 수업 항목", rest)]
+    parts, counted = [], set()
+    for name, ids in groups:
+        n = len([i for i in picked if i in ids and i not in counted])
+        counted.update(i for i in picked if i in ids)
+        if n:
+            parts.append(f"{name} {n}개")
+    return picked, " + ".join(parts)
 
 
 def plan_lesson(state: dict) -> dict:
@@ -148,8 +184,9 @@ def plan_lesson(state: dict) -> dict:
     grammar_ids = [g["id"] for g in unit["grammar"]]
     # 숙제: 문법 수만큼 앞쪽 연습문제 (교재 연습문제는 문법 순서대로 나온다)
     homework_ids = [e["id"] for e in unit["exercises"]][: max(1, len(grammar_ids))]
-    # 시간은 고정된 7단계 수업 틀에서 나온다 (워밍업·활용·피드백 단계는 범주에 속하지 않는다)
-    minutes = lesson_frame.category_minutes(lesson_frame.step_minutes(state["lesson_minutes"], bool(review_ids)))
+    # 시간은 고정된 15장 슬라이드 틀에서 나온다 (워밍업·목표 대화·역할극·고치기 단계는 범주에 속하지 않는다)
+    steps = lesson_frame.step_minutes(state["lesson_minutes"], long_review(state["profile"], review_ids))
+    minutes = lesson_frame.category_minutes(steps, bool(review_ids))
 
     unit_title = f"{unit['unit_no']}과 {unit['title']}"
     plan = {
@@ -284,14 +321,15 @@ def code_checks(state: dict) -> list[dict]:
         }
     )
 
-    # (3) 범주 시간 + 틀에만 있는 단계(워밍업·활용·피드백) 시간이 수업 시간과 같은가
-    steps = lesson_frame.step_minutes(state["lesson_minutes"], bool(drafts["review"]["item_ids"]))
-    total = sum(drafts[category]["minutes"] for category in CATEGORIES) + lesson_frame.frame_only_minutes(steps)
+    # (3) 범주 시간 + 틀에만 있는 단계(워밍업·목표 대화·역할극·고치기) 시간이 수업 시간과 같은가
+    review_ids = drafts["review"]["item_ids"]
+    steps = lesson_frame.step_minutes(state["lesson_minutes"], long_review(state["profile"], review_ids))
+    total = sum(drafts[category]["minutes"] for category in CATEGORIES) + lesson_frame.frame_only_minutes(steps, bool(review_ids))
     checks.append(
         {
             "name": "시간 합계",
             "passed": total == state["lesson_minutes"],
-            "reason": f"범주 시간 + 워밍업·활용·피드백 시간 = {total}분, 수업 시간은 {state['lesson_minutes']}분입니다.",
+            "reason": f"범주 시간 + 틀에만 있는 단계 시간 = {total}분, 수업 시간은 {state['lesson_minutes']}분입니다.",
         }
     )
     return checks
@@ -333,19 +371,23 @@ def auto_review(state: dict) -> dict:
 
 
 # ---------------------------------------------------------------------------
-# 5-1. briefing: 선생님이 수업 전에 읽을 브리핑 + 고정된 7단계 수업 틀 (ADR-0013, ADR-0015)
+# 5-1. briefing: 선생님이 수업 전에 읽을 브리핑 (ADR-0013)
 #      코드가 근거 자료(교원용 지침서)를 먼저 모으고, LLM은 개인화 칸만 쓴다.
-#      출처와 수업 틀은 코드가 붙인다.
+#      출처는 코드가 붙인다.
 #      구성안이 정해진 뒤(자동 검토 뒤) 한 번만 만든다.
 # ---------------------------------------------------------------------------
 
-GUIDE_BOOK = "ko1_guide"  # 기준 교재의 교원용 지침서 (기획 ADR-0013)
 GUIDE_SECTIONS = ["학습 목표", "문법"]  # 브리핑 근거로 쓰는 구역 (학습 목표·수업 개요, 문법 1·2)
 
 
-def collect_references(unit_no: int) -> list[dict]:
+def guide_of(book: str) -> str:
+    """교재 시리즈의 교원용 지침서 색인 ID (ko1 → ko1_guide)"""
+    return BOOK_SOURCES.get(book, BOOK_SOURCES["ko1"])["guide"]
+
+
+def collect_references(book: str, unit_no: int) -> list[dict]:
     """필터 경로: 이번 과의 지침서 구역을 가져온다. 색인이 없으면 빈 목록 (브리핑은 근거 없이 만든다)."""
-    return rag_index.get_sections(GUIDE_BOOK, unit_no, GUIDE_SECTIONS)
+    return rag_index.get_sections(guide_of(book), unit_no, GUIDE_SECTIONS)
 
 
 CULTURE_BOOK = "culture1"  # 세종한국문화 1 (기획 ADR-0023)
@@ -364,7 +406,7 @@ def collect_culture(unit: dict) -> list[dict]:
     query = f"{unit['title']} {dialogue} {vocab}"
     try:
         found = rag_index.search(query, k=2, book=CULTURE_BOOK)
-        found += rag_index.search(f"{query} 문화 예절 인사 호칭", k=1, book=GUIDE_BOOK, unit=unit["unit_no"])
+        found += rag_index.search(f"{query} 문화 예절 인사 호칭", k=1, book=guide_of(unit["book"]), unit=unit["unit_no"])
     except Exception:  # noqa: BLE001 — 검색은 덧붙이는 정보라 실패해도 수업 준비는 계속한다
         return []
     return [
@@ -412,7 +454,7 @@ def briefing(state: dict) -> dict:
     profile = state["profile"]
     native = profile["native_language"]
     unit = state["textbook_unit"]
-    references = collect_references(state["unit_no"])
+    references = collect_references(unit["book"], state["unit_no"])
     grammar_ids = drafts["new_grammar"]["item_ids"]
     weak_forms = grammar_forms([i for i in profile["weaknesses"] if items.get(i, {}).get("kind") == "grammar"], items)
     notes, missing_ids = l1_notes.lookup(grammar_ids, native)
@@ -480,9 +522,64 @@ def briefing(state: dict) -> dict:
         "references": [{"source": ref["source"], "section": ref["section"], "book": ref["book"], "pages": ref["pages"]} for ref in references],
         "l1_sources": l1_sources,
         "culture": culture,
+        # 자동으로 만든 단원 시트면 화면이 "검수 전 단원"을 표시한다 (기획 ADR-0030)
+        "unit_sheet": {"book": unit["book"], "unit_no": unit["unit_no"], "status": unit["status"], "notes": unit["notes"]},
     }
-    extra["lesson_frame"] = lesson_frame.assemble(state["lesson_minutes"], drafts, {**result, "culture": culture})
     return {"briefing": TeacherBriefing.model_validate(result).model_dump() | extra}
+
+
+# ---------------------------------------------------------------------------
+# 5-2. write_slides: 15장 슬라이드 구성안 (기획 ADR-0032, 기술 ADR-0034)
+#      틀(번호·단계·레이아웃·시간)은 코드(lesson_frame), 학생 화면 문구와 교사 노트는 LLM 한 번.
+#      선생님이 4범주를 고치면 슬라이드가 낡으므로, 승인할 때 초안이 달라졌으면 한 번 더 만든다.
+# ---------------------------------------------------------------------------
+
+
+def slide_table_text(frame: list[dict]) -> str:
+    return "\n".join(f"{s['no']}번 | {s['name']} | {s['minutes']}분 | 레이아웃 {s['layout']}" for s in frame)
+
+
+def example_sentences(drafts: dict) -> str:
+    """4범주 초안에 쓰인 한국어 예문 (슬라이드는 새 예문을 만들지 않고 이 안에서 고른다, 기획 ADR-0017)."""
+    sentences = list(dict.fromkeys(e["korean"] for c in CATEGORIES for e in drafts[c]["examples"]))
+    return "\n".join(f"- {s}" for s in sentences) or "(없음)"
+
+
+def write_slides(state: dict) -> dict:
+    """승인 전 4범주 초안과 브리핑을 재료로 15장 슬라이드 구성안(학생 화면 문구 + 교사 노트)을 만든다."""
+    items = all_items_by_id(state)
+    drafts = state["drafts"]
+    briefing_ = state["briefing"]
+    profile = state["profile"]
+    unit = state["textbook_unit"]
+    review_ids = drafts["review"]["item_ids"]
+    long = long_review(profile, review_ids)
+    frame = lesson_frame.frame(state["lesson_minutes"], bool(review_ids), long)
+
+    values = {
+        "lang_name": llm.LANG_NAMES[state["target_lang"]],
+        "learner": learner_view(profile),
+        "unit_title": f"{unit['unit_no']}과 「{unit['title']}」",
+        "lesson_minutes": state["lesson_minutes"],
+        "slide_table": slide_table_text(frame),
+        "review_state": "복습할 항목이 있다" if review_ids else "복습할 이전 수업 정보가 없다 (2번은 수준 확인 질문으로 쓴다)",
+        "review_items": items_text(review_ids, items),
+        "vocab_items": items_text(drafts["new_vocab"]["item_ids"], items),
+        "grammar_items": items_text(drafts["new_grammar"]["item_ids"], items),
+        "dialogue_items": items_text([d["id"] for d in unit["dialogues"]], items),
+        "homework_items": items_text(drafts["homework"]["item_ids"], items),
+        "examples": example_sentences(drafts),
+        "warmup_questions": "\n".join(f"- {q}" for q in briefing_.get("warmup_questions", [])) or "(없음)",
+        "practice_activity": briefing_.get("practice_activity") or "(없음)",
+        "grammar_points": to_json(briefing_.get("grammar_points", [])),
+        "expected_qa": to_json(briefing_.get("expected_qa", [])),
+    }
+    output = SlidePlanOutput.model_validate(llm.call_llm("write_slides", SlidePlanOutput, values)).model_dump()
+    slide_plan = lesson_frame.merge(state["lesson_minutes"], bool(review_ids), long, output)
+    return {
+        "briefing": {**briefing_, "slide_plan": slide_plan},
+        "slides_fingerprint": lesson_frame.drafts_fingerprint(drafts),
+    }
 
 
 # ---------------------------------------------------------------------------

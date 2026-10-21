@@ -12,7 +12,7 @@ from fastapi import FastAPI
 
 from app.agent.lesson_prep.graph import build_graph
 from app.agent.post_lesson.graph import build_graph as build_post_lesson_graph
-from app.api import files, grammar_qa, intake, level_test, materials, post_lesson, prep, report, standard, traces
+from app.api import curriculum, files, grammar_qa, intake, level_test, materials, post_lesson, prep, report, standard, textbook, traces
 from app.logging_config import setup_logging
 from app.persistence.checkpointer import create_checkpointer
 
@@ -37,9 +37,11 @@ app.include_router(files.router)
 app.include_router(level_test.router)
 app.include_router(report.router)
 app.include_router(standard.router)
+app.include_router(textbook.router)
 app.include_router(grammar_qa.router)
 app.include_router(traces.router)
 app.include_router(materials.router)
+app.include_router(curriculum.router)
 
 
 @app.get("/health")

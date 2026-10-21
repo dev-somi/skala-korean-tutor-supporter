@@ -153,7 +153,7 @@ public class ChatService {
     }
 
     private void prep(Out out, String conversationId, String message, Student student, Integer minutes) {
-        LessonView lesson = lessons.create(student.getId(), new CreateLessonRequest(null, minutes, null, null));
+        LessonView lesson = lessons.create(student.getId(), new CreateLessonRequest(null, null, minutes, null, null));
         out.event("action", Map.of("type", "open_prep", "lesson_id", lesson.id(), "label", "수업 준비 화면 열기"));
         reply(out, conversationId, message, "%s 학생 %d회차 수업(%d과, %d분)을 만들었어요. 검토 화면에서 수업 준비를 시작합니다."
                 .formatted(student.getName(), lesson.lessonNo(), lesson.unitNo(), lesson.minutes()));
@@ -163,7 +163,7 @@ public class ChatService {
         // 가장 최근의 아직 기록하지 않은 수업. 없으면 새로 만든다.
         Long lessonId = lessonRepository.findByStudentIdOrderByLessonNoDesc(student.getId()).stream()
                 .filter(l -> RECORDABLE.contains(l.getStatus())).findFirst().map(Lesson::getId)
-                .orElseGet(() -> lessons.create(student.getId(), new CreateLessonRequest(null, null, null, java.time.LocalDate.now())).id());
+                .orElseGet(() -> lessons.create(student.getId(), new CreateLessonRequest(null, null, null, null, java.time.LocalDate.now())).id());
         out.event("action", Map.of("type", "open_record", "lesson_id", lessonId, "note", message, "label", "수업 후 기록 화면 열기"));
         reply(out, conversationId, message, student.getName() + " 학생의 수업 후 기록 화면에 메모를 넣어 두었어요. [정리하기]를 누르면 AI가 초안을 만듭니다.");
     }

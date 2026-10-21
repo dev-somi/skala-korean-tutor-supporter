@@ -56,6 +56,25 @@ class RecordExtraction(BaseModel):
     next_lesson_note: str = Field(description="다음 수업에서 할 것 (한국어). 없으면 빈 문자열")
 
 
+# 학생 반응 장면의 종류 (기획 ADR-0029, 기술 ADR-0033). 점수는 graph.judge가 코드로 매긴다
+EpisodeKind = Literal["error", "asked_again", "hesitation", "re_explained", "self_corrected", "correct"]
+
+
+class Episode(BaseModel):
+    item_id: str = Field(description="이 장면과 관련된 교재 항목 ID. 아래 '다룬 항목' 목록에 있는 ID만")
+    kind: EpisodeKind = Field(
+        description="error=학생이 틀림, asked_again=학생이 같은 것을 다시 물어봄, hesitation=망설이거나 모르겠다고 함, "
+        "re_explained=선생님이 같은 것을 다시 설명함, self_corrected=학생이 스스로 고침, correct=학생이 바로 맞힘"
+    )
+    quote: str = Field(description="그 장면의 원문 한 줄을 메모·녹취록에서 그대로 복사 (고치거나 요약하지 않음)")
+
+
+class Observation(BaseModel):
+    """다룬 항목별 학생 반응 장면 (observe 노드 출력)"""
+
+    episodes: list[Episode] = Field(description="찾은 장면 목록. 없으면 빈 목록")
+
+
 class FeedbackMessage(BaseModel):
     target_lang_text: str = Field(description="학생에게 보낼 메시지 (학생 언어)")
     korean_text: str = Field(description="위 메시지의 한국어 번역 (선생님 확인용)")
@@ -71,5 +90,5 @@ class FeedbackValidation(BaseModel):
 class PostLessonRequest(BaseModel):
     profile: StudentProfile
     lesson: LessonInfo
-    raw_note: str = Field(min_length=1, max_length=8000)
+    raw_note: str = Field(min_length=1, max_length=30000)  # 50분 녹취록 전체 (기획 ADR-0029)
     current_weaknesses: list[CurrentWeakness] = []

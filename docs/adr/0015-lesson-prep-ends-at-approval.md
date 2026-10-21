@@ -1,5 +1,5 @@
 # ADR-0015: 수업 준비 그래프는 승인에서 끝나고, 7단계 틀은 briefing 노드가 코드로 붙인다
-- 상태: Accepted (2026-10-20)
+- 상태: Accepted (2026-10-20) — 그래프가 승인에서 끝난다는 결정은 유효. 7단계 틀을 briefing 노드가 붙인다는 부분은 [ADR-0034](0034-slide-plan-node.md)로 대체됨 (2026-10-21)
 - 관련 모듈: `ai-server/app/agent/lesson_prep/graph.py`, `lesson_frame.py`, `nodes.py` (`plan_lesson`, `briefing`), `app/api/prep.py`
 - 관련 ADR: [기획 ADR-0015](../planning-adr/0015-no-ppt-fixed-lesson-frame.md), [ADR-0013](0013-process-over-model.md), [ADR-0009](0009-graph-split-and-hitl-location.md)
 

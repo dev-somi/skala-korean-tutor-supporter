@@ -1,7 +1,7 @@
 <script setup lang="ts">
 import Card from 'primevue/card'
 import Tag from 'primevue/tag'
-import { LANG_NAMES, PERSONA_NAMES, levelName, type StudentSummary } from '../api/types'
+import { LANG_NAMES, PERSONA_NAMES, levelName, type StudentSummary, bookName } from '../api/types'
 import { formatDate } from '../utils'
 
 // 학생 프로필 카드. 누르면 학생 상세(프로필 보기·수정)로 간다. 대시보드와 [학생] 메뉴에서 같이 쓴다.
@@ -25,7 +25,7 @@ defineProps<{ student: StudentSummary }>()
       </template>
       <template #content>
         <div class="space-y-1 text-sm">
-          <div><span class="text-surface-500">다음 과</span> {{ student.nextUnit }}과 · <span class="text-surface-500">마지막 수업</span> {{ formatDate(student.lastLessonDate) }}</div>
+          <div><span class="text-surface-500">다음 과</span> {{ bookName(student.nextBook) }} {{ student.nextUnit }}과 · <span class="text-surface-500">마지막 수업</span> {{ formatDate(student.lastLessonDate) }}</div>
           <div class="flex flex-wrap gap-1">
             <Tag v-for="w in student.mainWeaknesses" :key="w" :value="w" severity="warn" class="!text-xs" />
             <span v-if="!student.mainWeaknesses.length" class="text-surface-400">약점 기록 없음</span>

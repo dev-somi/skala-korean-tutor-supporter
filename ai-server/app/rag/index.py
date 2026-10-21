@@ -15,6 +15,7 @@
 색인 만들기: uv run python -m app.rag.index  (책을 주지 않으면 BOOKS 전부)
 """
 
+import hashlib
 import json
 import math
 import os
@@ -34,16 +35,61 @@ OLLAMA_URL = os.environ.get("OLLAMA_BASE_URL", "http://localhost:11434")
 EMBED_BATCH = 32
 
 
-def embed(texts: list[str]) -> list[list[float]]:
+def embed_batch(texts: list[str]) -> list[list[float]]:
     """Ollama 임베딩 모델로 글 목록을 벡터로 바꾼다. 길이 1로 정규화해서 내적 = 코사인 유사도가 되게 한다."""
+    res = httpx.post(f"{OLLAMA_URL}/api/embed", json={"model": EMBED_MODEL, "input": texts}, timeout=300)
+    res.raise_for_status()
     vectors = []
-    for i in range(0, len(texts), EMBED_BATCH):
-        res = httpx.post(f"{OLLAMA_URL}/api/embed", json={"model": EMBED_MODEL, "input": texts[i : i + EMBED_BATCH]}, timeout=300)
-        res.raise_for_status()
-        for vec in res.json()["embeddings"]:
-            norm = math.sqrt(sum(x * x for x in vec)) or 1.0
-            vectors.append([x / norm for x in vec])
+    for vec in res.json()["embeddings"]:
+        norm = math.sqrt(sum(x * x for x in vec)) or 1.0
+        vectors.append([x / norm for x in vec])
     return vectors
+
+
+def cache_dir():
+    return RAG_DIR / "embed_cache" / EMBED_MODEL.replace(":", "_")
+
+
+def load_cache() -> tuple[dict[str, int], array, int | None]:
+    """{글 해시: 순번}, 벡터(이어 붙인 float32), 차원. 벡터를 먼저 쓰고 키를 나중에 써서, 끊기면 키 개수 × 차원만큼만 믿는다."""
+    keys_path, vec_path = cache_dir() / "keys.txt", cache_dir() / "vectors.bin"
+    keys = keys_path.read_text(encoding="utf-8").split() if keys_path.exists() else []
+    dim_path = cache_dir() / "dim"
+    dim = int(dim_path.read_text()) if dim_path.exists() else None
+    flat = array("f")
+    if vec_path.exists() and dim:
+        flat.frombytes(vec_path.read_bytes()[: len(keys) * dim * 4])
+    else:
+        keys = []
+    return {key: i for i, key in enumerate(keys)}, flat, dim
+
+
+def embed(texts: list[str]) -> list[list[float]]:
+    """
+    글 목록 → 벡터. 이미 임베딩한 글(같은 내용)은 캐시에서 꺼낸다 (기술 ADR-0031).
+    한 묶음(EMBED_BATCH)마다 캐시에 덧붙이므로, 중간에 끊겨도 다시 실행하면 남은 글만 임베딩한다.
+    """
+    index, flat, dim = load_cache()
+    digests = [hashlib.sha1(text.encode("utf-8")).hexdigest() for text in texts]
+    missing = list(dict.fromkeys((d, t) for d, t in zip(digests, texts) if d not in index))
+    cache_dir().mkdir(parents=True, exist_ok=True)
+    with open(cache_dir() / "vectors.bin", "ab") as vec_file, open(cache_dir() / "keys.txt", "a", encoding="utf-8") as key_file:
+        vec_file.truncate(len(flat) * 4)  # 지난번에 키 없이 남은 벡터를 버린다
+        for i in range(0, len(missing), EMBED_BATCH):
+            batch = missing[i : i + EMBED_BATCH]
+            vectors = embed_batch([t for _, t in batch])
+            if not dim:
+                dim = len(vectors[0])
+                (cache_dir() / "dim").write_text(str(dim))
+            for (digest, _), vec in zip(batch, vectors):
+                index[digest] = len(flat) // dim
+                flat.extend(vec)
+            vec_file.write(array("f", (x for vec in vectors for x in vec)).tobytes())
+            vec_file.flush()
+            key_file.write("".join(f"{d}\n" for d, _ in batch))
+            key_file.flush()
+            print(f"임베딩 {min(i + EMBED_BATCH, len(missing))}/{len(missing)} (캐시 {len(texts) - len(missing)}개 재사용)", flush=True)
+    return [flat[index[d] * dim : (index[d] + 1) * dim].tolist() for d in digests]
 
 
 def write_jsonl(path, rows: list[dict]) -> None:
@@ -135,7 +181,7 @@ def search(query: str, k: int = 3, book: str | None = None, unit: int | None = N
     index = load_index()
     if not index["children"]:
         return []
-    qvec = embed([query])[0]
+    qvec = embed_batch([query])[0]  # 질문은 캐시에 넣지 않는다
     scored = []
     for child, vec in zip(index["children"], index["vectors"]):
         parent = index["parents"][child["parent_id"]]
@@ -156,4 +202,4 @@ def search(query: str, k: int = 3, book: str | None = None, unit: int | None = N
 
 
 if __name__ == "__main__":
-    build_index(sys.argv[1:] or [book for book, info in BOOKS.items() if info["layout"] != "merged"])
+    build_index(sys.argv[1:] or [book for book, info in BOOKS.items() if info["layout"] != "merged" and info.get("index", True)])

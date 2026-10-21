@@ -24,6 +24,11 @@ dist/
 # 실행 결과물 (PPT, PDF, 체크포인트 DB)
 ai-server/output/
 
+# 교재로 만든 수업 PPT (참고/, 저작권). 템플릿 ai-server/templates/*.pptx는 올린다
+참고/
+*.pptx
+!ai-server/templates/*.pptx
+
 # 교재 원본·교재 데이터 (저작권, PRD 12장)
 *.pdf
 ai-server/data/textbook/
@@ -31,5 +36,11 @@ ai-server/data/textbook/
 # OCR 결과·검색 색인 (교재 원문이 들어 있음, ADR-0014)
 ai-server/data/rag/
 
+# 단원 시트 (지침서·교재 발췌가 들어 있음, 기술 ADR-0032)
+ai-server/data/curriculum/
+
 # 개발 로그 (scripts/dev.sh)
 .dev-logs/
+
+# 개발 DB 백업 (pg_dump, 학생 데이터가 들어 있음)
+backups/

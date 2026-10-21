@@ -94,7 +94,12 @@ def get_item(standard_id: str) -> dict | None:
 
 
 def standard_ids(textbook_item_id: str) -> list[str]:
-    """교재 항목에 대응하는 표준 항목 ID 목록. 대응이 없으면 빈 목록."""
+    """
+    항목에 대응하는 표준 항목 ID 목록. 대응이 없으면 빈 목록.
+    옛 교재 ID(u03-g02)는 대응표로, 이미 표준 ID(std-g-007, 단원 시트 ID)면 그 자신 (기술 ADR-0032).
+    """
+    if textbook_item_id.startswith("std-"):
+        return [textbook_item_id] if get_item(textbook_item_id) else []
     return _textbook_map().get(textbook_item_id, [])
 
 
@@ -133,14 +138,15 @@ def content_words(sentence: str) -> list[tuple[str, str]]:
     tokens = _kiwi().tokenize(SPEAKER_LABEL.sub(" ", sentence))
     for i, token in enumerate(tokens):
         next_tag = tokens[i + 1].tag if i + 1 < len(tokens) else None
+        tag = token.tag.split("-")[0]  # 불규칙 활용은 "VA-I"(춥다), "VV-I"(듣다)처럼 붙어 나온다 (TS-0004)
         if token.tag == "XR" and next_tag in ROOT_SUFFIX:
             words.append((token.form + "하다", ROOT_SUFFIX[next_tag]))
         elif token.tag == "NNG" and next_tag == "XSN" and word_level(token.form + tokens[i + 1].form, "명사"):
             # 선생 + 님 -> 선생님 (목록에 붙은 꼴로 있을 때만)
             words.append((token.form + tokens[i + 1].form, "명사"))
-        elif token.tag in CONTENT_TAGS:
-            lemma = token.form + "다" if token.tag in PREDICATE_TAGS else token.form
-            words.append((lemma, CONTENT_TAGS[token.tag]))
+        elif tag in CONTENT_TAGS:
+            lemma = token.form + "다" if tag in PREDICATE_TAGS else token.form
+            words.append((lemma, CONTENT_TAGS[tag]))
     return words
 
 

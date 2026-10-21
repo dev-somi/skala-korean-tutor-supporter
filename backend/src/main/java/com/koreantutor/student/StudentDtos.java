@@ -13,14 +13,16 @@ public final class StudentDtos {
     private StudentDtos() {
     }
 
-    // shared/constraints.json 의 textbook_item_id_pattern 과 같다
-    public static final String ITEM_ID_PATTERN = "^u\\d{2}-[vgdre]\\d{2}$";
+    // shared/constraints.json 의 item_id_pattern 과 같다. 표준 ID(std-g-007), 교재 안 ID(ko1-u02-d01), 옛 교재 ID(u02-g01, 이전 전 기록) (기술 ADR-0032)
+    public static final String ITEM_ID_PATTERN = "^(std-[gv]-\\d{3,5}|[a-z0-9]+-u\\d{2}-[vgdrex]\\d{2}|u\\d{2}-[vgdre]\\d{2})$";
+    // shared/constraints.json 의 book_pattern 과 같다 (단원 시트 교재 ID: ko1, ko2)
+    public static final String BOOK_PATTERN = "^[a-z0-9]{2,10}$";
     // shared/constraints.json 의 personas 와 같다
     public static final String PERSONA_PATTERN = "structured|conversation|travel|business";
 
     public record WeaknessDto(
             Long id,
-            @Pattern(regexp = ITEM_ID_PATTERN, message = "교재 항목 ID 형식이 아닙니다 (예: u03-g02)") String itemId,
+            @Pattern(regexp = ITEM_ID_PATTERN, message = "항목 ID 형식이 아닙니다 (예: std-g-007)") String itemId,
             @NotBlank @Size(max = 500) String description,
             Boolean resolved,     // 비우면 false
             Long sinceLessonId,   // 아래 셋은 응답 전용 (요청에서는 무시)
@@ -48,6 +50,7 @@ public final class StudentDtos {
             @Pattern(regexp = PERSONA_PATTERN) String persona,
             List<@NotBlank String> goals,
             List<@NotBlank String> interests,
+            @Pattern(regexp = BOOK_PATTERN) String nextBook,
             @Min(1) Integer nextUnit,
             @Min(10) @Max(180) Integer lessonMinutesDefault,
             String notes,
@@ -58,14 +61,14 @@ public final class StudentDtos {
     public record StudentDetail(
             Long id, String name, String nativeLanguage, String level,
             Integer standardLevel, Integer targetLevel, LocalDate levelAssessedOn, String persona,
-            List<String> goals, List<String> interests, int nextUnit, int lessonMinutesDefault,
+            List<String> goals, List<String> interests, String nextBook, int nextUnit, int lessonMinutesDefault,
             String notes, String status, List<WeaknessDto> weaknesses,
             OffsetDateTime createdAt, OffsetDateTime updatedAt) {
 
         static StudentDetail from(Student s) {
             return new StudentDetail(s.getId(), s.getName(), s.getNativeLanguage(), s.getLevel(),
                     s.getStandardLevel(), s.getTargetLevel(), s.getLevelAssessedOn(), s.getPersona(),
-                    s.getGoals(), s.getInterests(), s.getNextUnit(), s.getLessonMinutesDefault(),
+                    s.getGoals(), s.getInterests(), s.getNextBook(), s.getNextUnit(), s.getLessonMinutesDefault(),
                     s.getNotes(), s.getStatus(), s.getWeaknesses().stream().map(WeaknessDto::from).toList(),
                     s.getCreatedAt(), s.getUpdatedAt());
         }
@@ -74,7 +77,7 @@ public final class StudentDtos {
     /** 대시보드 학생 카드 (PRD F5-1) */
     public record StudentSummary(
             Long id, String name, String nativeLanguage, String level, Integer standardLevel, String persona,
-            int nextUnit, String status,
+            String nextBook, int nextUnit, String status,
             LocalDate lastLessonDate, List<String> mainWeaknesses) {
     }
 

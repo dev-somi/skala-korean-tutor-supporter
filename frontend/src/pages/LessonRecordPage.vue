@@ -8,12 +8,15 @@ import Textarea from 'primevue/textarea'
 import InputNumber from 'primevue/inputnumber'
 import Message from 'primevue/message'
 import Tag from 'primevue/tag'
+import SelectButton from 'primevue/selectbutton'
 import ProgressSteps from '../components/ProgressSteps.vue'
 import ErrorBox from '../components/ErrorBox.vue'
+import ItemChips from '../components/ItemChips.vue'
+import { useItemLabels } from '../stores/itemLabels'
 import { ApiError } from '../api/http'
 import { lessonsApi, recordsApi, studentsApi } from '../api/endpoints'
 import {
-  CATEGORIES, CATEGORY_NAMES, LANG_NAMES, type FeedbackMessage, type LessonView, type ProgressEvent, type RecordView, type StudentDetail,
+  CATEGORIES, CATEGORY_NAMES, EPISODE_NAMES, LANG_NAMES, UNDERSTANDING_NAMES, type FeedbackMessage, type UnderstandingLevel, type LessonView, type ProgressEvent, type RecordView, type StudentDetail, bookName,
 } from '../api/types'
 import { useHandoffStore } from '../stores/handoff'
 import { formatDateTime, toUiError, type UiError } from '../utils'
@@ -22,6 +25,7 @@ const props = defineProps<{ id: number }>()
 const router = useRouter()
 const toast = useToast()
 const handoff = useHandoffStore()
+const { label } = useItemLabels()
 
 type Phase = 'loading' | 'input' | 'running' | 'review' | 'approved'
 const phase = ref<Phase>('loading')
@@ -46,9 +50,13 @@ const nextNote = ref('')
 const message = ref<FeedbackMessage>({ target_lang_text: '', korean_text: '' })
 const nextUnit = ref<number | null>(null)
 const approving = ref(false)
+// 항목별 이해도: AI 판정을 기본값으로, 선생님이 바꿀 수 있다. null = 반영 안 함 (기술 ADR-0033)
+const understanding = ref<Record<string, UnderstandingLevel | null>>({})
+const LEVEL_OPTIONS = (['confused', 'shaky', 'ok'] as UnderstandingLevel[]).map(value => ({ value, label: UNDERSTANDING_NAMES[value] }))
+const LEVEL_SEVERITY: Record<UnderstandingLevel, 'danger' | 'warn' | 'success'> = { confused: 'danger', shaky: 'warn', ok: 'success' }
 
 // 녹취록(.txt)을 불러와 메모 칸에 넣는다. 이후 흐름은 메모와 같다 (기획 ADR-0025)
-const NOTE_MAX = 8000 // backend RecordRequest·ai-server raw_note 상한과 같다
+const NOTE_MAX = 30000 // backend RecordRequest·ai-server raw_note 상한과 같다 (기획 ADR-0029)
 const fileInput = ref<HTMLInputElement | null>(null)
 async function loadTranscript(e: Event) {
   const input = e.target as HTMLInputElement
@@ -105,6 +113,7 @@ function showReview(r: RecordView) {
   changesOn.value = d.weakness_changes.map(() => true)
   homeworkOn.value = d.homework.map(() => true)
   nextNote.value = d.next_lesson_note
+  understanding.value = Object.fromEntries((d.understanding ?? []).map(u => [u.item_id, u.level]))
   message.value = { ...d.feedback_message }
   nextUnit.value = student.value?.nextUnit ?? null
   phase.value = 'review'
@@ -150,6 +159,10 @@ async function approve() {
       nextLessonNote: nextNote.value,
       feedbackMessage: message.value,
       nextUnit: nextUnit.value,
+      // 다룬 항목에서 뺀 항목, 선생님이 지운 판정은 보내지 않는다
+      understanding: Object.fromEntries(
+        Object.entries(understanding.value).filter(([id, level]) => level && covered.value.includes(id)),
+      ) as Record<string, UnderstandingLevel>,
     })
     toast.add({ severity: 'success', summary: '학생 프로필과 수업 이력에 반영했어요', life: 3000 })
     router.push(`/students/${lesson.value!.studentId}`)
@@ -167,7 +180,8 @@ async function copy(text: string) {
 
 const approved = computed(() => record.value?.approved as
   | { strengths?: string[]; errors?: { student_said: string; correction: string }[]; weaknessChanges?: { action: string; description: string }[];
-      homework?: { description: string }[]; nextLessonNote?: string; feedbackMessage?: FeedbackMessage; coveredItemIds?: string[] }
+      homework?: { description: string }[]; nextLessonNote?: string; feedbackMessage?: FeedbackMessage; coveredItemIds?: string[]
+      understanding?: Record<string, UnderstandingLevel> }
   | null)
 const planIds = computed(() => (lesson.value?.plan ? CATEGORIES.flatMap(c => lesson.value!.plan![c]?.item_ids ?? []) : []))
 </script>
@@ -175,7 +189,7 @@ const planIds = computed(() => (lesson.value?.plan ? CATEGORIES.flatMap(c => les
 <template>
   <div v-if="lesson" class="mb-4">
     <RouterLink :to="`/students/${lesson.studentId}`" class="text-sm">← {{ lesson.studentName }}</RouterLink>
-    <h1 class="m-0 text-xl font-bold">{{ lesson.lessonNo }}회차 수업 후 기록 <span class="text-base font-normal text-surface-500">· {{ lesson.unitNo }}과</span></h1>
+    <h1 class="m-0 text-xl font-bold">{{ lesson.lessonNo }}회차 수업 후 기록 <span class="text-base font-normal text-surface-500">· {{ bookName(lesson.book) }} {{ lesson.unitNo }}과</span></h1>
   </div>
   <ErrorBox :error="error" @retry="lastAction()" />
 
@@ -201,7 +215,7 @@ const planIds = computed(() => (lesson.value?.plan ? CATEGORIES.flatMap(c => les
       <h3 class="mb-2 mt-0 text-sm font-bold">수업 준비 때 계획</h3>
       <div v-for="c in CATEGORIES" :key="c" class="mb-2">
         <div class="font-semibold text-surface-600">{{ CATEGORY_NAMES[c] }} · {{ lesson.plan[c]?.minutes }}분</div>
-        <code v-for="id in lesson.plan[c]?.item_ids" :key="id" class="mr-1 text-xs">{{ id }}</code>
+        <ItemChips :ids="lesson.plan[c]?.item_ids ?? []" />
       </div>
     </aside>
   </section>
@@ -218,12 +232,28 @@ const planIds = computed(() => (lesson.value?.plan ? CATEGORIES.flatMap(c => les
       <p class="m-0 max-h-60 overflow-y-auto pre-line text-sm text-surface-600">{{ record.rawNote }}</p>
     </div>
 
+    <div class="rounded-xl border border-surface-200 bg-white p-4">
+      <h3 class="m-0 text-sm font-bold">항목별 이해도 → 다음 수업 복습</h3>
+      <p class="mb-3 mt-1 text-xs text-surface-500">AI가 메모·녹취록에서 찾은 장면으로 판정했어요. 헷갈림 → 조금 헷갈림 순서로 다음 수업 복습 앞에 들어가고, 헷갈림이 있으면 복습 시간이 두 배가 돼요. 다시 누르면 판정을 지워요.</p>
+      <div v-for="u in record.draft.understanding ?? []" :key="u.item_id" class="border-t border-surface-100 py-2 first-of-type:border-0" :class="{ 'opacity-50': !covered.includes(u.item_id) }">
+        <div class="flex flex-wrap items-center gap-2">
+          <span class="min-w-24 text-sm font-semibold" :title="u.item_id">{{ label(u.item_id) }}</span>
+          <SelectButton v-model="understanding[u.item_id]" :options="LEVEL_OPTIONS" option-label="label" option-value="value" size="small" :disabled="!covered.includes(u.item_id)" />
+          <span v-if="!covered.includes(u.item_id)" class="text-xs text-surface-400">다룬 항목에서 빼서 반영 안 함</span>
+        </div>
+        <ul class="mb-0 mt-1 list-none space-y-0.5 pl-0 text-xs text-surface-600">
+          <li v-for="(e, i) in u.episodes" :key="i"><Tag :value="EPISODE_NAMES[e.kind] ?? e.kind" severity="secondary" class="mr-1 !text-[0.65rem]" />“{{ e.quote }}”</li>
+        </ul>
+      </div>
+      <p v-if="!record.draft.understanding?.length" class="m-0 text-sm text-surface-400">판정할 장면을 찾지 못했어요. 메모가 짧으면 녹취록을 올려 주세요.</p>
+    </div>
+
     <div class="grid gap-4 lg:grid-cols-2">
       <div class="rounded-xl border border-surface-200 bg-white p-4">
         <h3 class="mb-2 mt-0 text-sm font-bold">다룬 교재 항목 → 수업 이력</h3>
         <div class="flex flex-wrap gap-2">
           <label v-for="id in record.draft.covered_item_ids" :key="id" class="flex items-center gap-1 rounded bg-surface-50 px-2 py-1 text-sm">
-            <Checkbox v-model="covered" :value="id" /> <code>{{ id }}</code>
+            <Checkbox v-model="covered" :value="id" /> <span :title="id">{{ label(id) }}</span>
             <Tag v-if="planIds.length && !planIds.includes(id)" value="계획 밖" severity="secondary" class="!text-[0.65rem]" />
           </label>
         </div>
@@ -232,7 +262,7 @@ const planIds = computed(() => (lesson.value?.plan ? CATEGORIES.flatMap(c => les
         <h3 class="mb-2 mt-4 text-sm font-bold">틀린 점</h3>
         <label v-for="(e, i) in record.draft.errors" :key="i" class="check-row">
           <Checkbox v-model="errorsOn[i]" binary />
-          <span><s class="text-red-600">{{ e.student_said }}</s> → <b>{{ e.correction }}</b> <code v-if="e.item_id" class="text-xs text-surface-500">{{ e.item_id }}</code>
+          <span><s class="text-red-600">{{ e.student_said }}</s> → <b>{{ e.correction }}</b> <span v-if="e.item_id" class="text-xs text-surface-500" :title="e.item_id">· {{ label(e.item_id) }}</span>
             <span v-if="e.note" class="block text-xs text-surface-500">{{ e.note }}</span></span>
         </label>
         <p v-if="!record.draft.errors.length" class="m-0 text-sm text-surface-400">없음</p>
@@ -243,12 +273,12 @@ const planIds = computed(() => (lesson.value?.plan ? CATEGORIES.flatMap(c => les
         <label v-for="(c, i) in record.draft.weakness_changes" :key="i" class="check-row">
           <Checkbox v-model="changesOn[i]" binary />
           <Tag :value="c.action === 'add' ? '추가' : '해결'" :severity="c.action === 'add' ? 'warn' : 'success'" />
-          <span>{{ c.action === 'resolve' ? weaknessName(c.weakness_id) ?? c.description : c.description }} <code v-if="c.item_id" class="text-xs text-surface-500">{{ c.item_id }}</code></span>
+          <span>{{ c.action === 'resolve' ? weaknessName(c.weakness_id) ?? c.description : c.description }} <span v-if="c.item_id" class="text-xs text-surface-500" :title="c.item_id">· {{ label(c.item_id) }}</span></span>
         </label>
         <p v-if="!record.draft.weakness_changes.length" class="m-0 text-sm text-surface-400">변경 없음</p>
         <h3 class="mb-2 mt-4 text-sm font-bold">숙제</h3>
         <label v-for="(h, i) in record.draft.homework" :key="i" class="check-row">
-          <Checkbox v-model="homeworkOn[i]" binary /> {{ h.description }} <code v-if="h.item_id" class="text-xs text-surface-500">{{ h.item_id }}</code>
+          <Checkbox v-model="homeworkOn[i]" binary /> {{ h.description }} <span v-if="h.item_id" class="text-xs text-surface-500" :title="h.item_id">· {{ label(h.item_id) }}</span>
         </label>
         <p v-if="!record.draft.homework.length" class="m-0 text-sm text-surface-400">없음</p>
         <h3 class="mb-2 mt-4 text-sm font-bold">다음 수업 메모</h3>
@@ -284,7 +314,13 @@ const planIds = computed(() => (lesson.value?.plan ? CATEGORIES.flatMap(c => les
     <div class="grid gap-4 lg:grid-cols-2">
       <div class="rounded-xl border border-surface-200 bg-white p-4 text-sm">
         <h3 class="mb-2 mt-0 font-bold">다룬 항목</h3>
-        <code v-for="id in approved.coveredItemIds" :key="id" class="mr-1 text-xs">{{ id }}</code>
+        <ItemChips :ids="approved.coveredItemIds ?? []" />
+        <template v-if="approved.understanding && Object.keys(approved.understanding).length">
+          <h3 class="mb-2 mt-4 font-bold">이해도</h3>
+          <div class="flex flex-wrap gap-1">
+            <Tag v-for="(level, id) in approved.understanding" :key="id" :severity="LEVEL_SEVERITY[level]" :value="`${label(String(id))} · ${UNDERSTANDING_NAMES[level]}`" />
+          </div>
+        </template>
         <h3 class="mb-2 mt-4 font-bold">잘한 점</h3>
         <ul class="m-0 pl-5"><li v-for="s in approved.strengths" :key="s">{{ s }}</li></ul>
         <h3 class="mb-2 mt-4 font-bold">틀린 점</h3>
