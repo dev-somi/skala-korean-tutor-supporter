@@ -1,0 +1,45 @@
+# 모노레포 루트의 .env를 읽는다 (backend와 ai-server가 같은 키를 씀, ADR-0007)
+spring:
+  application:
+    name: backend
+  config:
+    import: optional:file:../.env[.properties]
+  datasource:
+    url: ${DB_URL:jdbc:postgresql://localhost:5432/tutor}
+    username: ${POSTGRES_USER:tutor}
+    password: ${POSTGRES_PASSWORD:tutor}
+  jpa:
+    open-in-view: false
+    hibernate:
+      ddl-auto: validate   # 스키마는 Flyway만 바꾼다
+  threads:
+    virtual:
+      enabled: true        # SSE 연결이 스레드를 오래 잡아도 괜찮도록 (ADR-0006 재검토 조건)
+  ai:
+    model:
+      chat: ${LLM_PROVIDER:anthropic}   # anthropic | ollama (ADR-0012)
+      embedding: none                   # 임베딩은 쓰지 않는다
+    anthropic:
+      api-key: ${ANTHROPIC_API_KEY:missing}
+      base-url: ${ANTHROPIC_BASE_URL:https://api.anthropic.com}
+    ollama:
+      base-url: ${OLLAMA_BASE_URL:http://localhost:11434}
+
+app:
+  ai-server:
+    url: ${AI_SERVER_URL:http://localhost:8000}
+    sse-timeout: 20m   # 자동 검토 재시도(최대 3회)까지 포함한 수업 준비 한 번의 최대 시간
+  models:
+    # ai-server와 같은 .env 값을 쓰되 "anthropic:" 접두어는 떼고 쓴다 (AppProperties 참고)
+    fast: ${LLM_MODEL_FAST:anthropic:claude-haiku-5-5}
+    quality: ${LLM_MODEL_QUALITY:anthropic:claude-sonnet-5-5}
+  ollama:
+    num-ctx: ${OLLAMA_NUM_CTX:16384}
+
+server:
+  port: 8080
+
+logging:
+  structured:
+    format:
+      console: logstash    # JSON 한 줄 로그. MDC 필드명은 student_id, lesson_id, thread_id로 고정

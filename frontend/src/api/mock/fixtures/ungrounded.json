@@ -1,0 +1,29 @@
+{
+  "points": [
+    "-더라고요는 문장 끝에 붙여서, 앞의 내용을 더 강조하거나 부정을 강조할 때 쓴다.",
+    "-더라고요는 ~아니요, ~더라고요로 쓰여, 부정을 강조할 때도 사용된다."
+  ],
+  "ai_note": "",
+  "removed_points": [],
+  "forms": [
+    {
+      "form": "-더라고요",
+      "key": "-더라고요",
+      "level": 5,
+      "meaning": null,
+      "sources": [],
+      "l1_notes": [],
+      "grounded": false
+    }
+  ],
+  "out_of_level": [
+    {
+      "form": "-더라고요",
+      "level": 5
+    }
+  ],
+  "ungrounded_forms": [
+    "-더라고요"
+  ],
+  "grounded": false
+}

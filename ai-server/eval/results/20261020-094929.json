@@ -1,0 +1,190 @@
+{
+  "summary": {
+    "cases": 3,
+    "covered_precision": 0.792,
+    "covered_recall": 0.905,
+    "covered_f1": 0.844,
+    "covered_exact_rate": 0.667,
+    "weakness_change_accuracy": 1.0,
+    "homework_accuracy": 1.0,
+    "case_pass_rate": 0.667,
+    "prd_extraction_accuracy": 0.922
+  },
+  "results": [
+    {
+      "id": "c01",
+      "note": "범위 표현(1~10)을 ID로 펼치기, 반복 오류 → 약점 추가",
+      "reviewed": false,
+      "seconds": 39.9,
+      "error": null,
+      "predicted": {
+        "covered_item_ids": [
+          "u03-v01",
+          "u03-v02",
+          "u03-v03",
+          "u03-v04",
+          "u03-v05",
+          "u03-v06",
+          "u03-v07",
+          "u03-v08",
+          "u03-v09",
+          "u03-v10",
+          "u03-v11",
+          "u03-v12",
+          "u03-v13",
+          "u03-v14",
+          "u03-v15"
+        ],
+        "strengths": [
+          "-습니다 잘함"
+        ],
+        "errors": [
+          {
+            "student_said": "밥를 먹습니다",
+            "correction": "밥을 먹습니다",
+            "item_id": null,
+            "note": ""
+          }
+        ],
+        "weakness_changes": [
+          {
+            "action": "add",
+            "weakness_id": null,
+            "item_id": "u03-g02",
+            "description": "을/를 받침 구분"
+          }
+        ],
+        "homework": [
+          {
+            "item_id": "u03-e02",
+            "description": "연습문제 2번"
+          }
+        ],
+        "next_lesson_note": "이어서 을/를 받침 구분을 집중적으로 다루고, 문법 연습 문제를 복습합니다."
+      },
+      "warnings": [],
+      "validation": {
+        "is_acceptable": true,
+        "reasoning": "4가지 기준 모두 만족합니다. 관련성: 오늘 수업 기록에 포함된 '밥을 먹다' 표현과 '을/를 받침 구분'에 대한 내용을 다루고 있으며, 기록에 없는 내용을 지어내지 않았습니다. 완전성: 잘한 점('밥을 먹다' 잘함), 고칠 점('밥를' → '밥을'), 숙제('을/를' 사용법 연습 문제)가 모두 포함되어 있습니다. 명확성: 학생이 무엇을 고치고, 무엇을 해야 하는지 명확히 전달하고 있습니다. 학습자 수준 적합성: 초급 1 수준(한글 읽기 가능)에 맞는 쉬운 일본어와 정확한 한국어 표현이 사용되었습니다."
+      },
+      "score": {
+        "case_id": "c01",
+        "covered_tp": 10,
+        "covered_fp": 5,
+        "covered_fn": 2,
+        "covered_exact": false,
+        "changes_exact": true,
+        "changes_missed": [],
+        "changes_extra": [],
+        "homework_exact": true,
+        "passed": false
+      }
+    },
+    {
+      "id": "c02",
+      "note": "기존 약점 해결 (weakness_id 연결), 숙제 없음",
+      "reviewed": false,
+      "seconds": 31.4,
+      "error": null,
+      "predicted": {
+        "covered_item_ids": [
+          "u03-g03"
+        ],
+        "strengths": [
+          "이/가 구분이 잘 됨"
+        ],
+        "errors": [],
+        "weakness_changes": [
+          {
+            "action": "resolve",
+            "weakness_id": 11,
+            "item_id": "u02-g01",
+            "description": "이/가 구분"
+          }
+        ],
+        "homework": [],
+        "next_lesson_note": "다음 수업에서는 3과 문법 '을/를'과 관련된 연습 문제를 다룹니다."
+      },
+      "warnings": [],
+      "validation": {
+        "is_acceptable": true,
+        "reasoning": "4가지 기준 모두 만족합니다. 관련성: 오늘 수업 기록에 포함된 '이/가 구분'에 대한 피드백이 포함되어 있으며, 기록에 없는 내용을 지어내지 않았습니다. 완전성: 잘한 점('이/가 구분 잘 함'), 고칠 점('을/를' 구분), 숙제(없음)가 모두 포함되어 있습니다. 명확성: 학생이 무엇을 고치고, 무엇을 해야 하는지 명확히 전달하고 있습니다. 학습자 수준 적합성: 초급 1 수준의 일본어 표현이 사용되었고, 한국어 표현도 정확합니다."
+      },
+      "score": {
+        "case_id": "c02",
+        "covered_tp": 1,
+        "covered_fp": 0,
+        "covered_fn": 0,
+        "covered_exact": true,
+        "changes_exact": true,
+        "changes_missed": [],
+        "changes_extra": [],
+        "homework_exact": true,
+        "passed": true
+      }
+    },
+    {
+      "id": "c03",
+      "note": "영어 메모, 단어 범위를 이름으로 지정",
+      "reviewed": false,
+      "seconds": 37.2,
+      "error": null,
+      "predicted": {
+        "covered_item_ids": [
+          "u04-v01",
+          "u04-v02",
+          "u04-v03",
+          "u04-v04",
+          "u04-v05",
+          "u04-v06",
+          "u04-v07",
+          "u04-g01"
+        ],
+        "strengths": [
+          "Emma는 새로운 단어들을 잘 받아들였습니다.",
+          "Emma는 문법 '과/하고'를 이해하고 사용할 수 있습니다."
+        ],
+        "errors": [
+          {
+            "student_said": "친구과",
+            "correction": "친구하고",
+            "item_id": null,
+            "note": ""
+          }
+        ],
+        "weakness_changes": [
+          {
+            "action": "add",
+            "weakness_id": null,
+            "item_id": null,
+            "description": "과/하고의 사용에 헷갈림"
+          }
+        ],
+        "homework": [
+          {
+            "item_id": "u04-e01",
+            "description": "연습 1"
+          }
+        ],
+        "next_lesson_note": "과/하고의 사용에 대한 추가 연습과 '의' 문법을 다룹니다."
+      },
+      "warnings": [],
+      "validation": {
+        "is_acceptable": true,
+        "reasoning": "4가지 기준 모두 만족합니다. 관련성: 오늘 수업 기록에 포함된 내용(과/하고 문법, '의' 문법, 연습 1 숙제)을 모두 반영했습니다. 완전성: 잘한 점, 고칠 점, 숙제가 모두 포함되어 있습니다. 명확성: 학생이 무엇을 고치고, 무엇을 해야 하는지 명확히 설명하고 있습니다. 학습자 수준 적합성: 초급 1 수준에 맞는 쉬운 영어로 작성되었고, 한국어 표현도 정확합니다."
+      },
+      "score": {
+        "case_id": "c03",
+        "covered_tp": 8,
+        "covered_fp": 0,
+        "covered_fn": 0,
+        "covered_exact": true,
+        "changes_exact": true,
+        "changes_missed": [],
+        "changes_extra": [],
+        "homework_exact": true,
+        "passed": true
+      }
+    }
+  ]
+}

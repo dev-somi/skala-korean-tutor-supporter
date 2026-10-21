@@ -1,0 +1,33 @@
+{
+  "_comment": "frontend · backend · ai-server가 함께 쓰는 상수. 값을 바꾸면 세 곳의 검증이 같이 바뀌어야 한다 (참고노트 6장).",
+  "native_languages": ["ja", "en"],
+  "lesson_categories": ["review", "new_vocab", "new_grammar", "homework"],
+  "category_names_ko": {
+    "review": "복습 내용",
+    "new_vocab": "새로운 어휘",
+    "new_grammar": "새로운 문법",
+    "homework": "숙제 내용"
+  },
+  "student_status": ["active", "paused"],
+  "lesson_status": ["planned", "prepared", "done", "recorded"],
+  "time_log_kind": ["prep", "post"],
+  "weakness_change_action": ["add", "resolve"],
+  "review_decision": ["approve", "edit", "feedback"],
+  "chat_intent": ["lookup", "student_upsert", "lesson_prep", "post_lesson", "grammar_qa", "general"],
+  "textbook_item_id_pattern": "^u\\d{2}-[vgdre]\\d{2}$",
+  "lesson_minutes_default": 50,
+  "standard_levels": {"0": "입문 (한글부터)", "1": "표준 1급", "2": "표준 2급", "3": "표준 3급", "4": "표준 4급", "5": "표준 5급", "6": "표준 6급"},
+  "personas": ["structured", "conversation", "travel", "business"],
+  "persona_names": {
+    "structured": "체계적 학습 · TOPIK 준비",
+    "conversation": "일상 회화 (드라마 · K-콘텐츠 포함)",
+    "travel": "여행",
+    "business": "업무"
+  },
+  "persona_textbooks": {
+    "structured": "세종학당 한국어 1~6 (한글이 처음이면 입문부터)",
+    "conversation": "세종학당 실용 한국어 1~2",
+    "travel": "여행 한국어",
+    "business": "비즈니스 한국어 1~2"
+  }
+}

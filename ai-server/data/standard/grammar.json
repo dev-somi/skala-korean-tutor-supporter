@@ -1,0 +1,3756 @@
+{
+ "source": {
+  "title": "2017년 국제 통용 한국어 표준 교육과정 적용 연구(4단계) 어휘, 문법 등급 목록 (2020-11-17 수정)",
+  "publisher": "국립국어원",
+  "url": "https://www.korean.go.kr/front/reportData/reportDataView.do?mn_id=45&report_seq=932",
+  "license": "공공누리 제1유형 (출처표시)"
+ },
+ "items": [
+  {
+   "id": "std-g-001",
+   "level": 1,
+   "category": "조사",
+   "form": "이",
+   "homonym": null,
+   "related": [
+    "가"
+   ],
+   "meaning": null
+  },
+  {
+   "id": "std-g-002",
+   "level": 1,
+   "category": "조사",
+   "form": "과",
+   "homonym": null,
+   "related": [
+    "와"
+   ],
+   "meaning": null
+  },
+  {
+   "id": "std-g-003",
+   "level": 1,
+   "category": "조사",
+   "form": "까지",
+   "homonym": null,
+   "related": [],
+   "meaning": "부터/까지"
+  },
+  {
+   "id": "std-g-004",
+   "level": 1,
+   "category": "조사",
+   "form": "께서",
+   "homonym": null,
+   "related": [],
+   "meaning": null
+  },
+  {
+   "id": "std-g-005",
+   "level": 1,
+   "category": "조사",
+   "form": "은",
+   "homonym": "1",
+   "related": [
+    "는",
+    "ㄴ"
+   ],
+   "meaning": "대조"
+  },
+  {
+   "id": "std-g-006",
+   "level": 1,
+   "category": "조사",
+   "form": "도",
+   "homonym": null,
+   "related": [],
+   "meaning": null
+  },
+  {
+   "id": "std-g-007",
+   "level": 1,
+   "category": "조사",
+   "form": "을",
+   "homonym": "1",
+   "related": [
+    "를",
+    "ㄹ"
+   ],
+   "meaning": null
+  },
+  {
+   "id": "std-g-008",
+   "level": 1,
+   "category": "조사",
+   "form": "이랑",
+   "homonym": null,
+   "related": [
+    "랑"
+   ],
+   "meaning": null
+  },
+  {
+   "id": "std-g-009",
+   "level": 1,
+   "category": "조사",
+   "form": "으로",
+   "homonym": null,
+   "related": [
+    "로"
+   ],
+   "meaning": null
+  },
+  {
+   "id": "std-g-010",
+   "level": 1,
+   "category": "조사",
+   "form": "부터",
+   "homonym": null,
+   "related": [
+    "에서부터(서부터)"
+   ],
+   "meaning": null
+  },
+  {
+   "id": "std-g-011",
+   "level": 1,
+   "category": "조사",
+   "form": "에",
+   "homonym": null,
+   "related": [
+    "다가",
+    "에다가(에다)"
+   ],
+   "meaning": null
+  },
+  {
+   "id": "std-g-012",
+   "level": 1,
+   "category": "조사",
+   "form": "에게",
+   "homonym": null,
+   "related": [
+    "에게로",
+    "에게서"
+   ],
+   "meaning": null
+  },
+  {
+   "id": "std-g-013",
+   "level": 1,
+   "category": "조사",
+   "form": "에서",
+   "homonym": null,
+   "related": [
+    "서"
+   ],
+   "meaning": null
+  },
+  {
+   "id": "std-g-014",
+   "level": 1,
+   "category": "조사",
+   "form": "의",
+   "homonym": null,
+   "related": [],
+   "meaning": null
+  },
+  {
+   "id": "std-g-015",
+   "level": 1,
+   "category": "조사",
+   "form": "하고",
+   "homonym": null,
+   "related": [],
+   "meaning": null
+  },
+  {
+   "id": "std-g-016",
+   "level": 1,
+   "category": "조사",
+   "form": "만",
+   "homonym": null,
+   "related": [],
+   "meaning": "단독"
+  },
+  {
+   "id": "std-g-017",
+   "level": 1,
+   "category": "조사",
+   "form": "이다",
+   "homonym": null,
+   "related": [],
+   "meaning": "지정사"
+  },
+  {
+   "id": "std-g-018",
+   "level": 1,
+   "category": "조사",
+   "form": "한테",
+   "homonym": null,
+   "related": [],
+   "meaning": null
+  },
+  {
+   "id": "std-g-019",
+   "level": 1,
+   "category": "조사",
+   "form": "보다",
+   "homonym": null,
+   "related": [],
+   "meaning": null
+  },
+  {
+   "id": "std-g-020",
+   "level": 1,
+   "category": "선어말어미",
+   "form": "-겠-",
+   "homonym": null,
+   "related": [],
+   "meaning": null
+  },
+  {
+   "id": "std-g-021",
+   "level": 1,
+   "category": "선어말어미",
+   "form": "-었-",
+   "homonym": null,
+   "related": [
+    "-았-",
+    "-였-"
+   ],
+   "meaning": null
+  },
+  {
+   "id": "std-g-022",
+   "level": 1,
+   "category": "선어말어미",
+   "form": "-으시-",
+   "homonym": null,
+   "related": [
+    "-시-"
+   ],
+   "meaning": null
+  },
+  {
+   "id": "std-g-023",
+   "level": 1,
+   "category": "연결어미",
+   "form": "-고",
+   "homonym": "3",
+   "related": [],
+   "meaning": "나열"
+  },
+  {
+   "id": "std-g-024",
+   "level": 1,
+   "category": "연결어미",
+   "form": "-으니까",
+   "homonym": null,
+   "related": [
+    "-니까"
+   ],
+   "meaning": null
+  },
+  {
+   "id": "std-g-025",
+   "level": 1,
+   "category": "연결어미",
+   "form": "-으러",
+   "homonym": null,
+   "related": [
+    "-러"
+   ],
+   "meaning": null
+  },
+  {
+   "id": "std-g-026",
+   "level": 1,
+   "category": "연결어미",
+   "form": "-어서",
+   "homonym": null,
+   "related": [
+    "-아서",
+    "-여서",
+    "-어",
+    "-아",
+    "-여",
+    "-라서",
+    "-라"
+   ],
+   "meaning": null
+  },
+  {
+   "id": "std-g-027",
+   "level": 1,
+   "category": "연결어미",
+   "form": "-지만",
+   "homonym": null,
+   "related": [],
+   "meaning": null
+  },
+  {
+   "id": "std-g-028",
+   "level": 1,
+   "category": "연결어미",
+   "form": "-으려고",
+   "homonym": "1",
+   "related": [
+    "-려고",
+    "으려",
+    "려"
+   ],
+   "meaning": "의도"
+  },
+  {
+   "id": "std-g-029",
+   "level": 1,
+   "category": "종결어미",
+   "form": "-습니까",
+   "homonym": null,
+   "related": [
+    "-ㅂ니까"
+   ],
+   "meaning": null
+  },
+  {
+   "id": "std-g-030",
+   "level": 1,
+   "category": "종결어미",
+   "form": "-습니다",
+   "homonym": null,
+   "related": [
+    "-ㅂ니다"
+   ],
+   "meaning": null
+  },
+  {
+   "id": "std-g-031",
+   "level": 1,
+   "category": "종결어미",
+   "form": "-읍시다",
+   "homonym": null,
+   "related": [
+    "-ㅂ시다"
+   ],
+   "meaning": null
+  },
+  {
+   "id": "std-g-032",
+   "level": 1,
+   "category": "종결어미",
+   "form": "-으세요",
+   "homonym": null,
+   "related": [
+    "-세요. -으셔요",
+    "-셔요",
+    "-으시어요",
+    "-시어요"
+   ],
+   "meaning": null
+  },
+  {
+   "id": "std-g-033",
+   "level": 1,
+   "category": "종결어미",
+   "form": "-으십시오",
+   "homonym": null,
+   "related": [
+    "-십시오"
+   ],
+   "meaning": null
+  },
+  {
+   "id": "std-g-034",
+   "level": 1,
+   "category": "종결어미",
+   "form": "-고",
+   "homonym": "4",
+   "related": [
+    "-고요"
+   ],
+   "meaning": "덧붙여 서술"
+  },
+  {
+   "id": "std-g-035",
+   "level": 1,
+   "category": "종결어미",
+   "form": "-을까",
+   "homonym": null,
+   "related": [
+    "-ㄹ까",
+    "을까요",
+    "-ㄹ까요"
+   ],
+   "meaning": null
+  },
+  {
+   "id": "std-g-036",
+   "level": 1,
+   "category": "종결어미",
+   "form": "-어",
+   "homonym": "2",
+   "related": [
+    "-아",
+    "-여",
+    "-야",
+    "-어요",
+    "-아요",
+    "-여요",
+    "-에요"
+   ],
+   "meaning": null
+  },
+  {
+   "id": "std-g-037",
+   "level": 1,
+   "category": "표현",
+   "form": "이 아니다",
+   "homonym": null,
+   "related": [
+    "가 아니다"
+   ],
+   "meaning": null
+  },
+  {
+   "id": "std-g-038",
+   "level": 1,
+   "category": "표현",
+   "form": "-고 싶다",
+   "homonym": null,
+   "related": [],
+   "meaning": null
+  },
+  {
+   "id": "std-g-039",
+   "level": 1,
+   "category": "표현",
+   "form": "-고 있다",
+   "homonym": null,
+   "related": [],
+   "meaning": null
+  },
+  {
+   "id": "std-g-040",
+   "level": 1,
+   "category": "표현",
+   "form": "-어야 되다",
+   "homonym": null,
+   "related": [
+    "-아야 되다",
+    "-여야 되다",
+    "<유의> -어야 하다",
+    "-아야 하다",
+    "-어야 하다"
+   ],
+   "meaning": null
+  },
+  {
+   "id": "std-g-041",
+   "level": 1,
+   "category": "표현",
+   "form": "-지 않다",
+   "homonym": null,
+   "related": [],
+   "meaning": null
+  },
+  {
+   "id": "std-g-042",
+   "level": 1,
+   "category": "표현",
+   "form": "-을 수 있다",
+   "homonym": null,
+   "related": [
+    "-ㄹ 수 있다",
+    "<반의> -ㄹ 수 없다",
+    "-을 수 없다"
+   ],
+   "meaning": null
+  },
+  {
+   "id": "std-g-043",
+   "level": 1,
+   "category": "표현",
+   "form": "-지 못하다",
+   "homonym": null,
+   "related": [],
+   "meaning": null
+  },
+  {
+   "id": "std-g-044",
+   "level": 1,
+   "category": "표현",
+   "form": "-기 전에",
+   "homonym": null,
+   "related": [
+    "-기 전"
+   ],
+   "meaning": null
+  },
+  {
+   "id": "std-g-045",
+   "level": 1,
+   "category": "표현",
+   "form": "-은 후에",
+   "homonym": null,
+   "related": [
+    "-은 후",
+    "-ㄴ 후",
+    "<유의> -은 뒤에",
+    "-ㄴ 뒤에",
+    "-은 뒤",
+    "-ㄴ 뒤"
+   ],
+   "meaning": null
+  },
+  {
+   "id": "std-g-046",
+   "level": 2,
+   "category": "조사",
+   "form": "께",
+   "homonym": null,
+   "related": [],
+   "meaning": null
+  },
+  {
+   "id": "std-g-047",
+   "level": 2,
+   "category": "조사",
+   "form": "마다",
+   "homonym": null,
+   "related": [],
+   "meaning": null
+  },
+  {
+   "id": "std-g-048",
+   "level": 2,
+   "category": "조사",
+   "form": "밖에",
+   "homonym": null,
+   "related": [],
+   "meaning": null
+  },
+  {
+   "id": "std-g-049",
+   "level": 2,
+   "category": "조사",
+   "form": "처럼",
+   "homonym": null,
+   "related": [],
+   "meaning": null
+  },
+  {
+   "id": "std-g-050",
+   "level": 2,
+   "category": "조사",
+   "form": "에서부터(서부터)",
+   "homonym": null,
+   "related": [],
+   "meaning": null
+  },
+  {
+   "id": "std-g-051",
+   "level": 2,
+   "category": "조사",
+   "form": "에다가",
+   "homonym": null,
+   "related": [
+    "에다"
+   ],
+   "meaning": null
+  },
+  {
+   "id": "std-g-052",
+   "level": 2,
+   "category": "조사",
+   "form": "에게로",
+   "homonym": null,
+   "related": [],
+   "meaning": null
+  },
+  {
+   "id": "std-g-053",
+   "level": 2,
+   "category": "조사",
+   "form": "에게서",
+   "homonym": null,
+   "related": [],
+   "meaning": null
+  },
+  {
+   "id": "std-g-054",
+   "level": 2,
+   "category": "조사",
+   "form": "한테서",
+   "homonym": null,
+   "related": [],
+   "meaning": null
+  },
+  {
+   "id": "std-g-055",
+   "level": 2,
+   "category": "조사",
+   "form": "이나",
+   "homonym": null,
+   "related": [
+    "나"
+   ],
+   "meaning": null
+  },
+  {
+   "id": "std-g-056",
+   "level": 2,
+   "category": "연결어미",
+   "form": "-거나",
+   "homonym": null,
+   "related": [],
+   "meaning": null
+  },
+  {
+   "id": "std-g-057",
+   "level": 2,
+   "category": "연결어미",
+   "form": "-는데",
+   "homonym": "1",
+   "related": [
+    "-은데",
+    "-ㄴ데"
+   ],
+   "meaning": "대립, 배경"
+  },
+  {
+   "id": "std-g-058",
+   "level": 2,
+   "category": "연결어미",
+   "form": "-으면",
+   "homonym": null,
+   "related": [
+    "-면"
+   ],
+   "meaning": "가정"
+  },
+  {
+   "id": "std-g-059",
+   "level": 2,
+   "category": "연결어미",
+   "form": "-으면서",
+   "homonym": null,
+   "related": [
+    "-면서"
+   ],
+   "meaning": null
+  },
+  {
+   "id": "std-g-060",
+   "level": 2,
+   "category": "연결어미",
+   "form": "-게",
+   "homonym": "2",
+   "related": [],
+   "meaning": "목적"
+  },
+  {
+   "id": "std-g-061",
+   "level": 2,
+   "category": "연결어미",
+   "form": "-다가1(1)",
+   "homonym": null,
+   "related": [
+    "-다",
+    "다가도"
+   ],
+   "meaning": "중단"
+  },
+  {
+   "id": "std-g-062",
+   "level": 2,
+   "category": "전성어미",
+   "form": "-기",
+   "homonym": null,
+   "related": [],
+   "meaning": "명사형"
+  },
+  {
+   "id": "std-g-063",
+   "level": 2,
+   "category": "전성어미",
+   "form": "-는",
+   "homonym": "2",
+   "related": [
+    "-은",
+    "-ㄴ"
+   ],
+   "meaning": "관형사형(현재)"
+  },
+  {
+   "id": "std-g-064",
+   "level": 2,
+   "category": "전성어미",
+   "form": "-은",
+   "homonym": "2",
+   "related": [
+    "-ㄴ"
+   ],
+   "meaning": "관형사형(과거)"
+  },
+  {
+   "id": "std-g-065",
+   "level": 2,
+   "category": "전성어미",
+   "form": "-을",
+   "homonym": "2",
+   "related": [
+    "-ㄹ"
+   ],
+   "meaning": "관형사형"
+  },
+  {
+   "id": "std-g-066",
+   "level": 2,
+   "category": "전성어미",
+   "form": "-은",
+   "homonym": "3",
+   "related": [],
+   "meaning": null
+  },
+  {
+   "id": "std-g-067",
+   "level": 2,
+   "category": "전성어미",
+   "form": "-음",
+   "homonym": null,
+   "related": [
+    "-ㅁ"
+   ],
+   "meaning": "명사형"
+  },
+  {
+   "id": "std-g-068",
+   "level": 2,
+   "category": "종결어미",
+   "form": "-는군",
+   "homonym": null,
+   "related": [
+    "-군",
+    "-는군요",
+    "-군요"
+   ],
+   "meaning": null
+  },
+  {
+   "id": "std-g-069",
+   "level": 2,
+   "category": "종결어미",
+   "form": "-을게",
+   "homonym": null,
+   "related": [
+    "-ㄹ게",
+    "을게요",
+    "-ㄹ게요"
+   ],
+   "meaning": null
+  },
+  {
+   "id": "std-g-070",
+   "level": 2,
+   "category": "종결어미",
+   "form": "-지",
+   "homonym": null,
+   "related": [
+    "-지요(-죠)"
+   ],
+   "meaning": "서술, 물음, 명령, 요청"
+  },
+  {
+   "id": "std-g-071",
+   "level": 2,
+   "category": "종결어미",
+   "form": "-는데",
+   "homonym": "2",
+   "related": [
+    "-ㄴ데",
+    "-은데",
+    "-는데요",
+    "-ㄴ데요",
+    "-은데요"
+   ],
+   "meaning": "감탄"
+  },
+  {
+   "id": "std-g-072",
+   "level": 2,
+   "category": "종결어미",
+   "form": "-네",
+   "homonym": null,
+   "related": [
+    "-네요"
+   ],
+   "meaning": "감탄"
+  },
+  {
+   "id": "std-g-073",
+   "level": 2,
+   "category": "종결어미",
+   "form": "-을래",
+   "homonym": null,
+   "related": [
+    "-을래요",
+    "-ㄹ래요"
+   ],
+   "meaning": null
+  },
+  {
+   "id": "std-g-074",
+   "level": 2,
+   "category": "표현",
+   "form": "-게 되다",
+   "homonym": null,
+   "related": [],
+   "meaning": null
+  },
+  {
+   "id": "std-g-075",
+   "level": 2,
+   "category": "표현",
+   "form": "-기 때문에",
+   "homonym": null,
+   "related": [
+    "-기 때문이다"
+   ],
+   "meaning": null
+  },
+  {
+   "id": "std-g-076",
+   "level": 2,
+   "category": "표현",
+   "form": "-기로 하다",
+   "homonym": null,
+   "related": [],
+   "meaning": null
+  },
+  {
+   "id": "std-g-077",
+   "level": 2,
+   "category": "표현",
+   "form": "-는 것 같다",
+   "homonym": null,
+   "related": [
+    "-ㄴ 것 같다",
+    "-은 것 같다",
+    "-ㄹ 것 같다",
+    "-을 것 같다"
+   ],
+   "meaning": null
+  },
+  {
+   "id": "std-g-078",
+   "level": 2,
+   "category": "표현",
+   "form": "-은 지",
+   "homonym": "2",
+   "related": [
+    "-ㄴ 지"
+   ],
+   "meaning": null
+  },
+  {
+   "id": "std-g-079",
+   "level": 2,
+   "category": "표현",
+   "form": "-는 것",
+   "homonym": null,
+   "related": [
+    "-은 것",
+    "-ㄴ 것",
+    "-을 것",
+    "-ㄹ 것"
+   ],
+   "meaning": null
+  },
+  {
+   "id": "std-g-080",
+   "level": 2,
+   "category": "표현",
+   "form": "-는 동안에",
+   "homonym": null,
+   "related": [
+    "-는 동안"
+   ],
+   "meaning": null
+  },
+  {
+   "id": "std-g-081",
+   "level": 2,
+   "category": "표현",
+   "form": "-은 적이 있다",
+   "homonym": null,
+   "related": [
+    "-ㄴ 적이 있다",
+    "-는 적이 있다 <반의> -은 적이 없다",
+    "-ㄴ 적이 없다",
+    "-는 적이 없다"
+   ],
+   "meaning": null
+  },
+  {
+   "id": "std-g-082",
+   "level": 2,
+   "category": "표현",
+   "form": "-을 것",
+   "homonym": "1",
+   "related": [
+    "-ㄹ 것"
+   ],
+   "meaning": "명령/지시"
+  },
+  {
+   "id": "std-g-083",
+   "level": 2,
+   "category": "표현",
+   "form": "-을 때",
+   "homonym": null,
+   "related": [
+    "-ㄹ 때"
+   ],
+   "meaning": null
+  },
+  {
+   "id": "std-g-084",
+   "level": 2,
+   "category": "표현",
+   "form": "-을까 보다",
+   "homonym": null,
+   "related": [
+    "-ㄹ까 보다"
+   ],
+   "meaning": null
+  },
+  {
+   "id": "std-g-085",
+   "level": 2,
+   "category": "표현",
+   "form": "-어 보다",
+   "homonym": null,
+   "related": [
+    "-아 보다",
+    "-여 보다"
+   ],
+   "meaning": null
+  },
+  {
+   "id": "std-g-086",
+   "level": 2,
+   "category": "표현",
+   "form": "-어 있다",
+   "homonym": null,
+   "related": [
+    "-아 있다",
+    "-여 있다"
+   ],
+   "meaning": null
+  },
+  {
+   "id": "std-g-087",
+   "level": 2,
+   "category": "표현",
+   "form": "-어 주다",
+   "homonym": null,
+   "related": [
+    "-아 주다",
+    "-여 주다"
+   ],
+   "meaning": null
+  },
+  {
+   "id": "std-g-088",
+   "level": 2,
+   "category": "표현",
+   "form": "-어도 되다",
+   "homonym": null,
+   "related": [
+    "-아도 되다",
+    "-여도 되다"
+   ],
+   "meaning": null
+  },
+  {
+   "id": "std-g-089",
+   "level": 2,
+   "category": "표현",
+   "form": "-지 말다",
+   "homonym": null,
+   "related": [],
+   "meaning": null
+  },
+  {
+   "id": "std-g-090",
+   "level": 2,
+   "category": "표현",
+   "form": "-을 수밖에 없다",
+   "homonym": null,
+   "related": [
+    "-ㄹ 수밖에 없다"
+   ],
+   "meaning": null
+  },
+  {
+   "id": "std-g-091",
+   "level": 3,
+   "category": "조사",
+   "form": "같이",
+   "homonym": null,
+   "related": [],
+   "meaning": null
+  },
+  {
+   "id": "std-g-092",
+   "level": 3,
+   "category": "조사",
+   "form": "이고",
+   "homonym": null,
+   "related": [
+    "고"
+   ],
+   "meaning": "모두 포함"
+  },
+  {
+   "id": "std-g-093",
+   "level": 3,
+   "category": "조사",
+   "form": "대로",
+   "homonym": null,
+   "related": [],
+   "meaning": null
+  },
+  {
+   "id": "std-g-094",
+   "level": 3,
+   "category": "조사",
+   "form": "으로부터",
+   "homonym": null,
+   "related": [],
+   "meaning": null
+  },
+  {
+   "id": "std-g-095",
+   "level": 3,
+   "category": "조사",
+   "form": "만큼",
+   "homonym": null,
+   "related": [
+    "<유의> 만치"
+   ],
+   "meaning": null
+  },
+  {
+   "id": "std-g-096",
+   "level": 3,
+   "category": "조사",
+   "form": "보고",
+   "homonym": null,
+   "related": [],
+   "meaning": null
+  },
+  {
+   "id": "std-g-097",
+   "level": 3,
+   "category": "조사",
+   "form": "뿐",
+   "homonym": null,
+   "related": [],
+   "meaning": null
+  },
+  {
+   "id": "std-g-098",
+   "level": 3,
+   "category": "조사",
+   "form": "아",
+   "homonym": "1",
+   "related": [
+    "야"
+   ],
+   "meaning": "호격"
+  },
+  {
+   "id": "std-g-099",
+   "level": 3,
+   "category": "조사",
+   "form": "요",
+   "homonym": "1",
+   "related": [],
+   "meaning": "존대"
+  },
+  {
+   "id": "std-g-100",
+   "level": 3,
+   "category": "조사",
+   "form": "이라고",
+   "homonym": "1",
+   "related": [
+    "라고",
+    "라",
+    "이라"
+   ],
+   "meaning": "직접 인용"
+  },
+  {
+   "id": "std-g-101",
+   "level": 3,
+   "category": "선어말어미",
+   "form": "-었었-",
+   "homonym": null,
+   "related": [
+    "-았었-",
+    "-였었-"
+   ],
+   "meaning": null
+  },
+  {
+   "id": "std-g-102",
+   "level": 3,
+   "category": "연결어미",
+   "form": "-거든",
+   "homonym": "1",
+   "related": [
+    "거들랑"
+   ],
+   "meaning": "조건"
+  },
+  {
+   "id": "std-g-103",
+   "level": 3,
+   "category": "연결어미",
+   "form": "-는다거나",
+   "homonym": "1",
+   "related": [
+    "-ㄴ다거나",
+    "-다거나",
+    "-라거나"
+   ],
+   "meaning": "나열"
+  },
+  {
+   "id": "std-g-104",
+   "level": 3,
+   "category": "연결어미",
+   "form": "-는다고",
+   "homonym": "1",
+   "related": [
+    "-다고",
+    "-라고",
+    "-으라고",
+    "-자고"
+   ],
+   "meaning": "이유"
+  },
+  {
+   "id": "std-g-105",
+   "level": 3,
+   "category": "연결어미",
+   "form": "-으나",
+   "homonym": null,
+   "related": [
+    "-나"
+   ],
+   "meaning": "대립"
+  },
+  {
+   "id": "std-g-106",
+   "level": 3,
+   "category": "연결어미",
+   "form": "-느라고",
+   "homonym": null,
+   "related": [
+    "-느라"
+   ],
+   "meaning": null
+  },
+  {
+   "id": "std-g-107",
+   "level": 3,
+   "category": "연결어미",
+   "form": "-도록",
+   "homonym": null,
+   "related": [],
+   "meaning": null
+  },
+  {
+   "id": "std-g-108",
+   "level": 3,
+   "category": "연결어미",
+   "form": "-어다가",
+   "homonym": null,
+   "related": [
+    "-아다가",
+    "-여다가",
+    "-어다",
+    "-아다",
+    "-여다"
+   ],
+   "meaning": null
+  },
+  {
+   "id": "std-g-109",
+   "level": 3,
+   "category": "연결어미",
+   "form": "-어도",
+   "homonym": null,
+   "related": [
+    "-아도",
+    "-여도",
+    "-라도",
+    "이라도"
+   ],
+   "meaning": null
+  },
+  {
+   "id": "std-g-110",
+   "level": 3,
+   "category": "연결어미",
+   "form": "-어야",
+   "homonym": null,
+   "related": [
+    "-아야",
+    "-여야",
+    "-어야만",
+    "-아야만",
+    "-여야만"
+   ],
+   "meaning": null
+  },
+  {
+   "id": "std-g-111",
+   "level": 3,
+   "category": "연결어미",
+   "form": "-어야지",
+   "homonym": "1",
+   "related": [
+    "-아야지",
+    "-여야지"
+   ],
+   "meaning": "필수 조건"
+  },
+  {
+   "id": "std-g-112",
+   "level": 3,
+   "category": "연결어미",
+   "form": "-었더니",
+   "homonym": null,
+   "related": [
+    "-았더니",
+    "-였더니"
+   ],
+   "meaning": null
+  },
+  {
+   "id": "std-g-113",
+   "level": 3,
+   "category": "연결어미",
+   "form": "-자마자",
+   "homonym": null,
+   "related": [
+    "-자"
+   ],
+   "meaning": null
+  },
+  {
+   "id": "std-g-114",
+   "level": 3,
+   "category": "연결어미",
+   "form": "-다가1(2)",
+   "homonym": null,
+   "related": [
+    "-다",
+    "다가도"
+   ],
+   "meaning": "중단"
+  },
+  {
+   "id": "std-g-115",
+   "level": 3,
+   "category": "연결어미",
+   "form": "-으니",
+   "homonym": "2",
+   "related": [
+    "-니"
+   ],
+   "meaning": "이유"
+  },
+  {
+   "id": "std-g-116",
+   "level": 3,
+   "category": "연결어미",
+   "form": "-으려면",
+   "homonym": null,
+   "related": [
+    "-려면"
+   ],
+   "meaning": null
+  },
+  {
+   "id": "std-g-117",
+   "level": 3,
+   "category": "전성어미",
+   "form": "-던-",
+   "homonym": null,
+   "related": [],
+   "meaning": "관형사형"
+  },
+  {
+   "id": "std-g-118",
+   "level": 3,
+   "category": "종결어미",
+   "form": "-거든",
+   "homonym": "2",
+   "related": [
+    "거든요"
+   ],
+   "meaning": "이유"
+  },
+  {
+   "id": "std-g-119",
+   "level": 3,
+   "category": "종결어미",
+   "form": "-는구나",
+   "homonym": null,
+   "related": [
+    "-구나"
+   ],
+   "meaning": null
+  },
+  {
+   "id": "std-g-120",
+   "level": 3,
+   "category": "종결어미",
+   "form": "-는다",
+   "homonym": null,
+   "related": [
+    "-ㄴ다",
+    "-다"
+   ],
+   "meaning": null
+  },
+  {
+   "id": "std-g-121",
+   "level": 3,
+   "category": "종결어미",
+   "form": "-던데",
+   "homonym": "2",
+   "related": [
+    "-던데요"
+   ],
+   "meaning": "감탄"
+  },
+  {
+   "id": "std-g-122",
+   "level": 3,
+   "category": "종결어미",
+   "form": "-잖아",
+   "homonym": null,
+   "related": [
+    "-잖아요"
+   ],
+   "meaning": null
+  },
+  {
+   "id": "std-g-123",
+   "level": 3,
+   "category": "종결어미",
+   "form": "-자",
+   "homonym": "3",
+   "related": [],
+   "meaning": "청유"
+  },
+  {
+   "id": "std-g-124",
+   "level": 3,
+   "category": "종결어미",
+   "form": "-니",
+   "homonym": "2",
+   "related": [
+    "-으니"
+   ],
+   "meaning": "의문"
+  },
+  {
+   "id": "std-g-125",
+   "level": 3,
+   "category": "표현",
+   "form": "-게 하다",
+   "homonym": null,
+   "related": [
+    "<유의> -게 만들다",
+    "-도록 하다"
+   ],
+   "meaning": null
+  },
+  {
+   "id": "std-g-126",
+   "level": 3,
+   "category": "표현",
+   "form": "-고 나다",
+   "homonym": null,
+   "related": [],
+   "meaning": null
+  },
+  {
+   "id": "std-g-127",
+   "level": 3,
+   "category": "표현",
+   "form": "-고 말다",
+   "homonym": null,
+   "related": [],
+   "meaning": null
+  },
+  {
+   "id": "std-g-128",
+   "level": 3,
+   "category": "표현",
+   "form": "-고 싶어 하다",
+   "homonym": null,
+   "related": [],
+   "meaning": null
+  },
+  {
+   "id": "std-g-129",
+   "level": 3,
+   "category": "표현",
+   "form": "-은 결과",
+   "homonym": null,
+   "related": [
+    "-ㄴ 결과"
+   ],
+   "meaning": null
+  },
+  {
+   "id": "std-g-130",
+   "level": 3,
+   "category": "표현",
+   "form": "-은 다음에",
+   "homonym": null,
+   "related": [
+    "-ㄴ 다음에"
+   ],
+   "meaning": null
+  },
+  {
+   "id": "std-g-131",
+   "level": 3,
+   "category": "표현",
+   "form": "-는 대신에",
+   "homonym": null,
+   "related": [
+    "-ㄴ 대신에",
+    "-은 대신에"
+   ],
+   "meaning": null
+  },
+  {
+   "id": "std-g-132",
+   "level": 3,
+   "category": "표현",
+   "form": "-는 만큼",
+   "homonym": null,
+   "related": [
+    "-ㄴ 만큼",
+    "-은 만큼",
+    "-ㄹ 만큼",
+    "-을 만큼"
+   ],
+   "meaning": null
+  },
+  {
+   "id": "std-g-133",
+   "level": 3,
+   "category": "표현",
+   "form": "-는 반면",
+   "homonym": null,
+   "related": [
+    "-ㄴ 반면에",
+    "-은 반면에"
+   ],
+   "meaning": null
+  },
+  {
+   "id": "std-g-134",
+   "level": 3,
+   "category": "표현",
+   "form": "-나 보다",
+   "homonym": null,
+   "related": [],
+   "meaning": null
+  },
+  {
+   "id": "std-g-135",
+   "level": 3,
+   "category": "표현",
+   "form": "-을 텐데",
+   "homonym": null,
+   "related": [
+    "-ㄹ 텐데",
+    "-을 텐데요",
+    "-ㄹ 텐데요"
+   ],
+   "meaning": null
+  },
+  {
+   "id": "std-g-136",
+   "level": 3,
+   "category": "표현",
+   "form": "-기 위해",
+   "homonym": null,
+   "related": [
+    "-기 위해서",
+    "-기 위한",
+    "을 위해",
+    "를 위해"
+   ],
+   "meaning": null
+  },
+  {
+   "id": "std-g-137",
+   "level": 3,
+   "category": "표현",
+   "form": "만 아니면",
+   "homonym": null,
+   "related": [],
+   "meaning": null
+  },
+  {
+   "id": "std-g-138",
+   "level": 3,
+   "category": "표현",
+   "form": "-으면 안 되다",
+   "homonym": null,
+   "related": [
+    "-면 안 되다",
+    "<반의> -으면 되다",
+    "-면 되다"
+   ],
+   "meaning": null
+  },
+  {
+   "id": "std-g-139",
+   "level": 3,
+   "category": "표현",
+   "form": "-으면 좋겠다",
+   "homonym": null,
+   "related": [
+    "-면 좋겠다"
+   ],
+   "meaning": null
+  },
+  {
+   "id": "std-g-140",
+   "level": 3,
+   "category": "표현",
+   "form": "-어 가다",
+   "homonym": null,
+   "related": [
+    "-아 가다",
+    "-여 가다"
+   ],
+   "meaning": null
+  },
+  {
+   "id": "std-g-141",
+   "level": 3,
+   "category": "표현",
+   "form": "-어 가지고",
+   "homonym": null,
+   "related": [
+    "-아 가지고",
+    "-여 가지고"
+   ],
+   "meaning": null
+  },
+  {
+   "id": "std-g-142",
+   "level": 3,
+   "category": "표현",
+   "form": "-어 놓다",
+   "homonym": null,
+   "related": [
+    "-아 놓다",
+    "-여 놓다"
+   ],
+   "meaning": null
+  },
+  {
+   "id": "std-g-143",
+   "level": 3,
+   "category": "표현",
+   "form": "-어 두다",
+   "homonym": null,
+   "related": [
+    "-아 두다",
+    "-여 두다"
+   ],
+   "meaning": null
+  },
+  {
+   "id": "std-g-144",
+   "level": 3,
+   "category": "표현",
+   "form": "-어 드리다",
+   "homonym": null,
+   "related": [
+    "-아 드리다",
+    "-여 드리다"
+   ],
+   "meaning": null
+  },
+  {
+   "id": "std-g-145",
+   "level": 3,
+   "category": "표현",
+   "form": "-어야겠-",
+   "homonym": null,
+   "related": [
+    "-아야겠-",
+    "-여야겠-"
+   ],
+   "meaning": null
+  },
+  {
+   "id": "std-g-146",
+   "level": 3,
+   "category": "표현",
+   "form": "-어지다",
+   "homonym": null,
+   "related": [
+    "-아지다",
+    "-여지다"
+   ],
+   "meaning": null
+  },
+  {
+   "id": "std-g-147",
+   "level": 3,
+   "category": "표현",
+   "form": "에 대하여",
+   "homonym": null,
+   "related": [
+    "에 대해",
+    "에 대해서",
+    "에 대한"
+   ],
+   "meaning": null
+  },
+  {
+   "id": "std-g-148",
+   "level": 3,
+   "category": "표현",
+   "form": "-을 테니",
+   "homonym": null,
+   "related": [
+    "-ㄹ 테니",
+    "-을 테니까",
+    "-ㄹ 테니까"
+   ],
+   "meaning": null
+  },
+  {
+   "id": "std-g-149",
+   "level": 3,
+   "category": "표현",
+   "form": "-어 오다",
+   "homonym": null,
+   "related": [
+    "-아 오다",
+    "-여 오다"
+   ],
+   "meaning": null
+  },
+  {
+   "id": "std-g-150",
+   "level": 3,
+   "category": "표현",
+   "form": "-기는",
+   "homonym": null,
+   "related": [
+    "-긴",
+    "-기는요",
+    "-긴요"
+   ],
+   "meaning": null
+  },
+  {
+   "id": "std-g-151",
+   "level": 3,
+   "category": "표현",
+   "form": "-는 모양이다",
+   "homonym": null,
+   "related": [
+    "-ㄴ 모양이다",
+    "-은 모양이다"
+   ],
+   "meaning": null
+  },
+  {
+   "id": "std-g-152",
+   "level": 3,
+   "category": "표현",
+   "form": "-는 편이다",
+   "homonym": null,
+   "related": [
+    "-는 편이다"
+   ],
+   "meaning": null
+  },
+  {
+   "id": "std-g-153",
+   "level": 3,
+   "category": "표현",
+   "form": "-는가 보다",
+   "homonym": null,
+   "related": [
+    "-는가 보다"
+   ],
+   "meaning": null
+  },
+  {
+   "id": "std-g-154",
+   "level": 3,
+   "category": "표현",
+   "form": "-는 중이다",
+   "homonym": null,
+   "related": [],
+   "meaning": null
+  },
+  {
+   "id": "std-g-155",
+   "level": 3,
+   "category": "표현",
+   "form": "-으려다가",
+   "homonym": null,
+   "related": [
+    "-려다가",
+    "-으려다",
+    "려다"
+   ],
+   "meaning": null
+  },
+  {
+   "id": "std-g-156",
+   "level": 3,
+   "category": "표현",
+   "form": "-어 보이다",
+   "homonym": null,
+   "related": [
+    "-아보이다",
+    "-여 보이다"
+   ],
+   "meaning": null
+  },
+  {
+   "id": "std-g-157",
+   "level": 3,
+   "category": "표현",
+   "form": "-는다고",
+   "homonym": "3",
+   "related": [
+    "-ㄴ다고",
+    "-다고",
+    "-라고",
+    "-느냐고",
+    "-냐고",
+    "-으냐고",
+    "-자고",
+    "-으라고",
+    "-라고"
+   ],
+   "meaning": "인용"
+  },
+  {
+   "id": "std-g-158",
+   "level": 4,
+   "category": "조사",
+   "form": "커녕",
+   "homonym": null,
+   "related": [
+    "ㄴ커녕",
+    "는커녕",
+    "은커녕"
+   ],
+   "meaning": null
+  },
+  {
+   "id": "std-g-159",
+   "level": 4,
+   "category": "조사",
+   "form": "이나마",
+   "homonym": null,
+   "related": [
+    "나마"
+   ],
+   "meaning": null
+  },
+  {
+   "id": "std-g-160",
+   "level": 4,
+   "category": "조사",
+   "form": "이며",
+   "homonym": null,
+   "related": [
+    "며",
+    "이니",
+    "니",
+    "하며",
+    "하고",
+    "이다"
+   ],
+   "meaning": "나열"
+  },
+  {
+   "id": "std-g-161",
+   "level": 4,
+   "category": "조사",
+   "form": "이든",
+   "homonym": null,
+   "related": [
+    "든",
+    "이든지",
+    "든지",
+    "이든가",
+    "든가"
+   ],
+   "meaning": "선택"
+  },
+  {
+   "id": "std-g-162",
+   "level": 4,
+   "category": "조사",
+   "form": "이란",
+   "homonym": null,
+   "related": [
+    "란"
+   ],
+   "meaning": "정의"
+  },
+  {
+   "id": "std-g-163",
+   "level": 4,
+   "category": "조사",
+   "form": "이면",
+   "homonym": null,
+   "related": [
+    "면"
+   ],
+   "meaning": "지정"
+  },
+  {
+   "id": "std-g-164",
+   "level": 4,
+   "category": "조사",
+   "form": "이야",
+   "homonym": null,
+   "related": [
+    "야"
+   ],
+   "meaning": "강조"
+  },
+  {
+   "id": "std-g-165",
+   "level": 4,
+   "category": "조사",
+   "form": "치고",
+   "homonym": null,
+   "related": [],
+   "meaning": null
+  },
+  {
+   "id": "std-g-166",
+   "level": 4,
+   "category": "조사",
+   "form": "까지",
+   "homonym": "2",
+   "related": [],
+   "meaning": "마저"
+  },
+  {
+   "id": "std-g-167",
+   "level": 4,
+   "category": "조사",
+   "form": "이라도",
+   "homonym": null,
+   "related": [
+    "라도"
+   ],
+   "meaning": "차선"
+  },
+  {
+   "id": "std-g-168",
+   "level": 4,
+   "category": "조사",
+   "form": "으로서",
+   "homonym": null,
+   "related": [
+    "로서"
+   ],
+   "meaning": null
+  },
+  {
+   "id": "std-g-169",
+   "level": 4,
+   "category": "조사",
+   "form": "으로써",
+   "homonym": null,
+   "related": [
+    "로써"
+   ],
+   "meaning": null
+  },
+  {
+   "id": "std-g-170",
+   "level": 4,
+   "category": "조사",
+   "form": "마저",
+   "homonym": null,
+   "related": [],
+   "meaning": null
+  },
+  {
+   "id": "std-g-171",
+   "level": 4,
+   "category": "연결어미",
+   "form": "-거니와",
+   "homonym": null,
+   "related": [],
+   "meaning": null
+  },
+  {
+   "id": "std-g-172",
+   "level": 4,
+   "category": "연결어미",
+   "form": "-고도",
+   "homonym": null,
+   "related": [],
+   "meaning": null
+  },
+  {
+   "id": "std-g-173",
+   "level": 4,
+   "category": "연결어미",
+   "form": "-고자",
+   "homonym": null,
+   "related": [],
+   "meaning": null
+  },
+  {
+   "id": "std-g-174",
+   "level": 4,
+   "category": "연결어미",
+   "form": "-기에",
+   "homonym": null,
+   "related": [],
+   "meaning": null
+  },
+  {
+   "id": "std-g-175",
+   "level": 4,
+   "category": "연결어미",
+   "form": "-는지",
+   "homonym": null,
+   "related": [
+    "-ㄴ지",
+    "-은지",
+    "-을지"
+   ],
+   "meaning": "의문"
+  },
+  {
+   "id": "std-g-176",
+   "level": 4,
+   "category": "연결어미",
+   "form": "-다시피",
+   "homonym": null,
+   "related": [],
+   "meaning": null
+  },
+  {
+   "id": "std-g-177",
+   "level": 4,
+   "category": "연결어미",
+   "form": "-더라도",
+   "homonym": null,
+   "related": [],
+   "meaning": null
+  },
+  {
+   "id": "std-g-178",
+   "level": 4,
+   "category": "연결어미",
+   "form": "-든지",
+   "homonym": "2",
+   "related": [
+    "-든",
+    "<유의> -든가"
+   ],
+   "meaning": "선택"
+  },
+  {
+   "id": "std-g-179",
+   "level": 4,
+   "category": "연결어미",
+   "form": "-으므로",
+   "homonym": null,
+   "related": [
+    "-므로"
+   ],
+   "meaning": null
+  },
+  {
+   "id": "std-g-180",
+   "level": 4,
+   "category": "연결어미",
+   "form": "-을래야",
+   "homonym": null,
+   "related": [
+    "-ㄹ래야"
+   ],
+   "meaning": null
+  },
+  {
+   "id": "std-g-181",
+   "level": 4,
+   "category": "연결어미",
+   "form": "-고서",
+   "homonym": null,
+   "related": [
+    "-고서는",
+    "-고서야"
+   ],
+   "meaning": null
+  },
+  {
+   "id": "std-g-182",
+   "level": 4,
+   "category": "연결어미",
+   "form": "-는다면",
+   "homonym": "1",
+   "related": [
+    "-ㄴ다면",
+    "-다면",
+    "-라면"
+   ],
+   "meaning": "조건"
+  },
+  {
+   "id": "std-g-183",
+   "level": 4,
+   "category": "연결어미",
+   "form": "-더니",
+   "homonym": null,
+   "related": [],
+   "meaning": null
+  },
+  {
+   "id": "std-g-184",
+   "level": 4,
+   "category": "연결어미",
+   "form": "-던데",
+   "homonym": "1",
+   "related": [],
+   "meaning": "대립, 배경"
+  },
+  {
+   "id": "std-g-185",
+   "level": 4,
+   "category": "연결어미",
+   "form": "-듯이",
+   "homonym": null,
+   "related": [],
+   "meaning": null
+  },
+  {
+   "id": "std-g-186",
+   "level": 4,
+   "category": "연결어미",
+   "form": "-을수록",
+   "homonym": null,
+   "related": [
+    "-ㄹ수록"
+   ],
+   "meaning": null
+  },
+  {
+   "id": "std-g-187",
+   "level": 4,
+   "category": "연결어미",
+   "form": "-으며",
+   "homonym": null,
+   "related": [
+    "-며"
+   ],
+   "meaning": "나열/동시"
+  },
+  {
+   "id": "std-g-188",
+   "level": 4,
+   "category": "종결어미",
+   "form": "-는다니",
+   "homonym": "2",
+   "related": [
+    "-ㄴ다니",
+    "-다니",
+    "-라니"
+   ],
+   "meaning": "의문"
+  },
+  {
+   "id": "std-g-189",
+   "level": 4,
+   "category": "종결어미",
+   "form": "-더군",
+   "homonym": null,
+   "related": [
+    "-더군요"
+   ],
+   "meaning": null
+  },
+  {
+   "id": "std-g-190",
+   "level": 4,
+   "category": "종결어미",
+   "form": "-더라",
+   "homonym": null,
+   "related": [],
+   "meaning": null
+  },
+  {
+   "id": "std-g-191",
+   "level": 4,
+   "category": "종결어미",
+   "form": "-어라",
+   "homonym": "1",
+   "related": [
+    "-아라",
+    "-여라"
+   ],
+   "meaning": "명령"
+  },
+  {
+   "id": "std-g-192",
+   "level": 4,
+   "category": "종결어미",
+   "form": "-게",
+   "homonym": "5",
+   "related": [
+    "-게요"
+   ],
+   "meaning": "의문"
+  },
+  {
+   "id": "std-g-193",
+   "level": 4,
+   "category": "종결어미",
+   "form": "-는다면서",
+   "homonym": "1",
+   "related": [
+    "-ㄴ다면서",
+    "-다면서",
+    "-라면서",
+    "-는다면서요",
+    "-다면서요",
+    "-라면서요"
+   ],
+   "meaning": "의문"
+  },
+  {
+   "id": "std-g-194",
+   "level": 4,
+   "category": "종결어미",
+   "form": "-나",
+   "homonym": "3",
+   "related": [
+    "-나요"
+   ],
+   "meaning": "의문"
+  },
+  {
+   "id": "std-g-195",
+   "level": 4,
+   "category": "종결어미",
+   "form": "-을걸",
+   "homonym": null,
+   "related": [
+    "-ㄹ걸",
+    "-을걸요",
+    "-ㄹ걸요"
+   ],
+   "meaning": null
+  },
+  {
+   "id": "std-g-196",
+   "level": 4,
+   "category": "종결어미",
+   "form": "-어야지",
+   "homonym": "2",
+   "related": [
+    "-아야지",
+    "-여야지",
+    "-어야지요",
+    "-아야지요",
+    "-여야지요"
+   ],
+   "meaning": null
+  },
+  {
+   "id": "std-g-197",
+   "level": 4,
+   "category": "종결어미",
+   "form": "-고",
+   "homonym": "4",
+   "related": [
+    "-고요"
+   ],
+   "meaning": "덧붙여 질문"
+  },
+  {
+   "id": "std-g-198",
+   "level": 4,
+   "category": "종결어미",
+   "form": "-다니",
+   "homonym": "1",
+   "related": [
+    "-다니요",
+    "-라니",
+    "-라니요"
+   ],
+   "meaning": null
+  },
+  {
+   "id": "std-g-199",
+   "level": 4,
+   "category": "표현",
+   "form": "-을 따름이다",
+   "homonym": null,
+   "related": [
+    "-ㄹ 따름이다",
+    "<유의> -을 뿐이다",
+    "ㄹ 뿐이다"
+   ],
+   "meaning": null
+  },
+  {
+   "id": "std-g-200",
+   "level": 4,
+   "category": "표현",
+   "form": "-고 들다",
+   "homonym": null,
+   "related": [],
+   "meaning": null
+  },
+  {
+   "id": "std-g-201",
+   "level": 4,
+   "category": "표현",
+   "form": "-고 보다",
+   "homonym": null,
+   "related": [],
+   "meaning": null
+  },
+  {
+   "id": "std-g-202",
+   "level": 4,
+   "category": "표현",
+   "form": "-고 해서",
+   "homonym": null,
+   "related": [],
+   "meaning": null
+  },
+  {
+   "id": "std-g-203",
+   "level": 4,
+   "category": "표현",
+   "form": "-는 김에",
+   "homonym": null,
+   "related": [
+    "-ㄴ 김에",
+    "-은 김에"
+   ],
+   "meaning": null
+  },
+  {
+   "id": "std-g-204",
+   "level": 4,
+   "category": "표현",
+   "form": "-는 대로",
+   "homonym": null,
+   "related": [
+    "-ㄴ 대로",
+    "-ㄴ 대로",
+    "-은 대로",
+    "-은 대로"
+   ],
+   "meaning": null
+  },
+  {
+   "id": "std-g-205",
+   "level": 4,
+   "category": "표현",
+   "form": "-는 사이에",
+   "homonym": null,
+   "related": [
+    "-는 사이"
+   ],
+   "meaning": null
+  },
+  {
+   "id": "std-g-206",
+   "level": 4,
+   "category": "표현",
+   "form": "-는 듯",
+   "homonym": null,
+   "related": [
+    "-ㄴ 듯",
+    "은 듯 -ㄹ 듯",
+    "-을 듯"
+   ],
+   "meaning": null
+  },
+  {
+   "id": "std-g-207",
+   "level": 4,
+   "category": "표현",
+   "form": "-는 줄",
+   "homonym": null,
+   "related": [
+    "-ㄴ 줄",
+    "-은 줄",
+    "ㄹ 줄",
+    "-을 줄"
+   ],
+   "meaning": null
+  },
+  {
+   "id": "std-g-208",
+   "level": 4,
+   "category": "표현",
+   "form": "-는 탓에",
+   "homonym": null,
+   "related": [
+    "-ㄴ 탓에",
+    "-은 탓에",
+    "<반의 관계> -는 덕분에"
+   ],
+   "meaning": null
+  },
+  {
+   "id": "std-g-209",
+   "level": 4,
+   "category": "표현",
+   "form": "-는다거나",
+   "homonym": "2",
+   "related": [
+    "-ㄴ다거나",
+    "-다거나",
+    "-라거나"
+   ],
+   "meaning": "선택"
+  },
+  {
+   "id": "std-g-210",
+   "level": 4,
+   "category": "표현",
+   "form": "-나 싶다",
+   "homonym": null,
+   "related": [],
+   "meaning": null
+  },
+  {
+   "id": "std-g-211",
+   "level": 4,
+   "category": "표현",
+   "form": "-는 바람에",
+   "homonym": null,
+   "related": [],
+   "meaning": null
+  },
+  {
+   "id": "std-g-212",
+   "level": 4,
+   "category": "표현",
+   "form": "-는 한",
+   "homonym": null,
+   "related": [],
+   "meaning": null
+  },
+  {
+   "id": "std-g-213",
+   "level": 4,
+   "category": "표현",
+   "form": "으로 인하여",
+   "homonym": null,
+   "related": [
+    "로 인하여",
+    "으로 인해",
+    "로 인해"
+   ],
+   "meaning": null
+  },
+  {
+   "id": "std-g-214",
+   "level": 4,
+   "category": "표현",
+   "form": "만 같아도",
+   "homonym": null,
+   "related": [],
+   "meaning": null
+  },
+  {
+   "id": "std-g-215",
+   "level": 4,
+   "category": "표현",
+   "form": "-어 대다",
+   "homonym": null,
+   "related": [
+    "-아 대다",
+    "-여 대다"
+   ],
+   "meaning": null
+  },
+  {
+   "id": "std-g-216",
+   "level": 4,
+   "category": "표현",
+   "form": "-어서인지",
+   "homonym": null,
+   "related": [
+    "-아서인지",
+    "-여서인지"
+   ],
+   "meaning": null
+  },
+  {
+   "id": "std-g-217",
+   "level": 4,
+   "category": "표현",
+   "form": "에 따라",
+   "homonym": null,
+   "related": [
+    "에 따르면"
+   ],
+   "meaning": null
+  },
+  {
+   "id": "std-g-218",
+   "level": 4,
+   "category": "표현",
+   "form": "에 비하여",
+   "homonym": null,
+   "related": [
+    "에 비하면"
+   ],
+   "meaning": null
+  },
+  {
+   "id": "std-g-219",
+   "level": 4,
+   "category": "표현",
+   "form": "에 의하여",
+   "homonym": null,
+   "related": [
+    "에 의하면"
+   ],
+   "meaning": null
+  },
+  {
+   "id": "std-g-220",
+   "level": 4,
+   "category": "표현",
+   "form": "-어 버리다",
+   "homonym": null,
+   "related": [
+    "-아 버리다",
+    "-여 버리다"
+   ],
+   "meaning": null
+  },
+  {
+   "id": "std-g-221",
+   "level": 4,
+   "category": "표현",
+   "form": "-을 모양이다",
+   "homonym": null,
+   "related": [
+    "-ㄹ 모양이다"
+   ],
+   "meaning": null
+  },
+  {
+   "id": "std-g-222",
+   "level": 4,
+   "category": "표현",
+   "form": "-을 뻔하다",
+   "homonym": null,
+   "related": [
+    "-ㄹ 뻔하다"
+   ],
+   "meaning": null
+  },
+  {
+   "id": "std-g-223",
+   "level": 4,
+   "category": "표현",
+   "form": "-는대",
+   "homonym": "2",
+   "related": [
+    "-ㄴ대",
+    "-는대요",
+    "-대",
+    "-대요",
+    "-래",
+    "-래요",
+    "-으래",
+    "-으래요",
+    "-래",
+    "-재",
+    "-재요"
+   ],
+   "meaning": "인용"
+  },
+  {
+   "id": "std-g-224",
+   "level": 4,
+   "category": "표현",
+   "form": "-는 통에",
+   "homonym": null,
+   "related": [],
+   "meaning": null
+  },
+  {
+   "id": "std-g-225",
+   "level": 5,
+   "category": "조사",
+   "form": "이라든가",
+   "homonym": null,
+   "related": [
+    "라든가",
+    "이라든지",
+    "라든지"
+   ],
+   "meaning": "선택"
+  },
+  {
+   "id": "std-g-226",
+   "level": 5,
+   "category": "조사",
+   "form": "따라",
+   "homonym": null,
+   "related": [],
+   "meaning": null
+  },
+  {
+   "id": "std-g-227",
+   "level": 5,
+   "category": "조사",
+   "form": "조차",
+   "homonym": null,
+   "related": [],
+   "meaning": null
+  },
+  {
+   "id": "std-g-228",
+   "level": 5,
+   "category": "연결어미",
+   "form": "-지",
+   "homonym": "1",
+   "related": [],
+   "meaning": "대조"
+  },
+  {
+   "id": "std-g-229",
+   "level": 5,
+   "category": "연결어미",
+   "form": "-을뿐더러",
+   "homonym": null,
+   "related": [
+    "-ㄹ뿐더러"
+   ],
+   "meaning": null
+  },
+  {
+   "id": "std-g-230",
+   "level": 5,
+   "category": "연결어미",
+   "form": "-고는",
+   "homonym": null,
+   "related": [
+    "-곤",
+    "-고는 하다",
+    "-곤 하다"
+   ],
+   "meaning": null
+  },
+  {
+   "id": "std-g-231",
+   "level": 5,
+   "category": "연결어미",
+   "form": "-길래",
+   "homonym": null,
+   "related": [],
+   "meaning": null
+  },
+  {
+   "id": "std-g-232",
+   "level": 5,
+   "category": "연결어미",
+   "form": "-다가는",
+   "homonym": null,
+   "related": [
+    "-다간",
+    "-단"
+   ],
+   "meaning": null
+  },
+  {
+   "id": "std-g-233",
+   "level": 5,
+   "category": "연결어미",
+   "form": "-을지라도",
+   "homonym": null,
+   "related": [
+    "-ㄹ지라도"
+   ],
+   "meaning": null
+  },
+  {
+   "id": "std-g-234",
+   "level": 5,
+   "category": "연결어미",
+   "form": "-느니",
+   "homonym": "1",
+   "related": [
+    "-느니보다",
+    "-느니보다는"
+   ],
+   "meaning": "비교"
+  },
+  {
+   "id": "std-g-235",
+   "level": 5,
+   "category": "종결어미",
+   "form": "-네",
+   "homonym": "2",
+   "related": [],
+   "meaning": "감탄"
+  },
+  {
+   "id": "std-g-236",
+   "level": 5,
+   "category": "종결어미",
+   "form": "-다",
+   "homonym": "4",
+   "related": [],
+   "meaning": "서술(신문)"
+  },
+  {
+   "id": "std-g-237",
+   "level": 5,
+   "category": "종결어미",
+   "form": "-다니",
+   "homonym": "1",
+   "related": [
+    "-다니요",
+    "-라니",
+    "-라니요",
+    "으라니",
+    "-으라니요"
+   ],
+   "meaning": "감탄"
+  },
+  {
+   "id": "std-g-238",
+   "level": 5,
+   "category": "종결어미",
+   "form": "­으려고",
+   "homonym": "2",
+   "related": [
+    "­려고",
+    "­려고요",
+    "­으려고요"
+   ],
+   "meaning": "의심"
+  },
+  {
+   "id": "std-g-239",
+   "level": 5,
+   "category": "종결어미",
+   "form": "-거라",
+   "homonym": null,
+   "related": [],
+   "meaning": null
+  },
+  {
+   "id": "std-g-240",
+   "level": 5,
+   "category": "종결어미",
+   "form": "-고말고",
+   "homonym": null,
+   "related": [
+    "-고말고요"
+   ],
+   "meaning": null
+  },
+  {
+   "id": "std-g-241",
+   "level": 5,
+   "category": "종결어미",
+   "form": "-는가",
+   "homonym": "1",
+   "related": [
+    "-ㄴ가",
+    "-은가"
+   ],
+   "meaning": "의문"
+  },
+  {
+   "id": "std-g-242",
+   "level": 5,
+   "category": "종결어미",
+   "form": "-는걸",
+   "homonym": null,
+   "related": [
+    "-ㄴ걸",
+    "-은걸",
+    "-ㄴ걸요",
+    "-는걸요",
+    "-은걸요"
+   ],
+   "meaning": null
+  },
+  {
+   "id": "std-g-243",
+   "level": 5,
+   "category": "종결어미",
+   "form": "-데",
+   "homonym": null,
+   "related": [
+    "-데요"
+   ],
+   "meaning": null
+  },
+  {
+   "id": "std-g-244",
+   "level": 5,
+   "category": "종결어미",
+   "form": "-더라고",
+   "homonym": null,
+   "related": [
+    "-더라고요"
+   ],
+   "meaning": null
+  },
+  {
+   "id": "std-g-245",
+   "level": 5,
+   "category": "표현",
+   "form": "-는다니",
+   "homonym": "1",
+   "related": [
+    "-다니",
+    "-라니",
+    "-으라니",
+    "-자니"
+   ],
+   "meaning": "명령 내용 질문"
+  },
+  {
+   "id": "std-g-246",
+   "level": 5,
+   "category": "표현",
+   "form": "-었던",
+   "homonym": null,
+   "related": [
+    "-았던",
+    "-였던"
+   ],
+   "meaning": null
+  },
+  {
+   "id": "std-g-247",
+   "level": 5,
+   "category": "표현",
+   "form": "에 관하여",
+   "homonym": null,
+   "related": [
+    "에 관한"
+   ],
+   "meaning": null
+  },
+  {
+   "id": "std-g-248",
+   "level": 5,
+   "category": "표현",
+   "form": "-자기에",
+   "homonym": null,
+   "related": [],
+   "meaning": null
+  },
+  {
+   "id": "std-g-249",
+   "level": 5,
+   "category": "표현",
+   "form": "-게 마련이다",
+   "homonym": null,
+   "related": [
+    "-기 마련이다"
+   ],
+   "meaning": null
+  },
+  {
+   "id": "std-g-250",
+   "level": 5,
+   "category": "표현",
+   "form": "-게 생겼다",
+   "homonym": null,
+   "related": [],
+   "meaning": null
+  },
+  {
+   "id": "std-g-251",
+   "level": 5,
+   "category": "표현",
+   "form": "-기 나름이다",
+   "homonym": null,
+   "related": [
+    "-을 나름이다"
+   ],
+   "meaning": null
+  },
+  {
+   "id": "std-g-252",
+   "level": 5,
+   "category": "표현",
+   "form": "-기가 바쁘게",
+   "homonym": null,
+   "related": [
+    "<유의> -기가 무섭게"
+   ],
+   "meaning": null
+  },
+  {
+   "id": "std-g-253",
+   "level": 5,
+   "category": "표현",
+   "form": "-기가 쉽다",
+   "homonym": null,
+   "related": [
+    "<유의> -기 십상이다"
+   ],
+   "meaning": null
+  },
+  {
+   "id": "std-g-254",
+   "level": 5,
+   "category": "표현",
+   "form": "-기만 하다",
+   "homonym": null,
+   "related": [],
+   "meaning": null
+  },
+  {
+   "id": "std-g-255",
+   "level": 5,
+   "category": "표현",
+   "form": "-기에 따라",
+   "homonym": null,
+   "related": [],
+   "meaning": null
+  },
+  {
+   "id": "std-g-256",
+   "level": 5,
+   "category": "표현",
+   "form": "-기에 앞서(서)",
+   "homonym": null,
+   "related": [],
+   "meaning": null
+  },
+  {
+   "id": "std-g-257",
+   "level": 5,
+   "category": "표현",
+   "form": "-은 나머지",
+   "homonym": null,
+   "related": [
+    "-ㄴ 나머지"
+   ],
+   "meaning": null
+  },
+  {
+   "id": "std-g-258",
+   "level": 5,
+   "category": "표현",
+   "form": "-는 데다가",
+   "homonym": null,
+   "related": [
+    "-ㄴ데다가",
+    "-은 데다가",
+    "-ㄴ 데다가",
+    "-은 데다가"
+   ],
+   "meaning": null
+  },
+  {
+   "id": "std-g-259",
+   "level": 5,
+   "category": "표현",
+   "form": "-는 동시에",
+   "homonym": null,
+   "related": [
+    "-ㄴ 동시에"
+   ],
+   "meaning": null
+  },
+  {
+   "id": "std-g-260",
+   "level": 5,
+   "category": "표현",
+   "form": "-는 듯하다",
+   "homonym": null,
+   "related": [
+    "-ㄴ듯하다",
+    "-은 듯하다",
+    "-ㄹ 듯하다",
+    "-을 듯하다"
+   ],
+   "meaning": null
+  },
+  {
+   "id": "std-g-261",
+   "level": 5,
+   "category": "표현",
+   "form": "-는 법이다",
+   "homonym": null,
+   "related": [
+    "-ㄴ 법이다",
+    "-은 법이다"
+   ],
+   "meaning": null
+  },
+  {
+   "id": "std-g-262",
+   "level": 5,
+   "category": "표현",
+   "form": "-는 이상",
+   "homonym": null,
+   "related": [
+    "-ㄴ 이상",
+    "-은 이상"
+   ],
+   "meaning": null
+  },
+  {
+   "id": "std-g-263",
+   "level": 5,
+   "category": "표현",
+   "form": "-은 채로",
+   "homonym": null,
+   "related": [
+    "-ㄴ 채로"
+   ],
+   "meaning": null
+  },
+  {
+   "id": "std-g-264",
+   "level": 5,
+   "category": "표현",
+   "form": "-는 척하다",
+   "homonym": null,
+   "related": [
+    "-ㄴ 척하다",
+    "-은 척하다",
+    "<유의> -는 체하다",
+    "-은 체하다"
+   ],
+   "meaning": null
+  },
+  {
+   "id": "std-g-265",
+   "level": 5,
+   "category": "표현",
+   "form": "-는 가운데",
+   "homonym": null,
+   "related": [
+    "-은 가운데"
+   ],
+   "meaning": null
+  },
+  {
+   "id": "std-g-266",
+   "level": 5,
+   "category": "표현",
+   "form": "는 말할 것도 없고",
+   "homonym": null,
+   "related": [
+    "은 말할 것도 없고",
+    "<유의> 는 고사하고",
+    "은 고사하고"
+   ],
+   "meaning": null
+  },
+  {
+   "id": "std-g-267",
+   "level": 5,
+   "category": "표현",
+   "form": "-을 만하다",
+   "homonym": null,
+   "related": [
+    "-ㄹ 만하다"
+   ],
+   "meaning": null
+  },
+  {
+   "id": "std-g-268",
+   "level": 5,
+   "category": "표현",
+   "form": "-을 법하다",
+   "homonym": null,
+   "related": [
+    "-ㄹ 법하다"
+   ],
+   "meaning": null
+  },
+  {
+   "id": "std-g-269",
+   "level": 5,
+   "category": "표현",
+   "form": "-을 테다",
+   "homonym": null,
+   "related": [
+    "-ㄹ 테다"
+   ],
+   "meaning": null
+  },
+  {
+   "id": "std-g-270",
+   "level": 5,
+   "category": "표현",
+   "form": "-을 테면",
+   "homonym": null,
+   "related": [
+    "-ㄹ 테면"
+   ],
+   "meaning": null
+  },
+  {
+   "id": "std-g-271",
+   "level": 5,
+   "category": "표현",
+   "form": "-을 테지만",
+   "homonym": null,
+   "related": [
+    "-ㄹ 테지만"
+   ],
+   "meaning": null
+  },
+  {
+   "id": "std-g-272",
+   "level": 5,
+   "category": "표현",
+   "form": "-으려나 보다",
+   "homonym": null,
+   "related": [
+    "-려나 보다"
+   ],
+   "meaning": null
+  },
+  {
+   "id": "std-g-273",
+   "level": 5,
+   "category": "표현",
+   "form": "를 가지고",
+   "homonym": null,
+   "related": [
+    "을 가지고"
+   ],
+   "meaning": null
+  },
+  {
+   "id": "std-g-274",
+   "level": 5,
+   "category": "표현",
+   "form": "-으면 몰라도",
+   "homonym": null,
+   "related": [
+    "-면 몰라도"
+   ],
+   "meaning": null
+  },
+  {
+   "id": "std-g-275",
+   "level": 5,
+   "category": "표현",
+   "form": "에도 불구하고",
+   "homonym": null,
+   "related": [],
+   "meaning": null
+  },
+  {
+   "id": "std-g-276",
+   "level": 5,
+   "category": "표현",
+   "form": "-는데도",
+   "homonym": null,
+   "related": [
+    "-ㄴ데도",
+    "-은데도"
+   ],
+   "meaning": null
+  },
+  {
+   "id": "std-g-277",
+   "level": 5,
+   "category": "표현",
+   "form": "-어 내다",
+   "homonym": null,
+   "related": [
+    "-아 내다",
+    "-여 내다"
+   ],
+   "meaning": null
+  },
+  {
+   "id": "std-g-278",
+   "level": 5,
+   "category": "표현",
+   "form": "-는다기에",
+   "homonym": null,
+   "related": [
+    "-ㄴ다기에",
+    "-다기에",
+    "-라기에"
+   ],
+   "meaning": "이유"
+  },
+  {
+   "id": "std-g-279",
+   "level": 5,
+   "category": "표현",
+   "form": "-는다는 것이",
+   "homonym": null,
+   "related": [
+    "-ㄴ다는 것이"
+   ],
+   "meaning": null
+  },
+  {
+   "id": "std-g-280",
+   "level": 5,
+   "category": "표현",
+   "form": "-는데도 불구하고",
+   "homonym": null,
+   "related": [
+    "-ㄴ데도 불구하고",
+    "-은데도 불구하고"
+   ],
+   "meaning": null
+  },
+  {
+   "id": "std-g-281",
+   "level": 6,
+   "category": "조사",
+   "form": "마는",
+   "homonym": null,
+   "related": [
+    "만"
+   ],
+   "meaning": "상반"
+  },
+  {
+   "id": "std-g-282",
+   "level": 6,
+   "category": "조사",
+   "form": "깨나",
+   "homonym": null,
+   "related": [],
+   "meaning": null
+  },
+  {
+   "id": "std-g-283",
+   "level": 6,
+   "category": "조사",
+   "form": "이라고",
+   "homonym": "2",
+   "related": [
+    "라고"
+   ],
+   "meaning": "보잘것없음"
+  },
+  {
+   "id": "std-g-284",
+   "level": 6,
+   "category": "조사",
+   "form": "을랑",
+   "homonym": null,
+   "related": [],
+   "meaning": null
+  },
+  {
+   "id": "std-g-285",
+   "level": 6,
+   "category": "조사",
+   "form": "이라면",
+   "homonym": null,
+   "related": [
+    "라면"
+   ],
+   "meaning": "강조"
+  },
+  {
+   "id": "std-g-286",
+   "level": 6,
+   "category": "연결어미",
+   "form": "-거들랑",
+   "homonym": "1",
+   "related": [
+    "-걸랑"
+   ],
+   "meaning": null
+  },
+  {
+   "id": "std-g-287",
+   "level": 6,
+   "category": "연결어미",
+   "form": "-노라면",
+   "homonym": null,
+   "related": [],
+   "meaning": null
+  },
+  {
+   "id": "std-g-288",
+   "level": 6,
+   "category": "연결어미",
+   "form": "-건대",
+   "homonym": null,
+   "related": [],
+   "meaning": null
+  },
+  {
+   "id": "std-g-289",
+   "level": 6,
+   "category": "연결어미",
+   "form": "-건만",
+   "homonym": null,
+   "related": [
+    "-건마는"
+   ],
+   "meaning": null
+  },
+  {
+   "id": "std-g-290",
+   "level": 6,
+   "category": "연결어미",
+   "form": "-기로서니",
+   "homonym": null,
+   "related": [],
+   "meaning": null
+  },
+  {
+   "id": "std-g-291",
+   "level": 6,
+   "category": "연결어미",
+   "form": "-느니만큼",
+   "homonym": null,
+   "related": [
+    "-니만큼",
+    "-으니만큼",
+    "<유의> -느니만치",
+    "니만치",
+    "-으니만치"
+   ],
+   "meaning": null
+  },
+  {
+   "id": "std-g-292",
+   "level": 6,
+   "category": "연결어미",
+   "form": "-되",
+   "homonym": null,
+   "related": [
+    "-으되",
+    "-로되"
+   ],
+   "meaning": null
+  },
+  {
+   "id": "std-g-293",
+   "level": 6,
+   "category": "연결어미",
+   "form": "-디",
+   "homonym": "1",
+   "related": [],
+   "meaning": "강조"
+  },
+  {
+   "id": "std-g-294",
+   "level": 6,
+   "category": "연결어미",
+   "form": "-이라야",
+   "homonym": null,
+   "related": [
+    "-라야",
+    "-이라야만",
+    "-라야만"
+   ],
+   "meaning": null
+  },
+  {
+   "id": "std-g-295",
+   "level": 6,
+   "category": "연결어미",
+   "form": "-으련마는",
+   "homonym": null,
+   "related": [
+    "-련마는",
+    "-으련만",
+    "-련만"
+   ],
+   "meaning": null
+  },
+  {
+   "id": "std-g-296",
+   "level": 6,
+   "category": "연결어미",
+   "form": "-자니",
+   "homonym": "3",
+   "related": [
+    "-자",
+    "-자니까"
+   ],
+   "meaning": "의도"
+  },
+  {
+   "id": "std-g-297",
+   "level": 6,
+   "category": "연결어미",
+   "form": "-는다고",
+   "homonym": "1",
+   "related": [
+    "-다고",
+    "-라고",
+    "으라고",
+    "-자고"
+   ],
+   "meaning": "의도"
+  },
+  {
+   "id": "std-g-298",
+   "level": 6,
+   "category": "연결어미",
+   "form": "-자면",
+   "homonym": "1",
+   "related": [],
+   "meaning": "의도"
+  },
+  {
+   "id": "std-g-299",
+   "level": 6,
+   "category": "연결어미",
+   "form": "-은들",
+   "homonym": null,
+   "related": [
+    "-ㄴ들",
+    "인들"
+   ],
+   "meaning": "양보"
+  },
+  {
+   "id": "std-g-300",
+   "level": 6,
+   "category": "연결어미",
+   "form": "-을망정,",
+   "homonym": null,
+   "related": [
+    "-ㄹ망정 <유의> -ㄹ지언정",
+    "-을지언정"
+   ],
+   "meaning": null
+  },
+  {
+   "id": "std-g-301",
+   "level": 6,
+   "category": "연결어미",
+   "form": "-을라치면",
+   "homonym": null,
+   "related": [
+    "-ㄹ라치면"
+   ],
+   "meaning": null
+  },
+  {
+   "id": "std-g-302",
+   "level": 6,
+   "category": "종결어미",
+   "form": "-는구려",
+   "homonym": null,
+   "related": [
+    "-구려"
+   ],
+   "meaning": "감탄"
+  },
+  {
+   "id": "std-g-303",
+   "level": 6,
+   "category": "종결어미",
+   "form": "-는구먼",
+   "homonym": null,
+   "related": [
+    "-구먼",
+    "-구먼요",
+    "-는구먼요"
+   ],
+   "meaning": null
+  },
+  {
+   "id": "std-g-304",
+   "level": 6,
+   "category": "종결어미",
+   "form": "-그려",
+   "homonym": null,
+   "related": [],
+   "meaning": null
+  },
+  {
+   "id": "std-g-305",
+   "level": 6,
+   "category": "종결어미",
+   "form": "-으리라",
+   "homonym": null,
+   "related": [
+    "-리라"
+   ],
+   "meaning": null
+  },
+  {
+   "id": "std-g-306",
+   "level": 6,
+   "category": "종결어미",
+   "form": "-으오",
+   "homonym": null,
+   "related": [
+    "-오"
+   ],
+   "meaning": null
+  },
+  {
+   "id": "std-g-307",
+   "level": 6,
+   "category": "종결어미",
+   "form": "-으니",
+   "homonym": "4",
+   "related": [],
+   "meaning": "비난"
+  },
+  {
+   "id": "std-g-308",
+   "level": 6,
+   "category": "종결어미",
+   "form": "-거들랑",
+   "homonym": "2",
+   "related": [
+    "-걸랑"
+   ],
+   "meaning": "이유"
+  },
+  {
+   "id": "std-g-309",
+   "level": 6,
+   "category": "종결어미",
+   "form": "-게",
+   "homonym": "3",
+   "related": [],
+   "meaning": "명령"
+  },
+  {
+   "id": "std-g-310",
+   "level": 6,
+   "category": "종결어미",
+   "form": "-게",
+   "homonym": "4",
+   "related": [],
+   "meaning": "환기"
+  },
+  {
+   "id": "std-g-311",
+   "level": 6,
+   "category": "종결어미",
+   "form": "-구려",
+   "homonym": "2",
+   "related": [],
+   "meaning": "명령"
+  },
+  {
+   "id": "std-g-312",
+   "level": 6,
+   "category": "종결어미",
+   "form": "-네",
+   "homonym": "1",
+   "related": [],
+   "meaning": "서술"
+  },
+  {
+   "id": "std-g-313",
+   "level": 6,
+   "category": "종결어미",
+   "form": "-는구만",
+   "homonym": null,
+   "related": [
+    "-구만"
+   ],
+   "meaning": null
+  },
+  {
+   "id": "std-g-314",
+   "level": 6,
+   "category": "종결어미",
+   "form": "-는가",
+   "homonym": "2",
+   "related": [
+    "-ㄴ가",
+    "-은가"
+   ],
+   "meaning": "문제 제기"
+  },
+  {
+   "id": "std-g-315",
+   "level": 6,
+   "category": "종결어미",
+   "form": "-나",
+   "homonym": "2",
+   "related": [],
+   "meaning": "의문"
+  },
+  {
+   "id": "std-g-316",
+   "level": 6,
+   "category": "종결어미",
+   "form": "-던",
+   "homonym": "2",
+   "related": [],
+   "meaning": "의문"
+  },
+  {
+   "id": "std-g-317",
+   "level": 6,
+   "category": "종결어미",
+   "form": "-던가",
+   "homonym": "1",
+   "related": [],
+   "meaning": "의문(경험)"
+  },
+  {
+   "id": "std-g-318",
+   "level": 6,
+   "category": "종결어미",
+   "form": "-던가",
+   "homonym": "2",
+   "related": [],
+   "meaning": "의문(추측)"
+  },
+  {
+   "id": "std-g-319",
+   "level": 6,
+   "category": "종결어미",
+   "form": "-라",
+   "homonym": "2",
+   "related": [],
+   "meaning": "서술"
+  },
+  {
+   "id": "std-g-320",
+   "level": 6,
+   "category": "종결어미",
+   "form": "-으리오",
+   "homonym": null,
+   "related": [
+    "-리오"
+   ],
+   "meaning": null
+  },
+  {
+   "id": "std-g-321",
+   "level": 6,
+   "category": "종결어미",
+   "form": "-소",
+   "homonym": null,
+   "related": [],
+   "meaning": null
+  },
+  {
+   "id": "std-g-322",
+   "level": 6,
+   "category": "표현",
+   "form": "-기 일쑤이다",
+   "homonym": null,
+   "related": [],
+   "meaning": null
+  },
+  {
+   "id": "std-g-323",
+   "level": 6,
+   "category": "표현",
+   "form": "-기 짝이 없다",
+   "homonym": null,
+   "related": [],
+   "meaning": null
+  },
+  {
+   "id": "std-g-324",
+   "level": 6,
+   "category": "표현",
+   "form": "는 마당에",
+   "homonym": null,
+   "related": [
+    "-ㄴ 마당에",
+    "-은 마당에"
+   ],
+   "meaning": null
+  },
+  {
+   "id": "std-g-325",
+   "level": 6,
+   "category": "표현",
+   "form": "-는 한이 있어도",
+   "homonym": null,
+   "related": [
+    "-는 한이 있더라도"
+   ],
+   "meaning": null
+  },
+  {
+   "id": "std-g-326",
+   "level": 6,
+   "category": "표현",
+   "form": "-을 바에",
+   "homonym": null,
+   "related": [
+    "-ㄹ 바에"
+   ],
+   "meaning": null
+  },
+  {
+   "id": "std-g-327",
+   "level": 6,
+   "category": "표현",
+   "form": "-으려도",
+   "homonym": null,
+   "related": [
+    "-려도"
+   ],
+   "meaning": null
+  },
+  {
+   "id": "std-g-328",
+   "level": 6,
+   "category": "표현",
+   "form": "-으리라는",
+   "homonym": null,
+   "related": [
+    "-리라는"
+   ],
+   "meaning": null
+  },
+  {
+   "id": "std-g-329",
+   "level": 6,
+   "category": "표현",
+   "form": "를 막론하고",
+   "homonym": null,
+   "related": [
+    "을 막론하고",
+    "<유의> 를 불문하고",
+    "을 불문하고"
+   ],
+   "meaning": null
+  },
+  {
+   "id": "std-g-330",
+   "level": 6,
+   "category": "표현",
+   "form": "-어 치우다",
+   "homonym": null,
+   "related": [
+    "-아 치우다",
+    "-여 치우다"
+   ],
+   "meaning": null
+  },
+  {
+   "id": "std-g-331",
+   "level": 6,
+   "category": "표현",
+   "form": "-는다는",
+   "homonym": null,
+   "related": [
+    "-ㄴ다는",
+    "-는단",
+    "-다는",
+    "-단",
+    "-라는",
+    "-란"
+   ],
+   "meaning": null
+  },
+  {
+   "id": "std-g-332",
+   "level": 6,
+   "category": "표현",
+   "form": "이라고는",
+   "homonym": null,
+   "related": [
+    "라고는",
+    "이라곤",
+    "라곤"
+   ],
+   "meaning": null
+  },
+  {
+   "id": "std-g-333",
+   "level": 6,
+   "category": "표현",
+   "form": "-는다던가",
+   "homonym": "1",
+   "related": [
+    "-다던가",
+    "-라던가"
+   ],
+   "meaning": "명령 확인 질문"
+  },
+  {
+   "id": "std-g-334",
+   "level": 6,
+   "category": "표현",
+   "form": "-으래서야",
+   "homonym": null,
+   "related": [
+    "-래서야"
+   ],
+   "meaning": "의문 제기"
+  },
+  {
+   "id": "std-g-335",
+   "level": 6,
+   "category": "표현",
+   "form": "-으리라고",
+   "homonym": null,
+   "related": [
+    "-리라고"
+   ],
+   "meaning": null
+  },
+  {
+   "id": "std-g-336",
+   "level": 6,
+   "category": "표현",
+   "form": "-자면",
+   "homonym": "2",
+   "related": [],
+   "meaning": "권유"
+  }
+ ]
+}

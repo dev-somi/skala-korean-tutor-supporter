@@ -1,0 +1,32 @@
+[project]
+name = "ai-server"
+version = "0.1.0"
+description = "한국어 선생님용 학습관리 AI - LangGraph 그래프 서버 (FastAPI)"
+requires-python = ">=3.11"
+dependencies = [
+    "fastapi>=0.115",
+    "uvicorn[standard]>=0.32",
+    "langchain>=1.4.5",
+    "langchain-anthropic>=1.7.6",
+    "langgraph>=1.2.15",
+    "langgraph-checkpoint-sqlite>=3.1.2",
+    "pydantic>=2.14.1",
+    "pypdf>=6.20.1",
+    "python-dotenv>=1.2.4",
+    "python-pptx>=1.0.2",
+    "langchain-ollama>=1.0",
+    "httpx>=0.28.1",
+    "kiwipiepy>=0.24.0",
+    "langsmith>=0.14",
+]
+
+[dependency-groups]
+dev = [
+    "httpx>=0.28",
+    "ipykernel>=7.4.0",
+    "openpyxl>=3.1.5",
+    "pytest>=9.1.1",
+]
+
+[tool.pytest.ini_options]
+testpaths = ["tests"]

@@ -1,0 +1,784 @@
+{
+  "summary": {
+    "cases": 16,
+    "covered_precision": 1.0,
+    "covered_recall": 1.0,
+    "covered_f1": 1.0,
+    "covered_exact_rate": 1.0,
+    "weakness_change_accuracy": 0.938,
+    "homework_accuracy": 1.0,
+    "case_pass_rate": 0.938,
+    "prd_extraction_accuracy": 0.969
+  },
+  "results": [
+    {
+      "id": "c01",
+      "note": "범위 표현(1~10)을 ID로 펼치기, 반복 오류 → 약점 추가",
+      "reviewed": false,
+      "seconds": 6.5,
+      "error": null,
+      "predicted": {
+        "covered_item_ids": [
+          "u03-v01",
+          "u03-v02",
+          "u03-v03",
+          "u03-v04",
+          "u03-v05",
+          "u03-v06",
+          "u03-v07",
+          "u03-v08",
+          "u03-v09",
+          "u03-v10",
+          "u03-g01",
+          "u03-g02"
+        ],
+        "strengths": [
+          "-습니다/-습니까 표현을 잘 사용함"
+        ],
+        "errors": [
+          {
+            "student_said": "밥를 먹습니다",
+            "correction": "밥을 먹습니다",
+            "item_id": "u03-g02",
+            "note": "받침이 있는 명사 뒤에는 '을', 받침이 없는 명사 뒤에는 '를'을 씀. 받침 구분을 계속 틀림."
+          }
+        ],
+        "weakness_changes": [
+          {
+            "action": "add",
+            "weakness_id": null,
+            "item_id": "u03-g02",
+            "description": "을/를 받침 구분"
+          }
+        ],
+        "homework": [
+          {
+            "item_id": "u03-e02",
+            "description": "연습문제 2번 (연습 Ⅱ. 대화를 완성하세요)"
+          }
+        ],
+        "next_lesson_note": ""
+      },
+      "warnings": [],
+      "validation": null,
+      "score": {
+        "case_id": "c01",
+        "covered_tp": 12,
+        "covered_fp": 0,
+        "covered_fn": 0,
+        "covered_exact": true,
+        "changes_exact": true,
+        "changes_missed": [],
+        "changes_extra": [],
+        "homework_exact": true,
+        "passed": true
+      }
+    },
+    {
+      "id": "c02",
+      "note": "기존 약점 해결 (weakness_id 연결), 숙제 없음",
+      "reviewed": false,
+      "seconds": 3.8,
+      "error": null,
+      "predicted": {
+        "covered_item_ids": [
+          "u03-g03"
+        ],
+        "strengths": [
+          "이/가를 이제 완벽하게 사용함."
+        ],
+        "errors": [],
+        "weakness_changes": [
+          {
+            "action": "resolve",
+            "weakness_id": 11,
+            "item_id": "u02-g01",
+            "description": "이/가 구분"
+          }
+        ],
+        "homework": [],
+        "next_lesson_note": ""
+      },
+      "warnings": [],
+      "validation": null,
+      "score": {
+        "case_id": "c02",
+        "covered_tp": 1,
+        "covered_fp": 0,
+        "covered_fn": 0,
+        "covered_exact": true,
+        "changes_exact": true,
+        "changes_missed": [],
+        "changes_extra": [],
+        "homework_exact": true,
+        "passed": true
+      }
+    },
+    {
+      "id": "c03",
+      "note": "영어 메모, 단어 범위를 이름으로 지정",
+      "reviewed": false,
+      "seconds": 5.9,
+      "error": null,
+      "predicted": {
+        "covered_item_ids": [
+          "u04-v01",
+          "u04-v02",
+          "u04-v03",
+          "u04-v04",
+          "u04-v05",
+          "u04-v06",
+          "u04-v07",
+          "u04-g01"
+        ],
+        "strengths": [],
+        "errors": [
+          {
+            "student_said": "친구과",
+            "correction": "친구와",
+            "item_id": "u04-g01",
+            "note": "받침이 없는 명사 뒤에는 '와'를 써야 하는데 '과'를 계속 사용함."
+          }
+        ],
+        "weakness_changes": [
+          {
+            "action": "add",
+            "weakness_id": null,
+            "item_id": "u04-g01",
+            "description": "받침 없는 명사 뒤에서도 '과'를 사용함 (예: 친구과 → 친구와). 와/과 구분이 필요함."
+          }
+        ],
+        "homework": [
+          {
+            "item_id": "u04-e01",
+            "description": "연습 Ⅰ. 문장을 완성하세요 (교재 p.60)"
+          }
+        ],
+        "next_lesson_note": ""
+      },
+      "warnings": [],
+      "validation": null,
+      "score": {
+        "case_id": "c03",
+        "covered_tp": 8,
+        "covered_fp": 0,
+        "covered_fn": 0,
+        "covered_exact": true,
+        "changes_exact": true,
+        "changes_missed": [],
+        "changes_extra": [],
+        "homework_exact": true,
+        "passed": true
+      }
+    },
+    {
+      "id": "c04",
+      "note": "잘한 것만 있음 → 약점 변경 없음, 교실 물건 단어 나열",
+      "reviewed": false,
+      "seconds": 4.7,
+      "error": null,
+      "predicted": {
+        "covered_item_ids": [
+          "u04-g02",
+          "u04-v15",
+          "u04-v16",
+          "u04-v17",
+          "u04-v18",
+          "u04-v19",
+          "u04-v20"
+        ],
+        "strengths": [
+          "'저의'를 '제'로 줄여 쓰는 축약을 바로 잘 이해하고 사용했다."
+        ],
+        "errors": [],
+        "weakness_changes": [],
+        "homework": [
+          {
+            "item_id": "u04-e12",
+            "description": "쓰기 1: 교실이 어떻습니까? <보기>와 같이 쓰세요."
+          }
+        ],
+        "next_lesson_note": ""
+      },
+      "warnings": [],
+      "validation": null,
+      "score": {
+        "case_id": "c04",
+        "covered_tp": 7,
+        "covered_fp": 0,
+        "covered_fn": 0,
+        "covered_exact": true,
+        "changes_exact": true,
+        "changes_missed": [],
+        "changes_extra": [],
+        "homework_exact": true,
+        "passed": true
+      }
+    },
+    {
+      "id": "c05",
+      "note": "교재 ID 없는 약점(자유 서술) 해결, 읽기 지문",
+      "reviewed": false,
+      "seconds": 2.5,
+      "error": null,
+      "predicted": {
+        "covered_item_ids": [
+          "u03-r01"
+        ],
+        "strengths": [
+          "받침 발음이 많이 좋아졌고 이제 문제가 없음"
+        ],
+        "errors": [],
+        "weakness_changes": [
+          {
+            "action": "resolve",
+            "weakness_id": 12,
+            "item_id": null,
+            "description": "받침 발음"
+          }
+        ],
+        "homework": [
+          {
+            "item_id": "u03-e10",
+            "description": "쓰기 과제: 좋아하는 음식에 대해 쓰기"
+          }
+        ],
+        "next_lesson_note": ""
+      },
+      "warnings": [],
+      "validation": null,
+      "score": {
+        "case_id": "c05",
+        "covered_tp": 1,
+        "covered_fp": 0,
+        "covered_fn": 0,
+        "covered_exact": true,
+        "changes_exact": true,
+        "changes_missed": [],
+        "changes_extra": [],
+        "homework_exact": true,
+        "passed": true
+      }
+    },
+    {
+      "id": "c06",
+      "note": "2과, 단어 범위, 비슷한 단어 혼동 → 자유 서술 약점",
+      "reviewed": false,
+      "seconds": 7.1,
+      "error": null,
+      "predicted": {
+        "covered_item_ids": [
+          "u02-v01",
+          "u02-v02",
+          "u02-v03",
+          "u02-v04",
+          "u02-v05",
+          "u02-v06",
+          "u02-v07"
+        ],
+        "strengths": [],
+        "errors": [
+          {
+            "student_said": "언니와 누나를 구분하지 못하고 헷갈려 함",
+            "correction": "여자가 손위 여자 형제를 부를 때는 '언니', 남자가 손위 여자 형제를 부를 때는 '누나'",
+            "item_id": null,
+            "note": "말하는 사람의 성별에 따라 호칭이 달라진다는 점을 다시 확인해 주세요."
+          }
+        ],
+        "weakness_changes": [
+          {
+            "action": "add",
+            "weakness_id": null,
+            "item_id": null,
+            "description": "언니/누나 구분을 헷갈려 함"
+          }
+        ],
+        "homework": [
+          {
+            "item_id": "u02-e01",
+            "description": "연습 Ⅰ 1번 풀어 오기"
+          }
+        ],
+        "next_lesson_note": ""
+      },
+      "warnings": [],
+      "validation": null,
+      "score": {
+        "case_id": "c06",
+        "covered_tp": 7,
+        "covered_fp": 0,
+        "covered_fn": 0,
+        "covered_exact": true,
+        "changes_exact": true,
+        "changes_missed": [],
+        "changes_extra": [],
+        "homework_exact": true,
+        "passed": true
+      }
+    },
+    {
+      "id": "c07",
+      "note": "표현 항목 포함, 문법 오류 → 약점 추가",
+      "reviewed": false,
+      "seconds": 4.8,
+      "error": null,
+      "predicted": {
+        "covered_item_ids": [
+          "u02-v08",
+          "u02-v09",
+          "u02-v10",
+          "u02-v11",
+          "u02-v14",
+          "u02-g02"
+        ],
+        "strengths": [],
+        "errors": [
+          {
+            "student_said": "가수이 아니에요",
+            "correction": "가수가 아니에요",
+            "item_id": "u02-g02",
+            "note": "받침이 없는 명사에는 '가'를 써야 하는데 '이'를 사용함."
+          }
+        ],
+        "weakness_changes": [],
+        "homework": [],
+        "next_lesson_note": ""
+      },
+      "warnings": [],
+      "validation": null,
+      "score": {
+        "case_id": "c07",
+        "covered_tp": 6,
+        "covered_fp": 0,
+        "covered_fn": 0,
+        "covered_exact": true,
+        "changes_exact": false,
+        "changes_missed": [
+          {
+            "action": "add",
+            "item_id": "u02-g02",
+            "keywords": [
+              "아니",
+              "이/가"
+            ]
+          }
+        ],
+        "changes_extra": [],
+        "homework_exact": true,
+        "passed": false
+      }
+    },
+    {
+      "id": "c08",
+      "note": "복습 + 약점 해결, 숙제가 대화문",
+      "reviewed": false,
+      "seconds": 2.4,
+      "error": null,
+      "predicted": {
+        "covered_item_ids": [
+          "u02-v04",
+          "u02-v05"
+        ],
+        "strengths": [
+          "언니와 누나를 이제 확실히 구분함"
+        ],
+        "errors": [],
+        "weakness_changes": [
+          {
+            "action": "resolve",
+            "weakness_id": 21,
+            "item_id": null,
+            "description": "언니/누나 구분"
+          }
+        ],
+        "homework": [
+          {
+            "item_id": "u02-d01",
+            "description": "2과 대화문 외워 오기"
+          }
+        ],
+        "next_lesson_note": ""
+      },
+      "warnings": [],
+      "validation": null,
+      "score": {
+        "case_id": "c08",
+        "covered_tp": 2,
+        "covered_fp": 0,
+        "covered_fn": 0,
+        "covered_exact": true,
+        "changes_exact": true,
+        "changes_missed": [],
+        "changes_extra": [],
+        "homework_exact": true,
+        "passed": true
+      }
+    },
+    {
+      "id": "c09",
+      "note": "단어를 이름으로 지정, 활용 오류",
+      "reviewed": false,
+      "seconds": 5.8,
+      "error": null,
+      "predicted": {
+        "covered_item_ids": [
+          "u03-v05",
+          "u03-v06",
+          "u03-v07",
+          "u03-v08",
+          "u03-v09",
+          "u03-g01"
+        ],
+        "strengths": [],
+        "errors": [
+          {
+            "student_said": "가습니다",
+            "correction": "갑니다",
+            "item_id": "u03-g01",
+            "note": "받침이 없는 동사는 -ㅂ니다/-ㅂ니까를 씁니다. 여러 번 반복해서 틀림."
+          }
+        ],
+        "weakness_changes": [
+          {
+            "action": "add",
+            "weakness_id": null,
+            "item_id": "u03-g01",
+            "description": "받침 없는 동사에 -ㅂ니다를 써야 하는데 -습니다를 붙임 (예: 가습니다 → 갑니다)"
+          }
+        ],
+        "homework": [
+          {
+            "item_id": "u03-e01",
+            "description": "연습 Ⅰ: -습니까? / -습니다 형태로 쓰기"
+          }
+        ],
+        "next_lesson_note": ""
+      },
+      "warnings": [],
+      "validation": null,
+      "score": {
+        "case_id": "c09",
+        "covered_tp": 6,
+        "covered_fp": 0,
+        "covered_fn": 0,
+        "covered_exact": true,
+        "changes_exact": true,
+        "changes_missed": [],
+        "changes_extra": [],
+        "homework_exact": true,
+        "passed": true
+      }
+    },
+    {
+      "id": "c10",
+      "note": "함정: 이미 있는 약점을 다시 추가하지 않아야 함",
+      "reviewed": false,
+      "seconds": 4.6,
+      "error": null,
+      "predicted": {
+        "covered_item_ids": [
+          "u03-g02"
+        ],
+        "strengths": [
+          "을/를을 사용하는 데 문제가 없었다."
+        ],
+        "errors": [
+          {
+            "student_said": "저가",
+            "correction": "제가",
+            "item_id": null,
+            "note": "이/가를 아직 헷갈려 함. '저' 뒤에 '가'가 붙으면 '제가'가 됩니다."
+          }
+        ],
+        "weakness_changes": [],
+        "homework": [],
+        "next_lesson_note": ""
+      },
+      "warnings": [],
+      "validation": null,
+      "score": {
+        "case_id": "c10",
+        "covered_tp": 1,
+        "covered_fp": 0,
+        "covered_fn": 0,
+        "covered_exact": true,
+        "changes_exact": true,
+        "changes_missed": [],
+        "changes_extra": [],
+        "homework_exact": true,
+        "passed": true
+      }
+    },
+    {
+      "id": "c11",
+      "note": "함정: 교재를 안 한 수업 → 아무것도 지어내지 않아야 함",
+      "reviewed": false,
+      "seconds": 2.2,
+      "error": null,
+      "predicted": {
+        "covered_item_ids": [],
+        "strengths": [],
+        "errors": [],
+        "weakness_changes": [],
+        "homework": [],
+        "next_lesson_note": ""
+      },
+      "warnings": [],
+      "validation": null,
+      "score": {
+        "case_id": "c11",
+        "covered_tp": 0,
+        "covered_fp": 0,
+        "covered_fn": 0,
+        "covered_exact": true,
+        "changes_exact": true,
+        "changes_missed": [],
+        "changes_extra": [],
+        "homework_exact": true,
+        "passed": true
+      }
+    },
+    {
+      "id": "c12",
+      "note": "표현 항목(u03-v14)과 관련된 새 오류",
+      "reviewed": false,
+      "seconds": 4.2,
+      "error": null,
+      "predicted": {
+        "covered_item_ids": [
+          "u03-v10",
+          "u03-v11",
+          "u03-v12",
+          "u03-v13",
+          "u03-v14"
+        ],
+        "strengths": [],
+        "errors": [
+          {
+            "student_said": "드라마가 좋아합니다",
+            "correction": "드라마를 좋아합니다 / 드라마가 좋습니다",
+            "item_id": "u03-v14",
+            "note": "좋아하다 앞에는 을/를을 쓰고, 좋다 앞에는 이/가를 씀. 같은 실수를 자꾸 함."
+          }
+        ],
+        "weakness_changes": [
+          {
+            "action": "add",
+            "weakness_id": null,
+            "item_id": "u03-v14",
+            "description": "'좋아하다' 앞에 을/를 대신 이/가를 쓰는 실수 (좋아하다와 좋다의 조사 혼동)"
+          }
+        ],
+        "homework": [],
+        "next_lesson_note": "'(명사)를 좋아하다 = (명사)가 좋다' 조사 구분을 다시 연습하기."
+      },
+      "warnings": [],
+      "validation": null,
+      "score": {
+        "case_id": "c12",
+        "covered_tp": 5,
+        "covered_fp": 0,
+        "covered_fn": 0,
+        "covered_exact": true,
+        "changes_exact": true,
+        "changes_missed": [],
+        "changes_extra": [],
+        "homework_exact": true,
+        "passed": true
+      }
+    },
+    {
+      "id": "c13",
+      "note": "연습문제를 수업 중에 푼 경우 (다룬 항목) vs 숙제",
+      "reviewed": false,
+      "seconds": 3.7,
+      "error": null,
+      "predicted": {
+        "covered_item_ids": [
+          "u04-v08",
+          "u04-v09",
+          "u04-v10",
+          "u04-v11",
+          "u04-e06"
+        ],
+        "strengths": [],
+        "errors": [],
+        "weakness_changes": [],
+        "homework": [
+          {
+            "item_id": "u04-e09",
+            "description": "읽고 쓰기 2번: 교실에 있으면 ○, 없으면 × 하기"
+          }
+        ],
+        "next_lesson_note": ""
+      },
+      "warnings": [],
+      "validation": null,
+      "score": {
+        "case_id": "c13",
+        "covered_tp": 5,
+        "covered_fp": 0,
+        "covered_fn": 0,
+        "covered_exact": true,
+        "changes_exact": true,
+        "changes_missed": [],
+        "changes_extra": [],
+        "homework_exact": true,
+        "passed": true
+      }
+    },
+    {
+      "id": "c14",
+      "note": "잘한 점만, 표현 항목 포함",
+      "reviewed": false,
+      "seconds": 4.3,
+      "error": null,
+      "predicted": {
+        "covered_item_ids": [
+          "u03-v01",
+          "u03-v02",
+          "u03-v03",
+          "u03-v04",
+          "u03-v15",
+          "u03-g02"
+        ],
+        "strengths": [
+          "받침 있는 단어 뒤에 '을'을 잘 붙입니다."
+        ],
+        "errors": [],
+        "weakness_changes": [],
+        "homework": [
+          {
+            "item_id": "u03-e04",
+            "description": "어휘 및 문법 연습 1번 하기"
+          }
+        ],
+        "next_lesson_note": ""
+      },
+      "warnings": [],
+      "validation": null,
+      "score": {
+        "case_id": "c14",
+        "covered_tp": 5,
+        "covered_fp": 0,
+        "covered_fn": 0,
+        "covered_exact": true,
+        "changes_exact": true,
+        "changes_missed": [],
+        "changes_extra": [],
+        "homework_exact": true,
+        "passed": true
+      }
+    },
+    {
+      "id": "c15",
+      "note": "대화문 + 문법, 계속 헷갈림 → 약점 추가",
+      "reviewed": false,
+      "seconds": 5.4,
+      "error": null,
+      "predicted": {
+        "covered_item_ids": [
+          "u04-d01",
+          "u04-g02"
+        ],
+        "strengths": [],
+        "errors": [
+          {
+            "student_said": "저의 (제로 바꾸지 못함)",
+            "correction": "제",
+            "item_id": "u04-g02",
+            "note": "'저의'를 '제'로 줄여 말하는 것을 계속 헷갈려 함. 문법 '의'의 발음 [에]도 수업에서 설명함."
+          }
+        ],
+        "weakness_changes": [
+          {
+            "action": "add",
+            "weakness_id": null,
+            "item_id": "u04-g02",
+            "description": "'저의'를 '제'로 바꾸는 것을 계속 헷갈림"
+          }
+        ],
+        "homework": [
+          {
+            "item_id": "u04-e11",
+            "description": "말하기 1 (교재 68쪽) 질문에 맞게 대답하기"
+          }
+        ],
+        "next_lesson_note": ""
+      },
+      "warnings": [],
+      "validation": null,
+      "score": {
+        "case_id": "c15",
+        "covered_tp": 2,
+        "covered_fp": 0,
+        "covered_fn": 0,
+        "covered_exact": true,
+        "changes_exact": true,
+        "changes_missed": [],
+        "changes_extra": [],
+        "homework_exact": true,
+        "passed": true
+      }
+    },
+    {
+      "id": "c16",
+      "note": "해결 + 추가가 동시에, 영어 메모",
+      "reviewed": false,
+      "seconds": 5.6,
+      "error": null,
+      "predicted": {
+        "covered_item_ids": [
+          "u03-d01",
+          "u03-e07"
+        ],
+        "strengths": [
+          "이/가 구분을 이제 잘함"
+        ],
+        "errors": [
+          {
+            "student_said": "음식을도",
+            "correction": "음식도",
+            "item_id": "u03-g03",
+            "note": "도를 을/를과 함께 쓰는 오류. 도는 을/를 자리에 대신 쓴다."
+          }
+        ],
+        "weakness_changes": [
+          {
+            "action": "resolve",
+            "weakness_id": 31,
+            "item_id": "u02-g01",
+            "description": "이/가 구분"
+          },
+          {
+            "action": "add",
+            "weakness_id": null,
+            "item_id": "u03-g03",
+            "description": "도를 을/를과 함께 씀 (예: 음식을도)"
+          }
+        ],
+        "homework": [
+          {
+            "item_id": "u03-e03",
+            "description": "연습 Ⅲ 문장 완성하기"
+          }
+        ],
+        "next_lesson_note": ""
+      },
+      "warnings": [],
+      "validation": null,
+      "score": {
+        "case_id": "c16",
+        "covered_tp": 2,
+        "covered_fp": 0,
+        "covered_fn": 0,
+        "covered_exact": true,
+        "changes_exact": true,
+        "changes_missed": [],
+        "changes_extra": [],
+        "homework_exact": true,
+        "passed": true
+      }
+    }
+  ]
+}

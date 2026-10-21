@@ -1,0 +1,35 @@
+# 비밀값
+.env
+
+# Python
+.venv/
+__pycache__/
+.pytest_cache/
+.ipynb_checkpoints/
+
+# Java / Gradle
+.gradle/
+build/
+*.class
+
+# Node
+node_modules/
+dist/
+
+# IDE / OS
+.idea/
+.vscode/
+.DS_Store
+
+# 실행 결과물 (PPT, PDF, 체크포인트 DB)
+ai-server/output/
+
+# 교재 원본·교재 데이터 (저작권, PRD 12장)
+*.pdf
+ai-server/data/textbook/
+
+# OCR 결과·검색 색인 (교재 원문이 들어 있음, ADR-0014)
+ai-server/data/rag/
+
+# 개발 로그 (scripts/dev.sh)
+.dev-logs/

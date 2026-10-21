@@ -1,0 +1,21 @@
+{
+  "student_id": "student_sample",
+  "name": "사토 유이 (가상 인물)",
+  "native_language": "ja",
+  "level": "초급 1 (한글을 읽을 수 있고, '-이에요/예요' 문장을 말할 수 있음)",
+  "goals": ["한국 드라마를 자막 없이 조금이라도 이해하고 싶다", "한국 여행에서 간단한 대화를 하고 싶다"],
+  "weaknesses": ["u02-g01", "u02-g02", "u02-v05"],
+  "lesson_history": [
+    {
+      "lesson_no": 1,
+      "unit_no": 2,
+      "item_ids": ["u02-v01", "u02-v02", "u02-v03", "u02-v04", "u02-v05", "u02-v06", "u02-v07", "u02-g01"]
+    },
+    {
+      "lesson_no": 2,
+      "unit_no": 2,
+      "item_ids": ["u02-v08", "u02-v09", "u02-v10", "u02-v11", "u02-v12", "u02-v13", "u02-v14", "u02-g02"]
+    }
+  ],
+  "next_unit": 3
+}

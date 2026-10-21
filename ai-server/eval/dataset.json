@@ -1,0 +1,200 @@
+{
+  "_comment": "수업 후 기록 추출 평가 데이터셋 (PRD 10장). 가상 학생·가상 메모만. reviewed=false인 항목은 선생님이 기대값을 검수한 뒤 true로 바꾼다 (참고노트 7-3).",
+  "profiles": {
+    "yui": {
+      "student_id": "eval-yui", "name": "사토 유이", "native_language": "ja", "level": "초급 1 (한글 읽기 가능)",
+      "goals": ["서울 여행"], "interests": ["드라마"], "weaknesses": [], "weakness_notes": [],
+      "lesson_history": [], "next_unit": 3, "notes": ""
+    },
+    "emma": {
+      "student_id": "eval-emma", "name": "Emma", "native_language": "en", "level": "초급 1",
+      "goals": ["한국 회사 이직"], "interests": ["K-pop"], "weaknesses": [], "weakness_notes": [],
+      "lesson_history": [], "next_unit": 3, "notes": ""
+    },
+    "haruto": {
+      "student_id": "eval-haruto", "name": "다나카 하루토", "native_language": "ja", "level": "입문 (한글 막 뗌)",
+      "goals": ["K-pop 가사 이해"], "interests": ["K-pop", "게임"], "weaknesses": [], "weakness_notes": [],
+      "lesson_history": [], "next_unit": 2, "notes": ""
+    }
+  },
+  "cases": [
+    {
+      "id": "c01", "reviewed": false, "profile": "yui", "note": "범위 표현(1~10)을 ID로 펼치기, 반복 오류 → 약점 추가",
+      "lesson": {"lesson_no": 3, "unit_no": 3, "minutes": 50, "target_lang": "ja"},
+      "raw_note": "3과 1~10 단어 함. -습니다 잘함. 을/를 받침 구분 계속 틀림 (밥를 먹습니다). 숙제는 연습문제 2번",
+      "current_weaknesses": [{"id": 11, "item_id": "u02-g01", "description": "이/가 구분"}],
+      "expected": {
+        "covered_item_ids": ["u03-v01", "u03-v02", "u03-v03", "u03-v04", "u03-v05", "u03-v06", "u03-v07", "u03-v08", "u03-v09", "u03-v10", "u03-g01", "u03-g02"],
+        "weakness_changes": [{"action": "add", "item_id": "u03-g02", "keywords": ["을/를", "을", "받침"]}],
+        "homework_item_ids": ["u03-e02"]
+      }
+    },
+    {
+      "id": "c02", "reviewed": false, "profile": "yui", "note": "기존 약점 해결 (weakness_id 연결), 숙제 없음",
+      "lesson": {"lesson_no": 4, "unit_no": 3, "minutes": 50, "target_lang": "ja"},
+      "raw_note": "이/가는 이제 완벽하게 씀. 오늘은 3과 문법 '도'를 함. 숙제 없음",
+      "current_weaknesses": [{"id": 11, "item_id": "u02-g01", "description": "이/가 구분"}, {"id": 12, "item_id": null, "description": "받침 발음"}],
+      "expected": {
+        "covered_item_ids": ["u03-g03"],
+        "weakness_changes": [{"action": "resolve", "weakness_id": 11}],
+        "homework_item_ids": []
+      }
+    },
+    {
+      "id": "c03", "reviewed": false, "profile": "emma", "note": "영어 메모, 단어 범위를 이름으로 지정",
+      "lesson": {"lesson_no": 2, "unit_no": 4, "minutes": 50, "target_lang": "en"},
+      "raw_note": "Unit 4 vocab from 공부하다 to 식당 (first 7 words). Introduced 과/하고. She keeps using 과 after vowels (친구과). Homework: 연습 1",
+      "current_weaknesses": [],
+      "expected": {
+        "covered_item_ids": ["u04-v01", "u04-v02", "u04-v03", "u04-v04", "u04-v05", "u04-v06", "u04-v07", "u04-g01"],
+        "weakness_changes": [{"action": "add", "item_id": "u04-g01", "keywords": ["과", "와"]}],
+        "homework_item_ids": ["u04-e01"]
+      }
+    },
+    {
+      "id": "c04", "reviewed": false, "profile": "emma", "note": "잘한 것만 있음 → 약점 변경 없음, 교실 물건 단어 나열",
+      "lesson": {"lesson_no": 3, "unit_no": 4, "minutes": 50, "target_lang": "en"},
+      "raw_note": "의 했음. 저의 → 제 축약도 바로 잘함. 교실 물건 단어 (책상, 의자, 지도, 칠판, 시계, 컴퓨터) 함. 숙제는 쓰기 1",
+      "current_weaknesses": [],
+      "expected": {
+        "covered_item_ids": ["u04-g02", "u04-v15", "u04-v16", "u04-v17", "u04-v18", "u04-v19", "u04-v20"],
+        "weakness_changes": [],
+        "homework_item_ids": ["u04-e12"]
+      }
+    },
+    {
+      "id": "c05", "reviewed": false, "profile": "yui", "note": "교재 ID 없는 약점(자유 서술) 해결, 읽기 지문",
+      "lesson": {"lesson_no": 5, "unit_no": 3, "minutes": 50, "target_lang": "ja"},
+      "raw_note": "비빔밥 읽기 지문 같이 읽음. 받침 발음이 많이 좋아져서 이제 문제없음. 숙제로 쓰기 과제(좋아하는 음식 쓰기)",
+      "current_weaknesses": [{"id": 12, "item_id": null, "description": "받침 발음"}],
+      "expected": {
+        "covered_item_ids": ["u03-r01"],
+        "weakness_changes": [{"action": "resolve", "weakness_id": 12}],
+        "homework_item_ids": ["u03-e10"]
+      }
+    },
+    {
+      "id": "c06", "reviewed": false, "profile": "haruto", "note": "2과, 단어 범위, 비슷한 단어 혼동 → 자유 서술 약점",
+      "lesson": {"lesson_no": 1, "unit_no": 2, "minutes": 50, "target_lang": "ja"},
+      "raw_note": "2과 가족 단어 1~7 함. 언니/누나 구분을 헷갈려 함. 숙제 연습 1번",
+      "current_weaknesses": [],
+      "expected": {
+        "covered_item_ids": ["u02-v01", "u02-v02", "u02-v03", "u02-v04", "u02-v05", "u02-v06", "u02-v07"],
+        "weakness_changes": [{"action": "add", "keywords": ["언니", "누나"]}],
+        "homework_item_ids": ["u02-e01"]
+      }
+    },
+    {
+      "id": "c07", "reviewed": false, "profile": "haruto", "note": "표현 항목 포함, 문법 오류 → 약점 추가",
+      "lesson": {"lesson_no": 2, "unit_no": 2, "minutes": 50, "target_lang": "ja"},
+      "raw_note": "직업 단어(가수, 배우, 회사원, 의사)와 '직업이 뭐예요?' 표현 함. 이/가 아니다 문법도 함. '가수이 아니에요'라고 말함",
+      "current_weaknesses": [{"id": 21, "item_id": null, "description": "언니/누나 구분"}],
+      "expected": {
+        "covered_item_ids": ["u02-v08", "u02-v09", "u02-v10", "u02-v11", "u02-v14", "u02-g02"],
+        "weakness_changes": [{"action": "add", "item_id": "u02-g02", "keywords": ["아니", "이/가"]}],
+        "homework_item_ids": []
+      }
+    },
+    {
+      "id": "c08", "reviewed": false, "profile": "haruto", "note": "복습 + 약점 해결, 숙제가 대화문",
+      "lesson": {"lesson_no": 3, "unit_no": 2, "minutes": 50, "target_lang": "ja"},
+      "raw_note": "언니, 누나 단어만 다시 복습함. 이제 확실히 구분함. 숙제는 2과 대화문 외워 오기",
+      "current_weaknesses": [{"id": 21, "item_id": null, "description": "언니/누나 구분"}],
+      "expected": {
+        "covered_item_ids": ["u02-v04", "u02-v05"],
+        "weakness_changes": [{"action": "resolve", "weakness_id": 21}],
+        "homework_item_ids": ["u02-d01"]
+      }
+    },
+    {
+      "id": "c09", "reviewed": false, "profile": "emma", "note": "단어를 이름으로 지정, 활용 오류",
+      "lesson": {"lesson_no": 4, "unit_no": 3, "minutes": 50, "target_lang": "en"},
+      "raw_note": "Covered verbs 하다, 좋아하다, 가다, 먹다, 듣다 and -습니다/-습니까. She said 가습니다 instead of 갑니다 several times. Homework: 연습 1",
+      "current_weaknesses": [{"id": 31, "item_id": "u02-g01", "description": "이/가 구분"}],
+      "expected": {
+        "covered_item_ids": ["u03-v05", "u03-v06", "u03-v07", "u03-v08", "u03-v09", "u03-g01"],
+        "weakness_changes": [{"action": "add", "item_id": "u03-g01", "keywords": ["습니다", "ㅂ니다", "받침"]}],
+        "homework_item_ids": ["u03-e01"]
+      }
+    },
+    {
+      "id": "c10", "reviewed": false, "profile": "emma", "note": "함정: 이미 있는 약점을 다시 추가하지 않아야 함",
+      "lesson": {"lesson_no": 5, "unit_no": 3, "minutes": 50, "target_lang": "en"},
+      "raw_note": "Did 을/를 today, no problems. 이/가 is still confusing for her (said 저가 instead of 제가).",
+      "current_weaknesses": [{"id": 31, "item_id": "u02-g01", "description": "이/가 구분"}],
+      "expected": {
+        "covered_item_ids": ["u03-g02"],
+        "weakness_changes": [],
+        "homework_item_ids": []
+      }
+    },
+    {
+      "id": "c11", "reviewed": false, "profile": "yui", "note": "함정: 교재를 안 한 수업 → 아무것도 지어내지 않아야 함",
+      "lesson": {"lesson_no": 6, "unit_no": 3, "minutes": 50, "target_lang": "ja"},
+      "raw_note": "오늘은 교재 안 하고 프리토킹만 함. 서울 여행 계획 이야기. 숙제 없음.",
+      "current_weaknesses": [{"id": 13, "item_id": null, "description": "을/를 받침 구분"}],
+      "expected": {
+        "covered_item_ids": [],
+        "weakness_changes": [],
+        "homework_item_ids": []
+      }
+    },
+    {
+      "id": "c12", "reviewed": false, "profile": "yui", "note": "표현 항목(u03-v14)과 관련된 새 오류",
+      "lesson": {"lesson_no": 7, "unit_no": 3, "minutes": 50, "target_lang": "ja"},
+      "raw_note": "형용사 크다, 작다, 예쁘다, 좋다 함. '드라마를 좋아하다 = 드라마가 좋다' 표현 설명함. '드라마가 좋아합니다'처럼 좋아하다 앞에 이/가를 쓰는 실수를 자꾸 함.",
+      "current_weaknesses": [{"id": 13, "item_id": null, "description": "을/를 받침 구분"}],
+      "expected": {
+        "covered_item_ids": ["u03-v10", "u03-v11", "u03-v12", "u03-v13", "u03-v14"],
+        "weakness_changes": [{"action": "add", "item_id": "u03-v14", "keywords": ["좋아"]}],
+        "homework_item_ids": []
+      }
+    },
+    {
+      "id": "c13", "reviewed": false, "profile": "emma", "note": "연습문제를 수업 중에 푼 경우 (다룬 항목) vs 숙제",
+      "lesson": {"lesson_no": 6, "unit_no": 4, "minutes": 50, "target_lang": "en"},
+      "raw_note": "있다/없다, 많다, 넓다 함. 듣고 말하기 1번(여기는 어디입니까?) 수업 중에 같이 풀었음. 숙제는 읽고 쓰기 2번.",
+      "current_weaknesses": [],
+      "expected": {
+        "covered_item_ids": ["u04-v08", "u04-v09", "u04-v10", "u04-v11", "u04-e06"],
+        "weakness_changes": [],
+        "homework_item_ids": ["u04-e09"]
+      }
+    },
+    {
+      "id": "c14", "reviewed": false, "profile": "haruto", "note": "잘한 점만, 표현 항목 포함",
+      "lesson": {"lesson_no": 4, "unit_no": 3, "minutes": 50, "target_lang": "ja"},
+      "raw_note": "3과 시작. 노래, 드라마, 음식, 전화 단어와 '무슨 + 명사' 표현 함. 받침 있는 단어 뒤에 을을 잘 붙임. 숙제는 어휘 및 문법 연습 1",
+      "current_weaknesses": [],
+      "expected": {
+        "covered_item_ids": ["u03-v01", "u03-v02", "u03-v03", "u03-v04", "u03-v15"],
+        "weakness_changes": [],
+        "homework_item_ids": ["u03-e04"],
+        "optional_covered_item_ids": ["u03-g02"]
+      }
+    },
+    {
+      "id": "c15", "reviewed": false, "profile": "yui", "note": "대화문 + 문법, 계속 헷갈림 → 약점 추가",
+      "lesson": {"lesson_no": 8, "unit_no": 4, "minutes": 50, "target_lang": "ja"},
+      "raw_note": "4과 대화문 같이 읽음. 의 문법 했고 발음 [에]도 설명함. '저의'를 '제'로 못 바꾸고 계속 헷갈려 함. 숙제는 말하기 1",
+      "current_weaknesses": [{"id": 13, "item_id": null, "description": "을/를 받침 구분"}],
+      "expected": {
+        "covered_item_ids": ["u04-d01", "u04-g02"],
+        "weakness_changes": [{"action": "add", "item_id": "u04-g02", "keywords": ["의", "제"]}],
+        "homework_item_ids": ["u04-e11"]
+      }
+    },
+    {
+      "id": "c16", "reviewed": false, "profile": "emma", "note": "해결 + 추가가 동시에, 영어 메모",
+      "lesson": {"lesson_no": 7, "unit_no": 3, "minutes": 50, "target_lang": "en"},
+      "raw_note": "Read the unit 3 dialogue and did the listening/speaking exercise together. Her 이/가 issue is finally resolved! New issue: she combines 도 with 을/를 ('음식을도'). Homework: 연습 3",
+      "current_weaknesses": [{"id": 31, "item_id": "u02-g01", "description": "이/가 구분"}],
+      "expected": {
+        "covered_item_ids": ["u03-d01", "u03-e07"],
+        "weakness_changes": [{"action": "resolve", "weakness_id": 31}, {"action": "add", "item_id": "u03-g03", "keywords": ["도"]}],
+        "homework_item_ids": ["u03-e03"],
+        "optional_covered_item_ids": ["u03-g03"]
+      }
+    }
+  ]
+}

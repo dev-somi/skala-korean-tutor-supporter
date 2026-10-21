@@ -1,0 +1,19 @@
+@import "tailwindcss";
+@import "tailwindcss-primeui";
+
+/* PrimeVue 스타일을 Tailwind 유틸리티보다 먼저 두어, 유틸리티 클래스로 덮어쓸 수 있게 한다 */
+@layer theme, base, primevue, utilities;
+
+:root {
+  font-family: "Pretendard", "Noto Sans KR", system-ui, -apple-system, sans-serif;
+}
+
+body {
+  margin: 0;
+  background: var(--p-surface-50);
+  color: var(--p-surface-800);
+}
+
+.pre-line {
+  white-space: pre-line;
+}
