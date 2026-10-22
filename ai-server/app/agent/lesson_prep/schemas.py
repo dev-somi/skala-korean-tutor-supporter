@@ -10,6 +10,8 @@
 pydantic을 쓰면 JSON 파일이나 LLM 출력의 형식이 틀렸을 때 바로 에러로 알려준다.
 """
 
+from typing import Literal
+
 from pydantic import BaseModel, Field
 
 # 수업 자료의 4개 범주. 프로젝트 전체에서 이 이름(키)을 그대로 쓴다.
@@ -279,6 +281,24 @@ class SlideContent(BaseModel):
     activity: str = Field(description="이 슬라이드에서 하는 활동 한 문장")
     note: SlideNote
     needs_check: list[str] = Field(description="입력에 없어서 만들지 않고 선생님이 확인해야 하는 것 (쪽수, 음원 번호 등). 없으면 빈 목록")
+
+
+class ScriptLine(BaseModel):
+    """슬라이드 대본의 한 줄. 선생님이 소리 내어 읽는 말이거나, 학생이 할 것으로 예상하는 답."""
+
+    who: Literal["teacher", "student_expected"] = Field(description="teacher: 선생님이 말함 / student_expected: 학생이 할 법한 답")
+    ko: str = Field(description="한국어 발화 그대로. 학생 수준에 맞는 짧은 문장")
+    hint: str = Field(description="학생 모국어 보조 설명. 막힐 만한 줄에만, 필요 없으면 빈 문자열")
+    wait: bool = Field(description="이 줄을 말한 뒤 학생이 답할 때까지 기다리면 true")
+
+
+class SlideScriptOutput(BaseModel):
+    """호출 결과: 슬라이드 한 장의 대본 (기술 ADR-0035)"""
+
+    lines: list[ScriptLine] = Field(description="수업 순서대로의 대본. 선생님 발화와 예상 학생 답")
+    transition: str = Field(description="다음 장으로 넘어갈 때 하는 말 한 문장 (한국어)")
+    fallback: list[ScriptLine] = Field(description="학생이 어려워할 때 쉽게 바꿔 말하는 줄 1~2개")
+    needs_check: list[str] = Field(description="입력에 없어서 만들지 않은 것 (쪽수, 음원 등). 없으면 빈 목록")
 
 
 class HomeworkPlan(BaseModel):

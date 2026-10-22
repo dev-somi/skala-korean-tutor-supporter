@@ -4,7 +4,8 @@
   GET /standard/grammar?level=&category=&q=          문법·표현 (336개, 한 번에 돌려준다)
   GET /standard/vocab?level=&pos=&q=&offset=&limit=   어휘 (10,635개라 나눠서 돌려준다)
 
-문법 항목에는 이 항목에 이어진 교재 항목(대응표)을 붙인다. 선생님이 "이 문법을 교재 몇 과에서 배우나"를 볼 수 있게.
+문법·어휘 항목에는 그 항목을 다루는 교재 과를 붙인다. 선생님이 "이 문법을 교재 몇 과에서 배우나"를 볼 수 있게.
+교재 과는 단원 시트(data/curriculum/<book>/unit_NN.json)의 표준 ID에서 거꾸로 찾는다 (기술 ADR-0036).
 """
 
 import json
@@ -14,25 +15,32 @@ from functools import lru_cache
 from fastapi import APIRouter, Query
 
 from app.agent.lesson_prep.textbook import get_data_dir
+from app.curriculum import sheets
 from app.standard.levels import POS_LIST, grammar_items, pos_parts, vocab_items
 
 router = APIRouter(tags=["standard"])
 
 
-@lru_cache
 def _textbook_links() -> dict[str, list[dict]]:
-    """{표준 ID: [{book, item_id, unit_no}]} — 대응표를 거꾸로 읽는다"""
-    data = json.loads((get_data_dir() / "standard" / "textbook_map.json").read_text(encoding="utf-8"))
+    """
+    {표준 ID: [{book, title, short, unit_no, status}]} — 단원 시트를 거꾸로 읽는다. 문법은 standard_ids, 어휘는 id.
+    시트 파일 읽기는 sheets.all_sheets가 수정 시각으로 캐시하므로, build로 시트를 다시 만들면 바로 반영된다.
+    """
     links: dict[str, list[dict]] = {}
-    for book, mapping in data.items():
-        if book.startswith("_"):
-            continue
-        title = mapping.get("_교재", book)
-        for item_id, std_ids in mapping.items():
-            if item_id.startswith("_"):
-                continue
-            for sid in std_ids:
-                links.setdefault(sid, []).append({"book": title, "item_id": item_id, "unit_no": int(item_id[1:3])})
+    for sheet in sheets.all_sheets():
+        info = sheets.BOOK_SOURCES.get(sheet["book"], {})
+        link = {
+            "book": sheet["book"],
+            "title": info.get("title", sheet["book"]),
+            "short": info.get("short", sheet["book"]),
+            "unit_no": sheet["unit_no"],
+            "status": sheet["status"],
+        }
+        ids = [sid for g in sheet["grammar"] for sid in (g.get("standard_ids") or [g["id"]])]
+        ids += [v["id"] for v in sheet["vocabulary"]]
+        for sid in dict.fromkeys(ids):  # 한 과에 같은 ID가 두 번 있어도 한 번만
+            if sid.startswith("std-"):
+                links.setdefault(sid, []).append(link)
     return links
 
 
@@ -94,5 +102,6 @@ def standard_vocab(
     if q:
         found.sort(key=lambda v: (v["word"] != q, not v["word"].startswith(q), v["level"]))
     repeated = _repeated()[1]
-    page = [{**v, "has_homonyms": v["word"] in repeated} for v in found[offset : offset + limit]]
+    links = _textbook_links()
+    page = [{**v, "textbook": links.get(v["id"], []), "has_homonyms": v["word"] in repeated} for v in found[offset : offset + limit]]
     return {"source": _source(), "total": len(found), "all_total": len(matched), "pos_counts": pos_counts, "offset": offset, "items": page}

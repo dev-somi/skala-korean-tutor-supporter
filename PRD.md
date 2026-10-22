@@ -43,7 +43,7 @@ P1은 다시 둘로 나뉜다 ([기획 ADR-0014](docs/planning-adr/0014-personal
 ### 주 페르소나: 초보 온라인 한국어 선생님 (= 나)
 - Preply / AmazingTalker에서 1:1 수업을 하는 한국인
 - 학생: 일본어권·영어권 초급 학습자 3~10명
-- 교재: 학생의 학습 목적(페르소나)에 따라 세종학당 교재 중 하나를 중심 교재로 쓴다 (체계·TOPIK → 세종학당 한국어 1~6([기획 ADR-0022](docs/planning-adr/0022-structured-persona-uses-sejong-korean-1-6.md)), 일상 회화 → 실용 한국어, 여행 → 여행 한국어, 업무 → 비즈니스 한국어). 지금 과별 데이터(단원 시트)가 있는 교재는 「세종학당 한국어」 1·2 (각 20과)다. 지침서에서 자동으로 만든 초안이고 1권 2~4과만 검수됐다 ([기획 ADR-0016](docs/planning-adr/0016-persona-anchor-textbook-standard-levels.md), [기획 ADR-0030](docs/planning-adr/0030-unit-sheets-from-materials.md))
+- 교재: 학생의 학습 목적(페르소나)에 따라 세종학당 교재 중 하나를 중심 교재로 쓴다 (체계·TOPIK → 세종학당 한국어 1~6([기획 ADR-0022](docs/planning-adr/0022-structured-persona-uses-sejong-korean-1-6.md)), 일상 회화 → 실용 한국어, 여행 → 여행 한국어, 업무 → 비즈니스 한국어). 지금 과별 데이터(단원 시트)가 있는 교재는 「세종학당 한국어」 1·2 (각 20과, 지침서에서)와 3A~6B (각 10과, 본책에서 — [기술 ADR-0040](docs/adr/0040-unit-sheets-from-textbook-3a-6b.md))다. 자동으로 만든 초안이고 1권 2~4과만 검수됐다 ([기획 ADR-0016](docs/planning-adr/0016-persona-anchor-textbook-standard-levels.md), [기획 ADR-0030](docs/planning-adr/0030-unit-sheets-from-materials.md))
 - 공통 기준: 국립국어원 「국제 통용 한국어 표준 교육과정」 어휘·문법 등급 목록 (1~6급). 학생 수준, 진척도, 예문 수준을 이 기준으로 잰다
 - 참고 자료: 교원용 지침서, 어휘와 문법 핸드북(영어판 1권, **일본어판 1·2권**: 문법마다 일본어 설명) 등 세종학당 공개 자료 ([기획 ADR-0013](docs/planning-adr/0013-sejong-public-materials.md), [0024](docs/planning-adr/0024-grammar-qa-chat-p0.md))
 - 한국어 교육 경력이 길지 않아 문법 설명 방법, 학습자가 자주 틀리는 지점을 미리 공부해야 한다
@@ -65,7 +65,7 @@ P1은 다시 둘로 나뉜다 ([기획 ADR-0014](docs/planning-adr/0014-personal
 ### 비목표 (이번에는 안 한다)
 - 학생용 화면·로그인 (학생 포털, 숙제 제출, 단어 복습 앱). 레벨테스트 학생 화면은 선생님이 화면 공유로 보여 주는 창일 뿐, 학생이 접속하지 않는다 ([기획 ADR-0021](docs/planning-adr/0021-student-screen-level-test-saved-result.md))
 - 예약·일정·결제·수익 모델 (플랫폼이 이미 제공)
-- 「한국어 1」 외 교재의 과별 진도 데이터 → 다음 단계 (결정은 [기획 ADR-0016](docs/planning-adr/0016-persona-anchor-textbook-standard-levels.md). 학습 목적 칸은 있지만 어떤 목적이든 진도는 「한국어 1」을 따른다)
+- 「세종학당 한국어」 1~6B 외 교재(실용·여행·비즈니스 한국어 등)의 과별 진도 데이터 → 다음 단계 (결정은 [기획 ADR-0016](docs/planning-adr/0016-persona-anchor-textbook-standard-levels.md). 학습 목적 칸은 있지만 어떤 목적이든 진도는 「세종학당 한국어」 순서를 따른다)
 - 선생님 자체 교재 업로드 → 확장 단계
 - PPT·PDF 수업 자료 생성 → 하지 않는다 (내용만 내놓고, 선생님이 자기 자료에 붙여 넣는다)
 - 일본어·영어 외 설명 언어 (예: 중국어 번체) → 확장 단계
@@ -118,7 +118,7 @@ P1은 다시 둘로 나뉜다 ([기획 ADR-0014](docs/planning-adr/0014-personal
 ### F2. 표준 등급 기준과 학습 방향 ([기획 ADR-0016](docs/planning-adr/0016-persona-anchor-textbook-standard-levels.md))
 | ID | 요구사항 | 우선 |
 |---|---|---|
-| F2-0 | 국립국어원 표준 교육과정 등급 목록(문법 336, 어휘 10,635, 1~6급)을 데이터로 두고, 교재 항목을 표준 항목에 잇는다 (대응표) | P0 (완료: 등급 목록, 「한국어 1」 2~4과 문법 대응) |
+| F2-0 | 국립국어원 표준 교육과정 등급 목록(문법 336, 어휘 10,635, 1~6급)을 데이터로 두고, 교재 항목을 표준 항목에 잇는다 (대응표) | P0 (완료: 등급 목록, 「한국어」 1~6B 단원 시트의 문법·어휘 대응 — 기술 ADR-0036·0040) |
 | F2-1 | 학생 진척도: 배운 교재 항목 → 표준 항목 → "표준 1급 문법 45개 중 N개" | P1 |
 | F2-2 | 목표 등급까지 남은 문법·어휘 목록과, 중심 교재에서 그 항목이 나오는 과 | P1 |
 | F2-5 | 상단 메뉴 [커리큘럼·페르소나]의 두 탭에 온라인 세종학당 커리큘럼(입문 → 초급 1·2급 → 중급 3·4급 → 고급 5·6급, 특별 과정)과 페르소나별 중심 교재·해당 학생을 보여 준다 | P0 (완료) |
@@ -132,9 +132,9 @@ P1은 다시 둘로 나뉜다 ([기획 ADR-0014](docs/planning-adr/0014-personal
 | ID | 요구사항 | 우선 |
 |---|---|---|
 | F3-1 | 그래프(구성안(코드 규칙) → 개인화 설명 → 대본 → 자동 검토 → 브리핑 → 선생님 검토)를 API로 실행 | P0 |
-| F3-1b | **단원 시트**: 교재·과마다 가르칠 문법·어휘·예문을 색인된 지침서에서 코드 규칙으로 뽑는다 (초안 = "검수 전" 표시, 선생님 확인 = 검수됨). 수업 준비 화면은 시트가 있는 과만 고를 수 있다 ([기획 ADR-0030](docs/planning-adr/0030-unit-sheets-from-materials.md), [ADR-0032](docs/adr/0032-unit-sheets-and-standard-ids.md)) | P0 (완료: 「한국어」 1·2 각 20과. 대화·연습은 본책 색인 뒤) |
+| F3-1b | **단원 시트**: 교재·과마다 가르칠 문법·어휘·예문을 색인된 지침서에서 코드 규칙으로 뽑는다 (초안 = "검수 전" 표시, 선생님 확인 = 검수됨). 수업 준비 화면은 시트가 있는 과만 고를 수 있다 ([기획 ADR-0030](docs/planning-adr/0030-unit-sheets-from-materials.md), [ADR-0032](docs/adr/0032-unit-sheets-and-standard-ids.md)) | P0 (완료: 「한국어」 1·2 각 20과, 3A~6B 각 10과(본책에서, 기술 ADR-0040). 3A~6B 대화는 아직) |
 | F3-2 | **선생님 브리핑**: 교원용 지침서에서 이번 과의 학습 목표·문법 구역을 가져와(RAG 필터 경로) 문법 설명 포인트를 만들고 **출처(책·쪽)**를 붙인다. 모국어 화자가 자주 틀리는 점, 예상 질문과 답, 설명 팁은 **문법×모국어 검수 데이터**(`l1_notes.json`, Claude 초안 + 선생님 검수)에서 꺼내고, 데이터에 없는 문법만 LLM이 만든다 ([ADR-0022](docs/adr/0022-l1-notes-data.md)). 워밍업 질문, 활용 활동, 맞춤 팁은 작은 LLM 호출로 만든다 | P0 |
-| F3-2a | **15장 슬라이드 구성안**: 번호·단계·시간은 코드에 고정(수업 길이에 비례 조정), 학생 화면 문구와 교사 노트 7칸(목표·진행·질문/답·어려워하면·잘하면·출처)은 LLM 한 번. 교재에 없는 숙제 쪽수·음원은 "확인 필요" ([기획 ADR-0032](docs/planning-adr/0032-slide-plan-from-reference.md), [기술 ADR-0034](docs/adr/0034-slide-plan-node.md)) | P0 |
+| F3-2a | **15장 슬라이드 구성안**: 번호·단계·시간은 코드에 고정(수업 길이에 비례 조정), 학생 화면 문구와 교사 노트 7칸(목표·진행·질문/답·어려워하면·잘하면·출처)은 LLM 한 번. 장마다 수업에서 그대로 읽을 **대본**(한국어 발화 + 모국어 보조, 학생 예상 답, 어려워할 때 바꿔 말하기)을 이어서 만든다 ([기획 ADR-0033](docs/planning-adr/0033-per-slide-teaching-script.md), [기술 ADR-0035](docs/adr/0035-slide-script-node.md)). 교재에 없는 숙제 쪽수·음원은 "확인 필요" ([기획 ADR-0032](docs/planning-adr/0032-slide-plan-from-reference.md), [기술 ADR-0034](docs/adr/0034-slide-plan-node.md)) | P0 |
 | F3-2b | **문화 포인트 (필수)**: 구성안 아래에 같이 보인다. 과 주제로 「세종한국문화 1」·지침서를 검색해 후보 2~3개(출처 쪽수 포함), LLM이 원문 안에서 요약 + 학생 나라 비교 질문(단정하지 않고 묻기). 선생님이 후보를 고른다. 못 찾으면 "선생님이 채워 주세요" ([기획 ADR-0023](docs/planning-adr/0023-culture-point-from-sejong-materials.md)) | P0 |
 | F3-3 | 범주별 승인 / 직접 수정 / 피드백 (기존 HITL을 GUI로 옮김) | P0 |
 | F3-4 | 확정한 수업안(15장 구성안 + 브리핑)을 학생별로 보관하고, 글로 복사할 수 있다. PPT/PDF는 만들지 않는다 | P0 |
@@ -157,12 +157,12 @@ P1은 다시 둘로 나뉜다 ([기획 ADR-0014](docs/planning-adr/0014-personal
 ### F5. 대시보드 (P0)
 | ID | 요구사항 | 우선 |
 |---|---|---|
-| F5-1 | 학생 목록 카드: 이름, 모국어, 수준, 다음 과, 마지막 수업일, 주요 약점. 대시보드와 상단 메뉴 [학생](이름 검색, 상태·모국어·학습 목적 필터)에 같은 카드를 쓴다 | P0 (완료) |
+| F5-1 | 학생 목록 카드: 이름, 모국어, 수준, 다음 과, 마지막 수업일, 주요 약점. 상단 메뉴 [학생](이름 검색, 상태·모국어·학습 목적 필터)에 같은 카드를 쓴다 | P0 (완료) |
 | F5-2 | 학생 상세: 프로필, 수업 이력 타임라인, 약점 변화, 만든 자료 | P0 |
-| F5-3 | "할 일" 영역: 미처리 수업 기록, 승인 대기 중인 수업안 | P0 |
-| F5-4 | 시간 측정 요약 (F7) | P0 |
-| F5-5 | 상단 메뉴는 대시보드 · 학생 · 수업 준비, 나머지는 [더보기]. [수업 준비] 탭은 학생 프로필 카드를 다음 수업 일정 순으로 보여 주고, 카드마다 상태에 맞는 버튼(수업 준비 / 이어서 준비 / 수업안 보기) 하나를 둔다 ([기술 ADR-0029](docs/adr/0029-nav-student-prep-tabs.md)) | P0 (완료) |
-| F5-5 | **학습자별 진도·향상 리포트**: 기간별 수업 횟수, 새로 배운 문법·단어와 누적, 표준 등급별 배운 양(선생님용), 목표까지 남은 문법, 잘한 점, 해결한 약점, 반복 오류 상위 3개, 학생에게 보낼 메시지 초안(한국어 + 학생 언어, 템플릿). 숫자와 문장은 코드가 만든다 ([기획 ADR-0019](docs/planning-adr/0019-progress-report-for-retention.md)) | P0 (완료) |
+| F5-3 | 대시보드는 **월간 수업 달력**: 칸마다 수업(학생 이름 + 준비 상태 색), 날짜를 누르면 그날 수업의 준비 체크와 지금 할 버튼 하나. 지난 수업은 기록 여부로 표시 ([기획 ADR-0034](docs/planning-adr/0034-dashboard-calendar.md)) | P0 (완료) |
+| F5-4 | 시간 측정 요약 (F7) — 대시보드에서 빼고 [더보기 › 지표]에서 본다 ([기획 ADR-0034](docs/planning-adr/0034-dashboard-calendar.md)) | P0 |
+| F5-5 | 상단 메뉴는 대시보드 · 학생 · 수업 준비 · 어휘·문법, 나머지는 [더보기] ([기술 ADR-0038](docs/adr/0038-nav-standard-tab.md)). [수업 준비] 탭은 학생 프로필 카드를 다음 수업 일정 순으로 보여 주고, 카드마다 상태에 맞는 버튼(수업 준비 / 이어서 준비 / 수업안 보기) 하나를 둔다 ([기술 ADR-0029](docs/adr/0029-nav-student-prep-tabs.md)) | P0 (완료) |
+| F5-6 | **학습자별 진도·향상 리포트**: 기간별 수업 횟수, 새로 배운 문법·단어와 누적, 표준 등급별 배운 양(선생님용), 목표까지 남은 문법, 잘한 점, 해결한 약점, 반복 오류 상위 3개, 학생에게 보낼 메시지 초안(한국어 + 학생 언어, 템플릿). 숫자와 문장은 코드가 만든다 ([기획 ADR-0019](docs/planning-adr/0019-progress-report-for-retention.md)) | P0 (완료) |
 
 ### F6. 채팅 (P0)
 | ID | 요구사항 | 우선 |
@@ -170,7 +170,9 @@ P1은 다시 둘로 나뉜다 ([기획 ADR-0014](docs/planning-adr/0014-personal
 | F6-1 | **라우팅 게이트(저가 모델)**: 조회 질문 / 학생 등록·수정 / 수업 준비 / 수업 후 기록 / 문법 질문 / 일반 질문으로 분류 | P0 |
 | F6-2 | 조회 질문은 DB를 읽어 바로 답한다 | P0 |
 | F6-3 | 작업 요청은 해당 화면으로 연결하고, 그 화면에서 그래프를 실행하며 SSE로 진행 단계를 보여 준다 ([ADR-0010](docs/adr/0010-chat-work-requests-handoff.md)) | P0 |
-| F6-4 | **교재 근거 문법 질문** ("-아서랑 -(으)니까 뭐가 달라?", "사는이랑 살던 차이"): 형태를 표준 문법 항목에 맞추고, 학생 모국어판 핸드북(설명 원문·예문·쪽수)·지침서·모국어 노트를 근거로 요점을 보여 준다. 학생을 지정하면 등급을 넘는 문법은 "아직 안 배움", 교재에 없는 문법은 "근거 없음 · AI 보충"으로 표시. 학생용 일본어 설명은 만들지 않고 원문을 보여 준다 ([기획 ADR-0024](docs/planning-adr/0024-grammar-qa-chat-p0.md), [ADR-0024](docs/adr/0024-japanese-handbook-and-grammar-qa.md)) | P0 |
+| F6-4 | **교재 근거 문법 질문** ("-아서랑 -(으)니까 뭐가 달라?", "사는이랑 살던 차이", "너라면, 너라서, 너니까 차이"): 형태를 표준 문법 항목에 맞추고, 학생 모국어판 핸드북(설명 원문·예문·쪽수)·지침서·모국어 노트를 근거로 요점을 보여 준다. 학생을 지정하면 등급을 넘는 문법은 "아직 안 배움", 교재에 없는 문법은 AI가 한국어 설명·예문을 만들어 "AI 설명 · 검수 필요"로 따로 보여 준다([기획 ADR-0036](docs/planning-adr/0036-ai-explanation-when-no-textbook-evidence.md)). 학생용 일본어 설명은 만들지 않고 원문을 보여 준다 ([기획 ADR-0024](docs/planning-adr/0024-grammar-qa-chat-p0.md), [ADR-0024](docs/adr/0024-japanese-handbook-and-grammar-qa.md), 관련형은 대표형 교재 근거: [ADR-0037](docs/adr/0037-listed-conjugations-and-head-form-evidence.md), 답은 비교표 → 핵심 차이 → 접힌 근거: [ADR-0043](docs/adr/0043-grammar-answer-comparison-table.md)) | P0 |
+| F6-5 | **AI 채팅 탭 + 대화 기록**: 주 메뉴의 AI 채팅 탭에서 대화 목록과 큰 대화 화면을 본다. 플로팅 창과 같은 대화를 쓰고, 답(글·근거 카드·이동 버튼)을 저장해 다시 연다. 제목은 첫 질문 앞 30자, 이름 바꾸기·삭제 ([기획 ADR-0035](docs/planning-adr/0035-chat-tab-history-and-language-toggle.md), [ADR-0041](docs/adr/0041-chat-history-in-postgres.md), [ADR-0042](docs/adr/0042-nav-chat-tab-shared-conversation.md)) | P0 |
+| F6-6 | **설명 언어 토글** (자동 / 日本語 / English): 문법 질문은 그 언어판 근거를, 일반 질문은 답 끝에 학생에게 말해 줄 그 언어 설명을 붙인다. 자동은 학생 모국어, 학생이 없으면 일본어 ([기획 ADR-0035](docs/planning-adr/0035-chat-tab-history-and-language-toggle.md)) | P0 |
 
 ### F7. 시간 측정 (P0, 성공 지표용)
 | ID | 요구사항 | 우선 |
@@ -178,7 +180,7 @@ P1은 다시 둘로 나뉜다 ([기획 ADR-0014](docs/planning-adr/0014-personal
 | F7-1 | 수업 준비 세션: [준비 시작] 시점 ~ 모든 범주 승인(수업안 확정) 시점을 자동 기록 | P0 |
 | F7-2 | 수업 후 정리 세션: 메모 입력 시작 ~ 기록 승인 완료 시점을 자동 기록 | P0 |
 | F7-3 | 그중 AI 대기 시간과 선생님 작업 시간(검토·수정)을 나눠 기록 | P1 |
-| F7-4 | AI 없이 했을 때의 기준 시간(baseline)을 선생님이 직접 입력 → 대시보드에서 비교 | P0 |
+| F7-4 | AI 없이 했을 때의 기준 시간(baseline)을 선생님이 직접 입력 → 지표 화면에서 비교 | P0 |
 
 ## 7. 데이터 모델 (초안)
 
@@ -212,7 +214,7 @@ Lesson                            # 수업 1회
   plan: LessonPlan                # 승인된 구성안
   understanding: {item_id: "confused"|"shaky"|"ok"}  # 승인한 항목별 이해도 → 다음 수업 복습 순서 (ADR-0033)
   briefing: TeacherBriefing
-  briefing.slide_plan            # 15장 슬라이드 구성안 (ADR-0034, 별도 칼럼 없이 briefing JSON 안. 예전 수업은 lesson_frame 7단계)
+  briefing.slide_plan            # 15장 슬라이드 구성안 + 장별 대본 slides[i].script (ADR-0034·0035, 별도 칼럼 없이 briefing JSON 안. 예전 수업은 lesson_frame 7단계)
   briefing.references            # 지침서 출처
   pptx_path, pdf_path             # (사용 안 함, 항상 null)
 
@@ -254,7 +256,7 @@ LevelTestResult                   # 저장한 레벨테스트 결과 (ADR-0021)
 |---|---|---|
 | `router` | 입력 → 분류(저가 모델, 구조화 출력) → 해당 핸들러 | – |
 | `student_intake` | 자연어 → 엔티티 추출 → **코드 검증**(언어 값, 항목 ID가 실제로 있는지) → 선생님 확인 → 저장 | 저장 전 |
-| `lesson_prep` | load → plan(코드) → explain → script → auto_review(1회, 참고) → **briefing**(지침서 근거 + LLM 3호출) → **write_slides**(15장 구성안, LLM 1호출) → human_review → END (승인 때 초안이 달라졌으면 write_slides 한 번 더) | 범주별 검토 + 브리핑 확인 |
+| `lesson_prep` | load → plan(코드) → explain → script → auto_review(1회, 참고) → **briefing**(지침서 근거 + LLM 3호출) → **write_slides**(15장 구성안, LLM 1호출) → **write_slide_scripts**(장별 대본, LLM 15호출) → human_review → END (승인 때 초안이 달라졌으면 write_slides·write_slide_scripts 한 번 더) | 범주별 검토 + 브리핑 확인 |
 | `grammar_qa` | 그래프 없이 함수: 형태 뽑기(코드, 못 찾으면 저가 모델 → 코드 검증) → 근거(핸드북 필터 경로 + 모국어 노트 + 지침서 의미 검색) → 등급 확인(코드) → 요점(LLM 1회) → 근거에 없는 예문 거르기(코드) | – (읽기만) |
 | `post_lesson` | 메모 + 수업 계획 → 구조화 추출 → **코드 검증**(ID 존재, 약점 변경이 기존 약점과 맞는지) → 피드백 메시지 작성 → Validator → 선생님 검토 → DB 반영 | 반영 전 (항목별) |
 
@@ -276,7 +278,7 @@ LevelTestResult                   # 저장한 레벨테스트 결과 (ADR-0021)
 
 ```
 Frontend (Vue 3 + Vite + TS + Pinia + PrimeVue + Tailwind)            :5173
-  ├─ 대시보드: 할 일 / 학생 카드 / 시간 요약,  학생 상세: 프로필 · 약점 변화 · 수업 이력 · 자료
+  ├─ 대시보드: 월간 수업 달력 + 날짜별 준비 상태,  학생 상세: 프로필 · 약점 변화 · 수업 이력 · 자료
   ├─ 검토 화면: 수업안 범주별 검토(브리핑 포함), 수업 후 기록 항목별 승인, 학생 등록 초안 확인
   └─ 채팅 패널 (SSE)
         ⇅ REST + SSE (/api, 브라우저는 backend만 호출)

@@ -57,6 +57,12 @@ public class LessonService {
         return LessonView.from(find(id));
     }
 
+    /** 대시보드 달력에 보일 수업 (기술 ADR-0039) */
+    @Transactional(readOnly = true)
+    public List<LessonView> listInRange(java.time.LocalDate from, java.time.LocalDate to) {
+        return lessons.findInRange(from, to).stream().map(LessonView::from).toList();
+    }
+
     /** 승인 대기 중인 수업안 (대시보드 할 일, PRD F5-3) */
     @Transactional(readOnly = true)
     public List<LessonView> pendingPrep() {

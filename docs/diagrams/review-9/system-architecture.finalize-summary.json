@@ -1,0 +1,152 @@
+{
+  "schemaVersion": 1,
+  "ok": true,
+  "command": "finalize",
+  "status": "pass",
+  "type": "architecture",
+  "quality": "showcase",
+  "specification": {
+    "path": "/Users/somi/workspace/ai-service-test/docs/diagrams/system.architecture.json",
+    "sha256": "647c18b170f16f47eb05bfc2c3c2915b23a100aac5efda1e4ceb05425de01edc",
+    "bytes": 6499
+  },
+  "artifact": {
+    "path": "/Users/somi/workspace/ai-service-test/docs/diagrams/system-architecture.html",
+    "sha256": "a0ba21edef08b384d3ef96b989f92e4b42539531e27ce2394034b21cfc7e612b",
+    "bytes": 871037
+  },
+  "gates": {
+    "validate": "pass",
+    "deliver": "pass",
+    "check": "pass",
+    "browser-check": "pass"
+  },
+  "diagnostics": [],
+  "diagnosticSummary": {
+    "total": 0,
+    "shown": 0,
+    "truncated": false
+  },
+  "evidence": {
+    "receipt": "/Users/somi/workspace/ai-service-test/docs/diagrams/review-9/system-architecture.finalize.json",
+    "summaryReceipt": "/Users/somi/workspace/ai-service-test/docs/diagrams/review-9/system-architecture.finalize-summary.json",
+    "browserCheckReceipt": "/Users/somi/workspace/ai-service-test/docs/diagrams/review-9/system-architecture.browser-check.json"
+  },
+  "update": {
+    "status": "current",
+    "installedVersion": "3.2.0",
+    "availableVersion": "3.2.0",
+    "releaseNotes": null,
+    "checkedAt": "2026-10-21T08:40:35.928Z",
+    "source": "cache",
+    "noticeRequired": false,
+    "noticeText": null
+  },
+  "visualReview": "not-requested",
+  "durationMs": 2437,
+  "browserCheck": {
+    "requested": true,
+    "ran": true
+  },
+  "visualReviewRecommendation": {
+    "action": "inspect-route-readability",
+    "signals": {
+      "resolvedCrossovers": 3,
+      "routesOverSuggestedBends": 1
+    },
+    "reason": "Automated gates passed, but crossings or detours still need perceptual review before claiming visual quality.",
+    "affectedRoutes": {
+      "crossings": [
+        {
+          "left": {
+            "id": "post-llm",
+            "from": "post",
+            "to": "llm",
+            "label": "추출",
+            "collectionIndex": 10,
+            "artifactIndex": 11
+          },
+          "right": {
+            "id": "misc-llm",
+            "from": "misc",
+            "to": "llm",
+            "label": "",
+            "collectionIndex": 11,
+            "artifactIndex": 12
+          },
+          "point": [
+            1345,
+            605
+          ],
+          "sharedNode": "llm"
+        },
+        {
+          "left": {
+            "id": "post-llm",
+            "from": "post",
+            "to": "llm",
+            "label": "추출",
+            "collectionIndex": 10,
+            "artifactIndex": 11
+          },
+          "right": {
+            "id": "prep-rag",
+            "from": "prep",
+            "to": "rag",
+            "label": "지침서·문화 검색",
+            "collectionIndex": 12,
+            "artifactIndex": 13
+          },
+          "point": [
+            1102,
+            636
+          ]
+        },
+        {
+          "left": {
+            "id": "misc-llm",
+            "from": "misc",
+            "to": "llm",
+            "label": "",
+            "collectionIndex": 11,
+            "artifactIndex": 12
+          },
+          "right": {
+            "id": "prep-rag",
+            "from": "prep",
+            "to": "rag",
+            "label": "지침서·문화 검색",
+            "collectionIndex": 12,
+            "artifactIndex": 13
+          },
+          "point": [
+            1102,
+            605
+          ]
+        }
+      ],
+      "detours": [
+        {
+          "relationship": {
+            "id": "prep-rag",
+            "from": "prep",
+            "to": "rag",
+            "label": "지침서·문화 검색",
+            "collectionIndex": 12,
+            "artifactIndex": 13
+          },
+          "bends": 3,
+          "stretch": 1
+        }
+      ],
+      "truncated": false
+    },
+    "hints": [
+      "post → llm and misc → llm cross next to llm: move node post or misc so the two reach llm from different sides (for example one level with it, one directly above or below it).",
+      "post → llm crosses prep → rag: move the node of whichever is a branch, return, or second entrance to the other side of the main path, so that relationship runs through an empty corridor.",
+      "misc → llm crosses prep → rag: move the node of whichever is a branch, return, or second entrance to the other side of the main path, so that relationship runs through an empty corridor.",
+      "prep → rag needs 3 bends: move node prep or rag so they share a row or column with matching centers, or sit diagonally with a clear corner."
+    ],
+    "repair": "Trace these relationships at the desktop viewport. For Architecture, use references/architecture-layout-repair.md: reflow a blocked main path or tangled connected scene, and repair an isolated defect locally only when the surrounding composition is accepted. Preserve all semantic content and user-fixed geometry. Rerun finalize once after the edit."
+  }
+}

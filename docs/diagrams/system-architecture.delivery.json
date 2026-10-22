@@ -1,0 +1,17 @@
+{
+  "schemaVersion": 1,
+  "receiptId": "2b66e465-c5c5-4f47-81e9-586bc082eaa5",
+  "status": "current",
+  "command": "deliver",
+  "type": "architecture",
+  "input": "/Users/somi/workspace/ai-service-test/docs/diagrams/system.architecture.json",
+  "output": "/Users/somi/workspace/ai-service-test/docs/diagrams/system-architecture.html",
+  "specification": {
+    "sha256": "3ec98b96db7e4d33f1fd94ebdc3dc7e80ecf006867c8065131220f84194f56c4",
+    "bytes": 6463
+  },
+  "artifact": {
+    "sha256": "56e42cdef11af11ca24b13f2dd8510721bf2e5566f19c25b48f340f5bf0f7ab2",
+    "bytes": 870017
+  }
+}

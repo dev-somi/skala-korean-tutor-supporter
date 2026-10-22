@@ -3,6 +3,7 @@ package com.koreantutor.lesson;
 import com.koreantutor.aiclient.AiServerClient;
 import com.koreantutor.lesson.LessonDtos.*;
 import jakarta.validation.Valid;
+import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.http.ContentDisposition;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
@@ -12,6 +13,7 @@ import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.mvc.method.annotation.SseEmitter;
 
 import java.nio.charset.StandardCharsets;
+import java.time.LocalDate;
 import java.util.List;
 import java.util.Map;
 
@@ -38,6 +40,13 @@ public class LessonController {
     @GetMapping("/students/{studentId}/lessons")
     public List<LessonView> list(@PathVariable Long studentId) {
         return lessons.listByStudent(studentId);
+    }
+
+    /** 대시보드 달력: from~to 사이 수업 + 날짜 미정 수업 (기술 ADR-0039) */
+    @GetMapping("/lessons")
+    public List<LessonView> listInRange(@RequestParam @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) LocalDate from,
+                                        @RequestParam @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) LocalDate to) {
+        return lessons.listInRange(from, to);
     }
 
     @GetMapping("/lessons/{id}")

@@ -14,7 +14,6 @@ import org.slf4j.LoggerFactory;
 import org.springframework.ai.chat.client.ChatClient;
 import org.springframework.ai.chat.client.advisor.MessageChatMemoryAdvisor;
 import org.springframework.ai.chat.memory.ChatMemory;
-import org.springframework.ai.chat.messages.AssistantMessage;
 import org.springframework.ai.chat.messages.Message;
 import org.springframework.ai.chat.messages.UserMessage;
 import org.springframework.beans.factory.annotation.Qualifier;
@@ -23,6 +22,7 @@ import org.springframework.web.servlet.mvc.method.annotation.SseEmitter;
 import tools.jackson.databind.json.JsonMapper;
 
 import java.io.IOException;
+import java.util.ArrayList;
 import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
@@ -40,6 +40,9 @@ import java.util.stream.Collectors;
  *   done            {}
  *   error           {code, message, retryable}
  *
+ * 질문과 답(위 이벤트의 내용까지)은 답이 끝날 때 chat_message에 한 번에 남긴다 (기술 ADR-0041).
+ * 설명 언어 lang: auto(학생 모국어, 없으면 ja) | ja | en (기획 ADR-0035)
+ *
  * 작업 요청(수업 준비·수업 후 기록)은 채팅에서 끝까지 돌리지 않고, 수업을 만들어 검토 화면으로 연결한다.
  * 그 화면에서 진행 단계와 HITL 검토를 보여 준다 (PRD F6-3).
  */
@@ -47,6 +50,8 @@ import java.util.stream.Collectors;
 public class ChatService {
 
     private static final Logger log = LoggerFactory.getLogger(ChatService.class);
+    public static final String LANG_AUTO = "auto";
+    private static final Map<String, String> LANG_NAMES = Map.of("ja", "일본어", "en", "영어");
     private static final Set<String> RECORDABLE = Set.of(Lesson.PLANNED, Lesson.PREPARED, Lesson.DONE);
 
     private static final String LOOKUP_SYSTEM = """
@@ -61,12 +66,14 @@ public class ChatService {
             - 선생님의 말은 질문입니다. 학생이 쓴 문장으로 보고 고치거나 평가하지 않습니다.
             - 인사나 잡담에는 한두 문장으로 답하고, 도울 수 있는 일(학생 조회, 수업 준비, 수업 기록, 문법 질문)을 짧게 알려 줍니다.
             - "이거", "그거"처럼 무엇을 묻는지 알 수 없으면 추측해서 설명하지 말고 무엇을 말하는지 되묻습니다.
-            - 표현·문법·수업 방법을 설명할 때만 설명 → 예문 → 학습자가 자주 하는 실수 순서로 씁니다.""";
+            - 표현·문법·수업 방법을 설명할 때만 설명 → 예문 → 학습자가 자주 하는 실수 순서로 씁니다.
+            - 표현·문법을 설명했으면 마지막에 "%s 설명:" 줄을 두고, 선생님이 학생에게 그대로 말해 줄 수 있는 %s 설명을 한두 문장 덧붙입니다. 인사·잡담에는 붙이지 않습니다.""";
 
     private final RouterService router;
     private final ChatClient fast;
     private final ChatClient quality;
     private final ChatMemory memory;
+    private final ChatHistoryService history;
     private final StudentLookupTools tools;
     private final LessonService lessons;
     private final LessonRepository lessonRepository;
@@ -77,12 +84,13 @@ public class ChatService {
     public ChatService(RouterService router,
                        @Qualifier("fastChatClient") ChatClient fast,
                        @Qualifier("qualityChatClient") ChatClient quality,
-                       ChatMemory memory, StudentLookupTools tools, LessonService lessons,
+                       ChatMemory memory, ChatHistoryService history, StudentLookupTools tools, LessonService lessons,
                        LessonRepository lessonRepository, AiServerClient aiServer, JsonMapper json, AppProperties props) {
         this.router = router;
         this.fast = fast;
         this.quality = quality;
         this.memory = memory;
+        this.history = history;
         this.tools = tools;
         this.lessons = lessons;
         this.lessonRepository = lessonRepository;
@@ -91,35 +99,58 @@ public class ChatService {
         this.timeoutMillis = props.aiServer().sseTimeout().toMillis();
     }
 
-    public SseEmitter chat(String message, String conversationId) {
+    public SseEmitter chat(String message, String conversationId, String lang) {
         SseEmitter emitter = new SseEmitter(timeoutMillis);
         Thread.ofVirtual().name("chat-" + conversationId).start(() -> {
+            Out out = new Out(emitter);
             try {
-                handle(new Out(emitter), message, conversationId);
+                handle(out, message, conversationId, lang);
                 emitter.complete();
             } catch (ClientGone e) {
                 emitter.complete();
             } catch (Exception e) {
                 log.error("chat failed", e);
                 boolean retryable = !(e instanceof AiServerException a) || a.isRetryable();
-                send(emitter, "error", Map.of("code", "CHAT_ERROR", "message", String.valueOf(e.getMessage()), "retryable", retryable));
+                Map<String, Object> error = Map.of("code", "CHAT_ERROR", "message", String.valueOf(e.getMessage()), "retryable", retryable);
+                out.meta.put("error", Map.of("message", error.get("message"), "retryable", retryable));
+                try {
+                    out.event("error", error);
+                } catch (ClientGone ignored) {
+                    // 창을 닫았어도 기록은 남긴다
+                }
                 emitter.complete();
+            } finally {
+                saveTurn(conversationId, message, out);
             }
         });
         return emitter;
     }
 
-    private void handle(Out out, String message, String conversationId) {
+    private void saveTurn(String conversationId, String message, Out out) {
+        try {
+            history.saveTurn(conversationId, message, out.text.toString(), out.meta);
+        } catch (Exception e) {
+            log.error("chat history save failed conversation={}", conversationId, e);
+        }
+    }
+
+    private void handle(Out out, String message, String conversationId, String requestedLang) {
         RouteDecision raw = router.route(message, recent(conversationId));
         RouterService.Resolved resolved = router.resolve(raw);
         RouteDecision decision = resolved.decision();
         Student student = resolved.student();
+        String lang = !LANG_AUTO.equals(requestedLang) ? requestedLang
+                : student == null || student.getNativeLanguage() == null ? "ja" : student.getNativeLanguage();
+        out.meta.put("lang", lang);
 
         Map<String, Object> routing = new LinkedHashMap<>();
         routing.put("intent", decision.intent());
         routing.put("student_id", student == null ? null : student.getId());
         routing.put("student_name", student == null ? null : student.getName());
         routing.put("reason", decision.reason());
+        routing.put("lang", lang);
+        out.meta.put("intent", decision.intent());
+        out.meta.put("studentName", student == null ? null : student.getName());
         out.event("routing_decided", routing);
         log.info("chat routed intent={} student_id={}", decision.intent(), student == null ? null : student.getId());
 
@@ -136,8 +167,8 @@ public class ChatService {
             case RouteDecision.STUDENT_UPSERT -> upsert(out, conversationId, message, student);
             case RouteDecision.LESSON_PREP -> prep(out, conversationId, message, student, decision.minutes());
             case RouteDecision.POST_LESSON -> postLesson(out, conversationId, message, student);
-            case RouteDecision.GRAMMAR_QA -> grammarQa(out, conversationId, message, student);
-            default -> streamAnswer(out, quality.prompt().system(GENERAL_SYSTEM).user(message), conversationId);
+            case RouteDecision.GRAMMAR_QA -> grammarQa(out, conversationId, message, student, lang);
+            default -> streamAnswer(out, quality.prompt().system(GENERAL_SYSTEM.formatted(LANG_NAMES.get(lang), LANG_NAMES.get(lang))).user(message), conversationId);
         }
     }
 
@@ -170,11 +201,10 @@ public class ChatService {
 
     /**
      * 문법 질문 (PRD F6-4): ai-server가 교재 근거를 모으고 요점을 만든다. 근거 카드는 sources 이벤트로, 요점은 글로 보낸다.
-     * 학생이 지정되면 그 학생의 모국어와 등급으로 근거 언어와 "아직 안 배운 문법"을 정한다.
+     * 근거 언어는 lang(토글 또는 학생 모국어), "아직 안 배운 문법"은 지정된 학생의 등급으로 정한다.
      */
     @SuppressWarnings("unchecked")
-    private void grammarQa(Out out, String conversationId, String message, Student student) {
-        String lang = student == null || student.getNativeLanguage() == null ? "ja" : student.getNativeLanguage();
+    private void grammarQa(Out out, String conversationId, String message, Student student, String lang) {
         Integer level = student == null ? null : student.getStandardLevel();
         Map<String, Object> result = aiServer.grammarQa(message, lang, level);
 
@@ -198,9 +228,8 @@ public class ChatService {
         out.event("done", Map.of());
     }
 
-    /** LLM을 거치지 않는 고정 답변. 대화 기록에도 남긴다. */
+    /** LLM을 거치지 않는 고정 답변. 기록은 답이 끝날 때 saveTurn이 남긴다 */
     private void reply(Out out, String conversationId, String userMessage, String text) {
-        memory.add(conversationId, List.of(new UserMessage(userMessage), new AssistantMessage(text)));
         out.event("token", Map.of("text", text));
         out.event("done", Map.of());
     }
@@ -220,15 +249,27 @@ public class ChatService {
         }
     }
 
-    /** 이벤트를 보내는 작은 도우미 */
+    /** 이벤트를 보내면서 기록에 남길 답(글·근거·버튼)을 모으는 작은 도우미 */
     private final class Out {
         private final SseEmitter emitter;
+        private final StringBuilder text = new StringBuilder();
+        private final Map<String, Object> meta = new LinkedHashMap<>();
+        private final List<Object> actions = new ArrayList<>();
 
         Out(SseEmitter emitter) {
             this.emitter = emitter;
+            meta.put("actions", actions);
         }
 
+        @SuppressWarnings("unchecked")
         void event(String name, Object data) {
+            switch (name) {
+                case "token" -> text.append(((Map<String, Object>) data).get("text"));
+                case "sources" -> meta.put("sources", data);
+                case "action" -> actions.add(data);
+                default -> {
+                }
+            }
             send(emitter, name, data);
         }
     }

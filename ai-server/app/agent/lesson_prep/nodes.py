@@ -5,7 +5,7 @@
 그래프에 연결하지 않고도 함수만 따로 불러서 시험해 볼 수 있다.
 
   코드 노드 (정해진 대로만 동작): load_profile, load_textbook, plan_lesson
-  LLM 노드 (LLM이 판단):          write_explanations, write_scripts, auto_review, briefing, write_slides
+  LLM 노드 (LLM이 판단):          write_explanations, write_scripts, auto_review, briefing, write_slides, write_slide_scripts
   사람 노드 (선생님이 판단):       human_review
 """
 
@@ -26,6 +26,7 @@ from app.agent.lesson_prep.schemas import (
     ReviewResult,
     ScriptOutput,
     SlidePlanOutput,
+    SlideScriptOutput,
     StudentProfile,
     TeacherBriefing,
 )
@@ -65,13 +66,13 @@ def learned_ids(profile: dict) -> set:
     return ids
 
 
-def run_parallel(func, categories: list[str]) -> dict:
+def run_parallel(func, categories: list, max_workers: int | None = None) -> dict:
     """서로 독립인 LLM 호출(범주별, 브리핑 조각별)을 동시에 실행하고 {키: 결과}로 돌려준다 (참고노트 5-2)."""
     if not categories:
         return {}
     # 일반 ThreadPoolExecutor는 실행 맥락(contextvars)을 넘기지 않아, 병렬 LLM 호출이 LangSmith에서
     # 그래프와 따로 떨어진 trace로 흩어진다. 맥락을 복사해 주는 실행기를 쓴다 (기술 ADR-0028)
-    with ContextThreadPoolExecutor(max_workers=len(categories)) as pool:
+    with ContextThreadPoolExecutor(max_workers=max_workers or len(categories)) as pool:
         return dict(zip(categories, pool.map(func, categories)))
 
 
@@ -580,6 +581,77 @@ def write_slides(state: dict) -> dict:
         "briefing": {**briefing_, "slide_plan": slide_plan},
         "slides_fingerprint": lesson_frame.drafts_fingerprint(drafts),
     }
+
+
+SCRIPT_WORKERS = 5  # 장별 대본은 15번 부르므로 한꺼번에 부르는 수를 줄인다 (로컬 모델 보호)
+
+
+def slide_materials(slide: dict, state: dict, items: dict) -> str:
+    """슬라이드 한 장의 대본 재료: 연결된 범주의 교재 원문·설명·4범주 대본, 범주가 없는 장은 브리핑과 예문."""
+    drafts = state["drafts"]
+    parts = []
+    for category in slide["categories"]:
+        draft = drafts[category]
+        parts.append(
+            f"[{CATEGORY_NAMES[category]}]\n교재 항목:\n{items_text(draft['item_ids'], items)}\n"
+            f"개인화 설명:\n{draft['explanation'] or '(없음)'}\n수업 대본(참고):\n{draft['script'] or '(없음)'}"
+        )
+    briefing_ = state["briefing"]
+    if slide["stage"] == "warmup":
+        parts.append("워밍업 질문 후보:\n" + ("\n".join(f"- {q}" for q in briefing_.get("warmup_questions", [])) or "(없음)"))
+    if slide["stage"] == "goal_dialog":
+        parts.append("교재 대화문:\n" + items_text([d["id"] for d in state["textbook_unit"]["dialogues"]], items))
+    if slide["stage"] == "activity":
+        parts.append(f"활용 활동 후보: {briefing_.get('practice_activity') or '(없음)'}\n쓸 수 있는 예문:\n{example_sentences(drafts)}")
+    return "\n\n".join(parts) or "(이 슬라이드에는 따로 연결된 재료가 없습니다. 학생 화면 문구와 교사 노트만 씁니다)"
+
+
+def write_slide_scripts(state: dict) -> dict:
+    """15장 슬라이드마다 선생님이 그대로 읽을 대본을 만든다. 한 장이 실패해도 나머지는 유지한다 (기술 ADR-0035)."""
+    items = all_items_by_id(state)
+    plan = state["briefing"]["slide_plan"]
+    slides = plan["slides"]
+    by_no = {s["no"]: s for s in slides}
+    lang_name = llm.LANG_NAMES[state["target_lang"]]
+
+    def generate(no: int) -> dict | None:
+        slide = by_no[no]
+        following = by_no.get(no + 1)
+        values = {
+            "learner": learner_view(state["profile"]),
+            "lang_name": lang_name,
+            "lesson_goal": plan["lesson_goal"],
+            "final_mission": plan["final_mission"],
+            "slide_no": no,
+            "stage_name": slide["name"],
+            "layout": slide["layout"],
+            "minutes": slide["minutes"],
+            "max_lines": lesson_frame.max_script_lines(slide["minutes"]),
+            "activity": slide["activity"] or "(없음)",
+            "student_screen": "\n".join(f"  - {t}" for t in slide["student_screen"]) or "  (비어 있음)",
+            "note": to_json(slide["note"]),
+            "slide_needs_check": ", ".join(slide["needs_check"]) or "(없음)",
+            "materials": slide_materials(slide, state, items),
+            "next_slide": f"{following['no']}번 {following['name']}: {following['activity']}" if following else "(마지막 슬라이드입니다)",
+        }
+        try:
+            return SlideScriptOutput.model_validate(llm.call_llm("write_slide_script", SlideScriptOutput, values)).model_dump()
+        except Exception:  # 한 장의 실패가 수업 준비 전체를 막지 않게 한다. 그 장은 확인 필요로 표시한다
+            return None
+
+    scripts = run_parallel(generate, [s["no"] for s in slides], max_workers=SCRIPT_WORKERS)
+
+    new_slides = []
+    for slide in slides:
+        output = scripts[slide["no"]]
+        if output is None:
+            new_slides.append({**slide, "script": None, "needs_check": [*slide["needs_check"], "대본이 만들어지지 않았어요. 직접 쓰거나 다시 만들어 주세요."]})
+        else:
+            extra = output.pop("needs_check")
+            new_slides.append({**slide, "script": output, "needs_check": [*slide["needs_check"], *extra]})
+
+    checks = [c for c in plan["checks"] if c["name"] not in lesson_frame.SCRIPT_CHECK_NAMES] + lesson_frame.script_checks(new_slides)
+    return {"briefing": {**state["briefing"], "slide_plan": {**plan, "slides": new_slides, "checks": checks}}}
 
 
 # ---------------------------------------------------------------------------

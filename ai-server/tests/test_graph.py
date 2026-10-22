@@ -56,6 +56,8 @@ def test_end_to_end_ends_with_slide_plan(fake_llm):
     assert all(check["passed"] for check in plan["checks"])
     assert plan["lesson_goal"] and plan["final_mission"]
     assert fake_llm.count("write_slides") == 1  # 초안을 고치지 않았으니 승인 때 다시 만들지 않는다
+    assert fake_llm.count("write_slide_script") == 15  # 장마다 한 번씩
+    assert all(s["script"]["lines"][0]["who"] == "teacher" for s in plan["slides"])
 
 
 def test_llm_review_fail_is_advice_only(fake_llm):
@@ -139,6 +141,7 @@ def test_edit_goes_into_final_plan_as_is(fake_llm):
     # 수정한 범주는 LLM을 다시 부르지 않는다 (범주 4개 x 처음 1번씩만)
     assert fake_llm.count("write_explanation") == 4
     assert fake_llm.count("write_slides") == 2  # 초안이 달라졌으니 승인 때 슬라이드를 한 번 더 만든다
+    assert fake_llm.count("write_slide_script") == 30  # 대본도 슬라이드와 함께 다시 만든다
     assert result["briefing"]["slide_plan"]
     assert result["drafts"]["new_grammar"]["explanation"] == "先生が直接書いた説明です。"
     assert result["drafts"]["new_grammar"]["script"] == "先生が直接書いた台本です。"
@@ -194,10 +197,25 @@ def test_first_lesson_keeps_review_slide_as_level_check(fake_llm):
 
 @pytest.mark.skipif(not sheet_path("ko1", 5).exists(), reason="단원 시트(data/curriculum, git 밖)가 있어야 한다")
 def test_draft_unit_sheet_runs_to_review_with_notice(fake_llm):
-    """자동으로 만든 시트(ko1 5과, 연습 없음)로도 선생님 검토까지 가고, 브리핑에 "검수 전" 표시가 붙는다 (기술 ADR-0032)."""
+    """자동으로 만든 시트(ko1 5과)로도 선생님 검토까지 가고, 브리핑에 "검수 전" 표시가 붙는다 (기술 ADR-0032)."""
     graph = build_graph(InMemorySaver())
     result = graph.invoke(make_initial_state("student_sample", unit_no=5, book="ko1"), CONFIG)
     payload = result["__interrupt__"][0].value
     assert payload["briefing"]["unit_sheet"]["status"] == "draft"
     assert payload["drafts"]["new_grammar"]["item_ids"]  # 지침서에서 뽑은 문법
-    assert payload["drafts"]["homework"]["item_ids"] == []  # 연습은 본책 색인 전이라 없다
+    homework = payload["drafts"]["homework"]["item_ids"]
+    assert homework and all(i.startswith("ko1-u05-e") for i in homework)  # 익힘책에서 뽑은 연습
+
+
+def test_one_failed_slide_script_does_not_stop_the_rest(fake_llm):
+    """한 장의 대본 생성이 실패해도 나머지는 남고, 그 장은 확인 필요로 표시되며 점검에 경고가 붙는다 (기술 ADR-0035)."""
+    fake_llm.failing_slides = {7}
+    graph, result = start(fake_llm)
+    plan = result["__interrupt__"][0].value["briefing"]["slide_plan"]
+
+    scripted = [s["no"] for s in plan["slides"] if s["script"]]
+    assert scripted == [n for n in range(1, 16) if n != 7]
+    failed = plan["slides"][6]
+    assert failed["script"] is None and any("대본" in text for text in failed["needs_check"])
+    check = next(c for c in plan["checks"] if c["name"] == "대본 구성")
+    assert not check["passed"] and "7" in check["reason"]

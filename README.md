@@ -16,12 +16,12 @@
 | 체험수업 레벨테스트 | 한글 읽기 + 1~6급 문법 질문·어휘를 국립국어원 표준 등급 목록에 묶어 제시, 맞음/틀림을 누르면 코드가 추천 등급을 계산. **학생 화면** 창을 따로 열어 화상수업에서 공유한다(문항만 보이고 예시 답·판정은 숨김). [결과 저장] → 선생님이 확인하면 새 학생 등록 또는 기존 학생 카드에 반영 ([기획 ADR-0021](docs/planning-adr/0021-student-screen-level-test-saved-result.md)) |
 | 수업 준비 | **15장 슬라이드 구성안**(수업 목표·최종 미션 + 장마다 학생 화면 문구·교사 노트·숙제, [참고 문서](docs/reference/온라인_한국어_1대1_수업_PPT_제작_기준.md) 기준), **문화 포인트**(「세종한국문화」·지침서에서 찾은 후보 + 학생 나라 비교 질문), 복습/새 어휘/새 문법/숙제 구성안(코드 규칙), 개인화 설명·대본, **선생님 브리핑**(세종학당 교원용 지침서 근거의 문법 설명 포인트 + 출처 쪽수, 모국어 화자가 자주 틀리는 점, 예상 질문, 워밍업 질문, 맞춤 활용 활동), 범주별 승인·직접 수정·피드백. PPT는 만들지 않는다 ([기획 ADR-0015](docs/planning-adr/0015-no-ppt-fixed-lesson-frame.md), [기획 ADR-0032](docs/planning-adr/0032-slide-plan-from-reference.md)) |
 | 수업 후 기록 | 짧은 메모 → 다룬 교재 항목, 잘한 점·틀린 점, 약점 추가·해결, 숙제, 학생에게 보낼 메시지(일본어·영어 + 한국어 번역) → **항목별 승인 후에만 반영** |
-| 대시보드 | 할 일(미처리 기록, 승인 대기 수업안, 기록을 쓸 수업), 학생 카드, 시간 요약 |
+| 대시보드 | 월간 수업 달력. 수업마다 준비 상태 색(준비 전·준비 중·준비 완료·기록 필요·끝), 날짜를 누르면 그날 수업의 준비 체크와 바로가기 버튼 |
 | 학생 | 상단 [학생]. 학생 프로필 카드 목록(이름 검색, 상태·모국어·학습 목적 필터) → 카드를 누르면 학생 상세에서 프로필 보기·[정보 수정] |
 | 커리큘럼·페르소나 | 상단 [커리큘럼·페르소나]. 탭 두 개: 온라인 세종학당 교육과정(입문 → 초급 1·2급 → 중급 3·4급 → 고급 5·6급, 특별 과정)을 표준 등급과 나란히 / 학습 목적 4가지의 대상·중심 교재·수업에서 강조할 점(참고)과 지금 그 목적에 속한 학생 |
 | 어휘·문법 등급 목록 | 상단 [어휘·문법]. 국립국어원 표준 교육과정 문법 336개·어휘 10,635개를 등급·문법 분류·품사·검색어로 찾아보기(문법마다 이어진 교재 과 표시), 분류·품사 설명 탭 |
 | 진도 리포트 | 학생별·기간별 새로 배운 문법·단어, 표준 등급별 배운 양, 해결한 약점, 반복 오류, 학생에게 보낼 메시지 초안(한국어 + 학생 언어). 숫자와 문장은 코드가 만든다 ([기획 ADR-0019](docs/planning-adr/0019-progress-report-for-retention.md)) |
-| 채팅 | 조회("유이 요즘 약한 거 뭐야?"), 학생 등록, 수업 준비·기록 화면 연결, 한국어 교육 질문 |
+| 채팅 | 조회("유이 요즘 약한 거 뭐야?"), 학생 등록, 수업 준비·기록 화면 연결, 한국어 교육 질문. 플로팅 창과 **AI 채팅** 탭이 같은 대화를 쓰고 기록이 남는다. 설명 언어 토글(자동/日本語/English) |
 | 지표 | **주 지표: AI 초안을 그대로 승인한 비율** (수업안 첫 검토 승인, 수업 후 기록 초안 유지 — [기획 ADR-0020](docs/planning-adr/0020-primary-metric-draft-quality.md)). 보조: 수업 준비·정리 시간 자동 기록(AI 대기 / 선생님 작업 분리), 기준 시간과 비교 |
 
 원칙: **AI는 DB에 직접 쓰지 않는다.** 모든 쓰기는 선생님 승인을 거친다 (PRD 8-3, [ADR-0005](docs/adr/0005-data-access-ownership.md)).
@@ -52,7 +52,7 @@
 │  └─ src/main/
 │     ├─ java/com/koreantutor/
 │     │  ├─ student/ lesson/ record/ leveltest/ report/   도메인별 API·DB
-│     │  ├─ chat/        채팅 의도 분류(Spring AI)와 조회 답변
+│     │  ├─ chat/        채팅 의도 분류(Spring AI)와 조회 답변, 대화 기록
 │     │  ├─ aiclient/    ai-server 호출, SSE 중계
 │     │  └─ dashboard/ timelog/ material/ trace/ config/ common/
 │     └─ resources/db/migration/   Flyway 스키마
@@ -134,14 +134,15 @@ uv run python -m app.rag.batch status                                        # �
 `ollama serve`가 떠 있어야 마지막 색인 단계가 된다. 색인은 임베딩 캐시(`data/rag/embed_cache/`)를 써서 이미 임베딩한 조각은 다시 하지 않는다.
 
 새 PDF를 넣으려면 `app/rag/chunk.py`의 `BOOKS`(형식을 맞춘 책)나 `catalog.json`(한 쪽 = 한 조각)에 한 줄 추가하고 같은 순서로 돌린다. `BOOKS`에는 기획 ADR-0025의 1순위 자료 24권이 있다 (지침서·매뉴얼·핸드북·문화 지침서). 글자 층이 있는 지침서(입문, 5A~6B)는 `textlayer`로, 나머지는 `ocr`로 뽑는다.
-문법 질문은 청크에 붙은 형태 키 태그(teaches/mentions)로 근거를 찾는다. 새 책은 `BOOKS`에 `kind`와 `teaches` 규칙을 적는다. 형식을 모르는 책은 `layout: "ocr_page"`(또는 `"text_page"`)로 한 쪽씩 넣으면 mentions만 붙는다. 같은 시리즈 핸드북의 영어판·일본어판은 색인에서 한 덩어리로 합쳐진다 ([ADR-0025](docs/adr/0025-form-key-tags-and-merged-editions.md)).
+문법 질문은 청크에 붙은 형태 키 태그(teaches/mentions)로 근거를 찾는다. 새 책은 `BOOKS`에 `kind`와 `teaches` 규칙을 적는다. 형식을 모르는 책은 `layout: "ocr_page"`(또는 `"text_page"`)로 한 쪽씩 넣으면 mentions만 붙는다. 같은 시리즈 핸드북의 영어판·일본어판은 색인에서 한 덩어리로 합쳐진다 ([ADR-0025](docs/adr/0025-form-key-tags-and-merged-editions.md)). 태그로 못 찾으면 본문에 그 형태가 적힌 구역을 글자로 찾고, 여러 개면 벡터 점수로 고른다 ([ADR-0044](docs/adr/0044-grammar-evidence-text-fallback.md)).
 
 ### 단원 시트 만들기 ([기획 ADR-0030](docs/planning-adr/0030-unit-sheets-from-materials.md), [ADR-0032](docs/adr/0032-unit-sheets-and-standard-ids.md))
-수업 준비는 교재·과마다 "가르칠 문법·어휘·예문" 시트를 읽는다 (`ai-server/data/curriculum/<교재>/unit_NN.json`, git 밖). 지침서 색인이 있어야 만들 수 있다.
+수업 준비는 교재·과마다 "가르칠 문법·어휘·예문" 시트를 읽는다 (`ai-server/data/curriculum/<교재>/unit_NN.json`, git 밖). 1·2권은 지침서 색인, 3A~6B는 본책 색인이 있어야 만들 수 있다 ([ADR-0040](docs/adr/0040-unit-sheets-from-textbook-3a-6b.md)).
 ```bash
 cd ai-server
 uv run python -m app.curriculum.build ko1            # 「세종학당 한국어 1」 20과 초안 (status: draft). 검수된 시트는 덮어쓰지 않는다
 uv run python -m app.curriculum.build ko2
+for b in ko3a ko3b ko4a ko4b ko5a ko5b ko6a ko6b; do uv run python -m app.curriculum.build $b; done   # 3A~6B: 본책에서 (각 10과)
 uv run python -m app.curriculum.convert_textbook      # 손으로 만든 data/textbook/ 2~4과 → 검수된 시트 (status: reviewed)
 uv run python -m app.curriculum.evaluate ko1          # 초안을 2~4과 정답과 비교 (정밀도·재현율)
 ```
@@ -155,7 +156,8 @@ cd ai-server
 uv run python -m app.standard.importer          # data/standard/source/*.xlsx → grammar.json, vocab.json
 uv run python -c "from app.standard.levels import sentence_level; print(sentence_level('한국 드라마를 좋아합니다.'))"
 ```
-교재 문법 → 표준 항목 대응표는 `ai-server/data/standard/textbook_map.json`이다 (지금은 「한국어 1」 2~4과).
+등급 목록 화면의 "교재" 칸(이 문법·어휘를 몇 과에서 배우나)은 단원 시트(`ai-server/data/curriculum/`)의 표준 ID에서 찾는다. 시트가 있는 「한국어」 1~6B 전 과, 검수 전 시트는 회색 태그 ([ADR-0036](docs/adr/0036-standard-list-textbook-links-from-sheets.md)).
+손으로 만든 교재 JSON의 문법 → 표준 항목 대응표는 `ai-server/data/standard/textbook_map.json`이다 (「한국어 1」 2~4과, 시트 변환용).
 체험수업 레벨테스트 문항은 `ai-server/data/standard/level_test.json`이다. 문항마다 표준 항목 ID가 붙어 있고, 서버가 뜰 때 ID와 등급이 맞는지 검사한다.
 
 ## 데모 시나리오 (PRD 5장)
@@ -177,7 +179,7 @@ curl -X POST localhost:8080/api/students/1/lessons -H 'Content-Type: application
 curl -N -X POST localhost:8080/api/lessons/1/prep            # SSE … review_required 에서 멈춤
 curl -N -X POST localhost:8080/api/lessons/1/prep/review -H 'Content-Type: application/json' \
   -d '{"decisions":{"review":{"action":"approve"},"new_vocab":{"action":"approve"},"new_grammar":{"action":"approve"},"homework":{"action":"approve"}}}'
-curl localhost:8080/api/lessons/1                            # briefing.slide_plan 에 15장 슬라이드 구성안
+curl localhost:8080/api/lessons/1                            # briefing.slide_plan 에 15장 슬라이드 구성안(장별 script 대본 포함)
 ```
 
 ## 테스트와 평가
@@ -197,7 +199,7 @@ cd ai-server && uv run python -m eval.run_eval
 
 ## 알려진 한계
 - 단일 선생님용 로컬 서비스다. 로그인·권한이 없다 (PRD 비목표).
-- 수업 구성(진도·학습 항목 ID)은 세종학당 한국어 1권 2~4과 JSON뿐이다. 지침서·핸드북은 검색 색인으로만 쓴다. 페르소나별 중심 교재(기획 ADR-0016)는 결정만 했고, 다른 교재의 과별 데이터와 학생 페르소나 칸은 아직 없다.
+- 과별 데이터(단원 시트)는 「세종학당 한국어」 1·2(각 20과, 지침서에서)와 3A~6B(각 10과, 본책에서)가 있다. 자동으로 만든 초안이라 "검수 전"이고, 1권 2~4과만 검수됐다. 3A~6B는 대화 부분이 아직 없다. 실용·여행·비즈니스 한국어 같은 다른 중심 교재의 과별 데이터는 없다 (기획 ADR-0030, 기술 ADR-0032·0040).
 - 예문을 자료에서 찾고 등급으로 거르는 방식(기획 ADR-0017)은 등급 판정 함수까지만 있다. 수업 준비의 설명 노드는 아직 LLM이 예문을 만든다.
 - 예문 등급은 어휘만 본다. 문장 안 문법 표현의 등급은 보지 않는다.
 - 진도 리포트의 학생 언어 메시지 안에서 잘한 점·극복한 것은 수업 기록의 한국어 그대로 나온다. 보내기 전에 고쳐야 한다. 등급별 숫자는 「한국어 1」 2~4과 대응표 범위만 반영한다.
@@ -205,8 +207,8 @@ cd ai-server && uv run python -m eval.run_eval
 - 레벨테스트 학생 화면은 선생님 화면과 같은 브라우저에서 연 창이어야 따라온다. 학생이 다른 기기에서 직접 들어올 수는 없다.
 - 표준 등급 칸을 넣기 전에 등록한 학생은 수준이 "수준 미정"이다. 정보를 고칠 때 등급을 골라야 저장된다.
 - 모국어별 실수·예상 질문은 `ai-server/data/standard/l1_notes.json`(2~4과 문법 7개 × 일본어·영어)에서 꺼낸다. 아직 모두 Claude 초안(`reviewed: false`)이라 화면에 "검수 전"으로 표시한다. 검수하면 파일에서 `reviewed`를 `true`로 바꾼다. 데이터에 없는 문법은 LLM이 만들고 "검수 필요"로 표시한다 ([ADR-0022](docs/adr/0022-l1-notes-data.md)).
-- 채팅 대화 기록은 backend 메모리에만 있어서 재시작하면 사라진다.
 - 수업 준비 도중 화면을 떠나면 실행이 멈춘다. 다시 들어오면 [다시 시작]으로 처음부터 만든다.
+- 실제 학생·선생님으로 검증한 적이 없다. 가상 데이터와 평가 데이터셋(메모 16개)뿐이라 주 지표(승인 비율)는 가설이다. 기본 모델이 로컬 qwen3:8b라 문법 질문에서 근거 없는 예문을 지어내기도 하며, 지금은 코드가 걸러 "검수 필요"로 표시한다.
 - 교재 데이터(`ai-server/data/textbook/`), 교재 PDF, OCR 결과·색인(`ai-server/data/rag/`)은 저작권 때문에 git에 올리지 않는다.
 
 ## 기타

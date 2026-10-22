@@ -1,9 +1,10 @@
 package com.koreantutor.config;
 
+import com.koreantutor.chat.ChatMessageRepository;
+import com.koreantutor.chat.DbChatMemory;
 import org.springframework.ai.anthropic.AnthropicChatOptions;
 import org.springframework.ai.chat.client.ChatClient;
 import org.springframework.ai.chat.memory.ChatMemory;
-import org.springframework.ai.chat.memory.MessageWindowChatMemory;
 import org.springframework.ai.chat.model.ChatModel;
 import org.springframework.ai.chat.prompt.ChatOptions;
 import org.springframework.ai.ollama.OllamaChatModel;
@@ -45,9 +46,9 @@ public class ChatClientConfig {
         return AnthropicChatOptions.builder().model(model).maxTokens(maxTokens);
     }
 
-    /** 채팅 대화 기록 (MVP: 메모리, 최근 20개 메시지) */
+    /** 채팅 대화 문맥: DB의 chat_message 최근 20개 (기술 ADR-0041) */
     @Bean
-    ChatMemory chatMemory() {
-        return MessageWindowChatMemory.builder().maxMessages(20).build();
+    ChatMemory chatMemory(ChatMessageRepository messages) {
+        return new DbChatMemory(messages, 20);
     }
 }

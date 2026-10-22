@@ -170,6 +170,30 @@ def find_by_form(keys: set[str], kind: str | None = None, others: set[str] = fro
     return [with_source(p) for p in found]
 
 
+@traceable(run_type="retriever")
+def find_by_text(pattern, query: str, k: int = 3) -> list[dict]:
+    """
+    글자 경로: 본문이 pattern(정규식)에 맞는 구역을 찾고, 여러 개면 query와의 벡터 점수로 순서를 정한다 (기술 ADR-0044).
+    태그가 빠진 구역(OCR이 따옴표를 놓침, 교재가 다른 표기로 가르침)을 찾는 데 쓴다. 임베딩 서버가 없으면 책 순서대로.
+    """
+    index = load_index()
+    found = {pid: p for pid, p in index["parents"].items() if pattern.search(p["text"])}
+    if len(found) > k:
+        try:
+            qvec = embed_batch([query])[0]
+            best: dict[str, float] = {}
+            for child, vec in zip(index["children"], index["vectors"]):
+                if child["parent_id"] in found:
+                    score = sum(a * b for a, b in zip(qvec, vec))
+                    best[child["parent_id"]] = max(best.get(child["parent_id"], -1.0), score)
+            ranked = sorted(found, key=lambda pid: -best.get(pid, -1.0))
+        except Exception:  # noqa: BLE001 — 순서 정하기만 못 할 뿐 찾은 구역은 쓴다
+            ranked = list(found)
+    else:
+        ranked = list(found)
+    return [with_source(found[pid]) for pid in ranked[:k]]
+
+
 def known_keys() -> set[str]:
     """색인에 teaches로 붙은 형태 키 전체 (질문의 형태를 맞춰 볼 사전)"""
     return {key for p in load_index()["parents"].values() for key in p.get("teaches", [])}

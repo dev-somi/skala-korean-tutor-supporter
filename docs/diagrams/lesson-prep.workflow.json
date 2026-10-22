@@ -1,0 +1,222 @@
+{
+  "schema_version": 2,
+  "diagram_type": "workflow",
+  "meta": {
+    "title": "수업 준비 그래프 (lesson_prep)",
+    "locale": "ko",
+    "output": "docs/diagrams/lesson-prep-workflow.html",
+    "quality_profile": "showcase",
+    "legend": {
+      "entries": {
+        "backend": {
+          "label": "코드 노드"
+        },
+        "cloud": {
+          "label": "LLM 노드"
+        },
+        "security": {
+          "label": "자동 점검 (코드 + LLM)"
+        },
+        "external": {
+          "label": "선생님 승인"
+        }
+      }
+    }
+  },
+  "lanes": [
+    {
+      "id": "code",
+      "label": "코드 노드"
+    },
+    {
+      "id": "draft",
+      "label": "LLM · 초안"
+    },
+    {
+      "id": "slides",
+      "label": "LLM · 브리핑·슬라이드"
+    },
+    {
+      "id": "human",
+      "label": "선생님 (HITL)",
+      "variant": "exception"
+    }
+  ],
+  "mainPath": [
+    "load",
+    "plan_lesson",
+    "write_explanations",
+    "write_scripts",
+    "auto_review",
+    "briefing",
+    "write_slides",
+    "write_slide_scripts",
+    "human_review"
+  ],
+  "nodes": [
+    {
+      "id": "load",
+      "lane": "code",
+      "col": 0,
+      "type": "backend",
+      "label": "load_profile · load_textbook",
+      "sublabel": "학생 프로필 + 단원 시트"
+    },
+    {
+      "id": "plan_lesson",
+      "lane": "code",
+      "col": 1,
+      "type": "backend",
+      "label": "plan_lesson",
+      "sublabel": "복습·어휘·문법·숙제",
+      "tag": "코드 규칙"
+    },
+    {
+      "id": "auto_review",
+      "lane": "code",
+      "col": 3,
+      "type": "security",
+      "label": "auto_review",
+      "sublabel": "코드 점검 + LLM 의견",
+      "tag": "경고만, 재생성 없음"
+    },
+    {
+      "id": "write_explanations",
+      "lane": "draft",
+      "col": 1,
+      "type": "cloud",
+      "label": "write_explanations",
+      "sublabel": "개인화 설명"
+    },
+    {
+      "id": "write_scripts",
+      "lane": "draft",
+      "col": 2,
+      "type": "cloud",
+      "label": "write_scripts",
+      "sublabel": "수업 대본"
+    },
+    {
+      "id": "briefing",
+      "lane": "slides",
+      "col": 3,
+      "type": "cloud",
+      "label": "briefing",
+      "sublabel": "지침서 근거 브리핑",
+      "tag": "RAG 검색"
+    },
+    {
+      "id": "write_slides",
+      "lane": "slides",
+      "col": 4,
+      "type": "cloud",
+      "label": "write_slides",
+      "sublabel": "15장 슬라이드 구성안"
+    },
+    {
+      "id": "write_slide_scripts",
+      "lane": "slides",
+      "col": 5,
+      "type": "cloud",
+      "label": "write_slide_scripts",
+      "sublabel": "장별 대본"
+    },
+    {
+      "id": "human_review",
+      "lane": "human",
+      "col": 5,
+      "type": "external",
+      "label": "human_review",
+      "sublabel": "범주별 승인·피드백",
+      "tag": "interrupt · 모두 승인 → END"
+    }
+  ],
+  "edges": [
+    {
+      "id": "e2",
+      "from": "load",
+      "to": "plan_lesson"
+    },
+    {
+      "id": "e3",
+      "from": "plan_lesson",
+      "to": "write_explanations"
+    },
+    {
+      "id": "e4",
+      "from": "write_explanations",
+      "to": "write_scripts"
+    },
+    {
+      "id": "e5",
+      "from": "write_scripts",
+      "to": "auto_review",
+      "label": "처음 생성"
+    },
+    {
+      "id": "e6",
+      "from": "auto_review",
+      "to": "briefing"
+    },
+    {
+      "id": "e7",
+      "from": "briefing",
+      "to": "write_slides"
+    },
+    {
+      "id": "e8",
+      "from": "write_slides",
+      "to": "write_slide_scripts"
+    },
+    {
+      "id": "e9",
+      "from": "write_slide_scripts",
+      "to": "human_review",
+      "label": "검토 대기",
+      "variant": "emphasis"
+    },
+    {
+      "id": "feedback",
+      "from": "human_review",
+      "to": "write_explanations",
+      "label": "피드백 → 다시 생성",
+      "variant": "security",
+      "role": "return"
+    },
+    {
+      "id": "regen-back",
+      "from": "write_scripts",
+      "to": "human_review",
+      "label": "재생성 후 바로 검토",
+      "variant": "dashed",
+      "role": "branch"
+    },
+    {
+      "id": "stale",
+      "from": "human_review",
+      "to": "write_slides",
+      "label": "승인했지만 초안 바뀜",
+      "variant": "dashed",
+      "role": "return"
+    }
+  ],
+  "cards": [
+    {
+      "dot": "rose",
+      "title": "사람 승인",
+      "items": [
+        "human_review의 interrupt()에서 그래프가 멈추고 SQLite 체크포인트에 상태를 남긴다",
+        "선생님이 범주별로 승인하거나 피드백을 주면 같은 thread로 재개한다"
+      ]
+    },
+    {
+      "dot": "cyan",
+      "title": "재생성 규칙",
+      "items": [
+        "피드백이 있으면 승인 안 된 범주만 설명·대본부터 다시 만든다",
+        "모두 승인됐는데 초안 지문이 슬라이드와 다르면 슬라이드·장별 대본만 다시 만들고 끝난다",
+        "장별 대본을 다시 만든 뒤 이미 모두 승인 상태면 그대로 END"
+      ]
+    }
+  ]
+}

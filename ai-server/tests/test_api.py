@@ -91,6 +91,7 @@ def test_prep_streams_until_review(client, fake_llm):
     assert finished[:2] == ["load_profile", "load_textbook"]
     assert "briefing" in finished
     assert "write_slides" in finished
+    assert finished.index("write_slide_scripts") > finished.index("write_slides")
 
     payload = events[-1][1]
     assert payload["briefing"]["grammar_points"][0]["item_id"] == "std-g-030"

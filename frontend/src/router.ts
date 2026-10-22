@@ -18,6 +18,8 @@ export const router = createRouter({
     { path: '/level-test/screen', name: 'level-test-screen', component: () => import('./pages/LevelTestScreenPage.vue'), meta: { bare: true } },
     { path: '/level-test/results/:id', name: 'level-test-result', component: () => import('./pages/LevelTestResultPage.vue'), props: r => ({ id: Number(r.params.id) }) },
     { path: '/standard', name: 'standard', component: () => import('./pages/StandardPage.vue') },
+    // AI 채팅 탭. id가 없으면 지금 대화 (기술 ADR-0042)
+    { path: '/chat/:id?', name: 'chat', component: () => import('./pages/ChatPage.vue'), props: r => ({ id: r.params.id || undefined }) },
     { path: '/curriculum', name: 'curriculum', component: () => import('./pages/CurriculumPage.vue') },
     { path: '/personas', redirect: { path: '/curriculum', query: { tab: 'persona' } } },
   ],

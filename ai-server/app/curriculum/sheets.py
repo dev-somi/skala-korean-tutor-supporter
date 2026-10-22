@@ -12,9 +12,22 @@ from app.agent.lesson_prep.textbook import get_data_dir
 from app.curriculum.schemas import UnitSheet
 
 # 교재 시리즈 → 그 과의 근거를 찾는 색인 책 (지침서·본책·익힘책)
+# extract: 문법·어휘를 어디서 뽑나. "guide" = 지침서 규칙 (1·2권), "textbook" = 본책 규칙 (3A~6B, 지침서 모양이 달라서. 기술 ADR-0040)
+# guide는 브리핑 근거로도 쓴다 (3A~4B는 익힘책 지침서, 5A~6B는 지침서)
 BOOK_SOURCES = {
-    "ko1": {"title": "세종학당 한국어 1", "guide": "ko1_guide", "textbook": "ko1_textbook", "workbook": "ko1_workbook"},
-    "ko2": {"title": "세종학당 한국어 2", "guide": "ko2_guide", "textbook": "ko2_textbook", "workbook": "ko2_workbook"},
+    "ko1": {"title": "세종학당 한국어 1", "short": "한국어 1", "extract": "guide", "guide": "ko1_guide", "textbook": "ko1_textbook", "workbook": "ko1_workbook"},
+    "ko2": {"title": "세종학당 한국어 2", "short": "한국어 2", "extract": "guide", "guide": "ko2_guide", "textbook": "ko2_textbook", "workbook": "ko2_workbook"},
+    **{
+        vol: {
+            "title": f"세종학당 한국어 {vol[2:].upper()}",
+            "short": f"한국어 {vol[2:].upper()}",
+            "extract": "textbook",
+            "guide": f"{vol}_workbook_guide" if vol[2] in "34" else f"{vol}_guide",
+            "textbook": f"{vol}_textbook",
+            "workbook": f"{vol}_workbook",
+        }
+        for vol in ("ko3a", "ko3b", "ko4a", "ko4b", "ko5a", "ko5b", "ko6a", "ko6b")
+    },
 }
 
 

@@ -239,3 +239,18 @@ def test_long_review_minutes_add_up(lesson_minutes):
     steps = lesson_frame.step_minutes(lesson_minutes, long_review=True)
     assert sum(steps.values()) == lesson_minutes
     assert steps["activity"] >= 1
+
+
+def test_script_checks_flag_missing_empty_and_long_scripts():
+    """대본 점검: 대본 없음, 선생님 발화 없음·빈 줄, 시간에 비해 긴 대본을 잡는다 (기술 ADR-0035)."""
+    line = {"who": "teacher", "ko": "안녕하세요?", "hint": "", "wait": True}
+    ok = {"no": 1, "minutes": 3, "script": {"lines": [line]}}
+    missing = {"no": 2, "minutes": 3, "script": None}
+    only_student = {"no": 3, "minutes": 3, "script": {"lines": [{**line, "who": "student_expected"}]}}
+    blank = {"no": 4, "minutes": 3, "script": {"lines": [line, {**line, "ko": " "}]}}
+    long = {"no": 5, "minutes": 1, "script": {"lines": [line] * (lesson_frame.max_script_lines(1) + 1)}}
+
+    structure, size = lesson_frame.script_checks([ok, missing, only_student, blank, long])
+    assert not structure["passed"] and "[2]" in structure["reason"] and "[3, 4]" in structure["reason"]
+    assert not size["passed"] and "[5]" in size["reason"]
+    assert all(c["passed"] for c in lesson_frame.script_checks([ok]))

@@ -1,0 +1,1589 @@
+{
+  "schemaVersion": 1,
+  "ok": true,
+  "command": "finalize",
+  "status": "pass",
+  "type": "workflow",
+  "quality": "showcase",
+  "startedAt": "2026-10-21T08:41:36.659Z",
+  "specification": {
+    "path": "/Users/somi/workspace/ai-service-test/docs/diagrams/lesson-prep.workflow.json",
+    "sha256": "4f419e6ed8ca99c482cf25ec109e4414f332949db5305a9d2953829a9644d947",
+    "bytes": 5051
+  },
+  "artifact": {
+    "path": "/Users/somi/workspace/ai-service-test/docs/diagrams/lesson-prep-workflow.html",
+    "sha256": "821556d551d22b6ebf2b46ad1b73482bf9175ab7dd9b766acfb4763d5136126a",
+    "bytes": 827817
+  },
+  "stages": {
+    "validate": {
+      "status": "pass",
+      "exitCode": 0,
+      "durationMs": null,
+      "execution": "embedded-in-deliver",
+      "command": [
+        "/opt/homebrew/Cellar/node/26.5.0/bin/node",
+        "/private/tmp/claude-501/-Users-somi-workspace-ai-service-test/53d7c053-7676-4657-b9dc-bddcb105fe46/scratchpad/archify/repo/archify/bin/archify.mjs",
+        "deliver",
+        "workflow",
+        "/Users/somi/workspace/ai-service-test/docs/diagrams/lesson-prep.workflow.json",
+        "/Users/somi/workspace/ai-service-test/docs/diagrams/lesson-prep-workflow.html",
+        "--quality",
+        "showcase",
+        "--json"
+      ],
+      "receipt": {
+        "schemaVersion": 1,
+        "ok": true,
+        "command": "validate",
+        "specification": {
+          "sha256": "4f419e6ed8ca99c482cf25ec109e4414f332949db5305a9d2953829a9644d947",
+          "bytes": 5051
+        },
+        "validation": {
+          "checksPassed": 9,
+          "checkCount": 9,
+          "compositionProfile": "showcase",
+          "compositionStatus": "pass",
+          "errors": 0,
+          "warnings": 0
+        }
+      }
+    },
+    "deliver": {
+      "status": "pass",
+      "exitCode": 0,
+      "durationMs": 276,
+      "command": [
+        "/opt/homebrew/Cellar/node/26.5.0/bin/node",
+        "/private/tmp/claude-501/-Users-somi-workspace-ai-service-test/53d7c053-7676-4657-b9dc-bddcb105fe46/scratchpad/archify/repo/archify/bin/archify.mjs",
+        "deliver",
+        "workflow",
+        "/Users/somi/workspace/ai-service-test/docs/diagrams/lesson-prep.workflow.json",
+        "/Users/somi/workspace/ai-service-test/docs/diagrams/lesson-prep-workflow.html",
+        "--quality",
+        "showcase",
+        "--json"
+      ],
+      "receipt": {
+        "schemaVersion": 1,
+        "receiptId": "dd3f01d5-a36e-4540-970e-e85991eff0c7",
+        "ok": true,
+        "command": "deliver",
+        "type": "workflow",
+        "input": "/Users/somi/workspace/ai-service-test/docs/diagrams/lesson-prep.workflow.json",
+        "output": "/Users/somi/workspace/ai-service-test/docs/diagrams/lesson-prep-workflow.html",
+        "specification": {
+          "sha256": "4f419e6ed8ca99c482cf25ec109e4414f332949db5305a9d2953829a9644d947",
+          "bytes": 5051
+        },
+        "artifact": {
+          "sha256": "821556d551d22b6ebf2b46ad1b73482bf9175ab7dd9b766acfb4763d5136126a",
+          "bytes": 827817
+        },
+        "validation": {
+          "checksPassed": 9,
+          "checkCount": 9,
+          "compositionProfile": "showcase",
+          "compositionStatus": "pass",
+          "errors": 0,
+          "warnings": 0
+        },
+        "update": {
+          "status": "unavailable",
+          "installedVersion": null,
+          "availableVersion": null,
+          "releaseNotes": null,
+          "checkedAt": null,
+          "source": null,
+          "noticeRequired": false,
+          "noticeText": null,
+          "reason": "disabled"
+        }
+      }
+    },
+    "check": {
+      "status": "pass",
+      "exitCode": 0,
+      "durationMs": 106,
+      "command": [
+        "/opt/homebrew/Cellar/node/26.5.0/bin/node",
+        "/private/tmp/claude-501/-Users-somi-workspace-ai-service-test/53d7c053-7676-4657-b9dc-bddcb105fe46/scratchpad/archify/repo/archify/bin/archify.mjs",
+        "check",
+        "/Users/somi/workspace/ai-service-test/docs/diagrams/lesson-prep-workflow.html",
+        "--require-provenance"
+      ],
+      "receipt": {
+        "ok": true,
+        "file": "/Users/somi/workspace/ai-service-test/docs/diagrams/lesson-prep-workflow.html",
+        "artifact": {
+          "sha256": "821556d551d22b6ebf2b46ad1b73482bf9175ab7dd9b766acfb4763d5136126a",
+          "bytes": 827817
+        },
+        "checks": [
+          {
+            "name": "single_svg",
+            "ok": true,
+            "details": [
+              "found 1 <svg> block(s)"
+            ]
+          },
+          {
+            "name": "finite_svg",
+            "ok": true,
+            "details": []
+          },
+          {
+            "name": "orthogonal_arrows",
+            "ok": true,
+            "details": []
+          },
+          {
+            "name": "label_route_clearance",
+            "ok": true,
+            "details": []
+          },
+          {
+            "name": "relationship_crossings",
+            "ok": true,
+            "details": []
+          },
+          {
+            "name": "relationship_corridors",
+            "ok": true,
+            "details": []
+          },
+          {
+            "name": "container_border_runs",
+            "ok": true,
+            "details": []
+          },
+          {
+            "name": "route_rhythm",
+            "ok": true,
+            "details": []
+          },
+          {
+            "name": "legend_clearance",
+            "ok": true,
+            "details": []
+          }
+        ],
+        "composition": {
+          "schemaVersion": 1,
+          "profile": "showcase",
+          "status": "pass",
+          "summary": {
+            "errors": 0,
+            "warnings": 0
+          },
+          "metrics": {
+            "properCrossings": 0,
+            "resolvedCrossovers": 0,
+            "ambiguousCorridors": 0,
+            "arrowheadCollisions": 0,
+            "containerBorderRuns": 0,
+            "labelRouteClearanceIssues": 0,
+            "labelCanvasOverflowIssues": 0,
+            "minLabelRouteClearance": 14.1,
+            "desktopReadabilityIssues": 0,
+            "viewportHeightIssues": 0,
+            "minProjectedNodeTextPx": 6.970021413276231,
+            "maxBends": 0,
+            "routesOverSuggestedBends": 0,
+            "maxStretch": 1,
+            "routesOverSuggestedStretch": 0,
+            "minSegmentPx": 8,
+            "minInteriorSegmentPx": null,
+            "shortSegmentCount": 3,
+            "shortEndpointSegmentCount": 3,
+            "shortInteriorSegmentCount": 0,
+            "microSegmentCount": 0
+          },
+          "suggestedLimits": {
+            "bendsPerRelationship": 2,
+            "stretch": 1.35,
+            "segmentPx": 16,
+            "microSegmentPx": 8
+          },
+          "routeReview": {
+            "crossings": [],
+            "detours": []
+          },
+          "leadingSpace": {
+            "measured": false,
+            "reviewSuggested": false
+          },
+          "desktopReadability": {
+            "budgetBasis": "legacy-930",
+            "readerContract": "declared-wide-v1",
+            "availableDiagramWidth": 930,
+            "actualBudgetPx": 930,
+            "limit": "legacy",
+            "requestedTargetPx": null,
+            "requestedTargetMet": null,
+            "hardFloorPx": 6,
+            "hardFloorMet": true,
+            "minimumOwner": {
+              "kind": "node",
+              "id": "auto_review"
+            },
+            "minimumSourceTextPx": 7,
+            "minimumProjectedTextPx": 6.970021413276231,
+            "semanticTextCount": 23
+          },
+          "issues": []
+        },
+        "provenance": "current",
+        "deliveryReceiptId": "dd3f01d5-a36e-4540-970e-e85991eff0c7"
+      }
+    },
+    "browser-check": {
+      "status": "pass",
+      "exitCode": 0,
+      "durationMs": 3465,
+      "command": [
+        "/opt/homebrew/Cellar/node/26.5.0/bin/node",
+        "/private/tmp/claude-501/-Users-somi-workspace-ai-service-test/53d7c053-7676-4657-b9dc-bddcb105fe46/scratchpad/archify/repo/archify/bin/archify.mjs",
+        "browser-check",
+        "/Users/somi/workspace/ai-service-test/docs/diagrams/lesson-prep-workflow.html",
+        "--json",
+        "--require-provenance"
+      ],
+      "execution": "in-process",
+      "receipt": {
+        "schemaVersion": 1,
+        "ok": true,
+        "command": "browser-check",
+        "evidenceKind": "automated-browser",
+        "status": "pass",
+        "visualReview": "not-requested",
+        "provenance": "current",
+        "deliveryReceiptId": "dd3f01d5-a36e-4540-970e-e85991eff0c7",
+        "artifact": {
+          "path": "/Users/somi/workspace/ai-service-test/docs/diagrams/lesson-prep-workflow.html",
+          "sha256": "821556d551d22b6ebf2b46ad1b73482bf9175ab7dd9b766acfb4763d5136126a",
+          "bytes": 827817
+        },
+        "state": {
+          "detail": "read",
+          "motion": "still"
+        },
+        "chrome": {
+          "status": "available",
+          "executable": "/Applications/Google Chrome.app/Contents/MacOS/Google Chrome"
+        },
+        "diagnostics": [],
+        "containment": {
+          "status": "pass",
+          "policy": "fit-or-reader-declared-readable-vertical-scroll",
+          "viewports": [
+            {
+              "width": 1440,
+              "height": 900,
+              "theme": "light",
+              "innerWidth": 1440,
+              "innerHeight": 900,
+              "scrollWidth": 1440,
+              "scrollHeight": 1094,
+              "overflowX": false,
+              "overflowY": true,
+              "verticalScrollAccepted": true,
+              "overflowDisposition": "readable-vertical-scroll",
+              "readerLayout": "adaptive",
+              "readerOverflow": "authored",
+              "readerFit": "width-first",
+              "ok": true,
+              "readerWidth": 1376,
+              "diagramWidth": 1346,
+              "pageComposition": {
+                "bodyPaddingPx": 12,
+                "headerPx": 52,
+                "diagramChromePx": 78,
+                "svgPx": 951,
+                "cardsPx": 0,
+                "viewBoxHeight": 660
+              },
+              "viewBoxWidth": 934,
+              "workflowLanes": [
+                {
+                  "frameId": "lane-0",
+                  "heightPx": 153,
+                  "nodeCount": 3,
+                  "nodeIds": [
+                    "load",
+                    "plan_lesson",
+                    "auto_review"
+                  ],
+                  "nodeSpanPx": 98,
+                  "spaceAboveNodesPx": 49,
+                  "spaceBelowNodesPx": 6
+                },
+                {
+                  "frameId": "lane-1",
+                  "heightPx": 153,
+                  "nodeCount": 2,
+                  "nodeIds": [
+                    "write_explanations",
+                    "write_scripts"
+                  ],
+                  "nodeSpanPx": 75,
+                  "spaceAboveNodesPx": 61,
+                  "spaceBelowNodesPx": 17
+                },
+                {
+                  "frameId": "lane-2",
+                  "heightPx": 153,
+                  "nodeCount": 3,
+                  "nodeIds": [
+                    "briefing",
+                    "write_slides",
+                    "write_slide_scripts"
+                  ],
+                  "nodeSpanPx": 98,
+                  "spaceAboveNodesPx": 49,
+                  "spaceBelowNodesPx": 6
+                },
+                {
+                  "frameId": "lane-3",
+                  "heightPx": 153,
+                  "nodeCount": 1,
+                  "nodeIds": [
+                    "human_review"
+                  ],
+                  "nodeSpanPx": 98,
+                  "spaceAboveNodesPx": 49,
+                  "spaceBelowNodesPx": 6
+                }
+              ],
+              "minimumProjectedNodeTextPx": 7,
+              "minimumProjectedNonEdgeTextPx": 7,
+              "minimumProjectedEdgeTextPx": 8,
+              "minimumProjectedNodeText": "코드 점검 + LLM 의견",
+              "minimumProjectedNodeTextDetail": "context",
+              "minimumProjectedNodeTextOwner": {
+                "kind": "node",
+                "id": "auto_review"
+              },
+              "minimumRequiredNodeTextPx": 6,
+              "readabilityOk": true,
+              "hasLegend": true,
+              "hasNavigationDock": true,
+              "legendDockIntersectionArea": 0,
+              "dockStageIntersectionArea": 0,
+              "dockStageGap": 10,
+              "requiredDockStageGap": 10,
+              "viewerChromeStageOk": true,
+              "viewerChromeReserve": 54,
+              "viewerChromeActive": true,
+              "viewerChromeOk": true,
+              "resolvedTheme": "light"
+            },
+            {
+              "width": 1600,
+              "height": 1000,
+              "theme": "light",
+              "innerWidth": 1600,
+              "innerHeight": 1000,
+              "scrollWidth": 1600,
+              "scrollHeight": 1199,
+              "overflowX": false,
+              "overflowY": true,
+              "verticalScrollAccepted": true,
+              "overflowDisposition": "readable-vertical-scroll",
+              "readerLayout": "adaptive",
+              "readerOverflow": "authored",
+              "readerFit": "width-first",
+              "ok": true,
+              "readerWidth": 1536,
+              "diagramWidth": 1401,
+              "pageComposition": {
+                "bodyPaddingPx": 64,
+                "headerPx": 60,
+                "diagramChromePx": 84,
+                "svgPx": 990,
+                "cardsPx": 0,
+                "viewBoxHeight": 660
+              },
+              "viewBoxWidth": 934,
+              "workflowLanes": [
+                {
+                  "frameId": "lane-0",
+                  "heightPx": 159,
+                  "nodeCount": 3,
+                  "nodeIds": [
+                    "load",
+                    "plan_lesson",
+                    "auto_review"
+                  ],
+                  "nodeSpanPx": 102,
+                  "spaceAboveNodesPx": 51,
+                  "spaceBelowNodesPx": 6
+                },
+                {
+                  "frameId": "lane-1",
+                  "heightPx": 159,
+                  "nodeCount": 2,
+                  "nodeIds": [
+                    "write_explanations",
+                    "write_scripts"
+                  ],
+                  "nodeSpanPx": 78,
+                  "spaceAboveNodesPx": 63,
+                  "spaceBelowNodesPx": 18
+                },
+                {
+                  "frameId": "lane-2",
+                  "heightPx": 159,
+                  "nodeCount": 3,
+                  "nodeIds": [
+                    "briefing",
+                    "write_slides",
+                    "write_slide_scripts"
+                  ],
+                  "nodeSpanPx": 102,
+                  "spaceAboveNodesPx": 51,
+                  "spaceBelowNodesPx": 6
+                },
+                {
+                  "frameId": "lane-3",
+                  "heightPx": 159,
+                  "nodeCount": 1,
+                  "nodeIds": [
+                    "human_review"
+                  ],
+                  "nodeSpanPx": 102,
+                  "spaceAboveNodesPx": 51,
+                  "spaceBelowNodesPx": 6
+                }
+              ],
+              "minimumProjectedNodeTextPx": 7,
+              "minimumProjectedNonEdgeTextPx": 7,
+              "minimumProjectedEdgeTextPx": 8,
+              "minimumProjectedNodeText": "코드 점검 + LLM 의견",
+              "minimumProjectedNodeTextDetail": "context",
+              "minimumProjectedNodeTextOwner": {
+                "kind": "node",
+                "id": "auto_review"
+              },
+              "minimumRequiredNodeTextPx": 6,
+              "readabilityOk": true,
+              "hasLegend": true,
+              "hasNavigationDock": true,
+              "legendDockIntersectionArea": 0,
+              "dockStageIntersectionArea": 0,
+              "dockStageGap": 10,
+              "requiredDockStageGap": 10,
+              "viewerChromeStageOk": true,
+              "viewerChromeReserve": 54,
+              "viewerChromeActive": true,
+              "viewerChromeOk": true,
+              "resolvedTheme": "light"
+            },
+            {
+              "width": 1920,
+              "height": 1080,
+              "theme": "light",
+              "innerWidth": 1920,
+              "innerHeight": 1080,
+              "scrollWidth": 1920,
+              "scrollHeight": 1199,
+              "overflowX": false,
+              "overflowY": true,
+              "verticalScrollAccepted": true,
+              "overflowDisposition": "readable-vertical-scroll",
+              "readerLayout": "adaptive",
+              "readerOverflow": "authored",
+              "readerFit": "width-first",
+              "ok": true,
+              "readerWidth": 1856,
+              "diagramWidth": 1401,
+              "pageComposition": {
+                "bodyPaddingPx": 64,
+                "headerPx": 60,
+                "diagramChromePx": 84,
+                "svgPx": 990,
+                "cardsPx": 0,
+                "viewBoxHeight": 660
+              },
+              "viewBoxWidth": 934,
+              "workflowLanes": [
+                {
+                  "frameId": "lane-0",
+                  "heightPx": 159,
+                  "nodeCount": 3,
+                  "nodeIds": [
+                    "load",
+                    "plan_lesson",
+                    "auto_review"
+                  ],
+                  "nodeSpanPx": 102,
+                  "spaceAboveNodesPx": 51,
+                  "spaceBelowNodesPx": 6
+                },
+                {
+                  "frameId": "lane-1",
+                  "heightPx": 159,
+                  "nodeCount": 2,
+                  "nodeIds": [
+                    "write_explanations",
+                    "write_scripts"
+                  ],
+                  "nodeSpanPx": 78,
+                  "spaceAboveNodesPx": 63,
+                  "spaceBelowNodesPx": 18
+                },
+                {
+                  "frameId": "lane-2",
+                  "heightPx": 159,
+                  "nodeCount": 3,
+                  "nodeIds": [
+                    "briefing",
+                    "write_slides",
+                    "write_slide_scripts"
+                  ],
+                  "nodeSpanPx": 102,
+                  "spaceAboveNodesPx": 51,
+                  "spaceBelowNodesPx": 6
+                },
+                {
+                  "frameId": "lane-3",
+                  "heightPx": 159,
+                  "nodeCount": 1,
+                  "nodeIds": [
+                    "human_review"
+                  ],
+                  "nodeSpanPx": 102,
+                  "spaceAboveNodesPx": 51,
+                  "spaceBelowNodesPx": 6
+                }
+              ],
+              "minimumProjectedNodeTextPx": 7,
+              "minimumProjectedNonEdgeTextPx": 7,
+              "minimumProjectedEdgeTextPx": 8,
+              "minimumProjectedNodeText": "코드 점검 + LLM 의견",
+              "minimumProjectedNodeTextDetail": "context",
+              "minimumProjectedNodeTextOwner": {
+                "kind": "node",
+                "id": "auto_review"
+              },
+              "minimumRequiredNodeTextPx": 6,
+              "readabilityOk": true,
+              "hasLegend": true,
+              "hasNavigationDock": true,
+              "legendDockIntersectionArea": 0,
+              "dockStageIntersectionArea": 0,
+              "dockStageGap": 10,
+              "requiredDockStageGap": 10,
+              "viewerChromeStageOk": true,
+              "viewerChromeReserve": 54,
+              "viewerChromeActive": true,
+              "viewerChromeOk": true,
+              "resolvedTheme": "light"
+            },
+            {
+              "width": 2048,
+              "height": 1320,
+              "theme": "light",
+              "innerWidth": 2048,
+              "innerHeight": 1320,
+              "scrollWidth": 2048,
+              "scrollHeight": 1320,
+              "overflowX": false,
+              "overflowY": false,
+              "verticalScrollAccepted": false,
+              "overflowDisposition": "contained",
+              "readerLayout": "adaptive",
+              "readerOverflow": null,
+              "readerFit": "width-first",
+              "ok": true,
+              "readerWidth": 1920,
+              "diagramWidth": 1401,
+              "pageComposition": {
+                "bodyPaddingPx": 64,
+                "headerPx": 68,
+                "diagramChromePx": 186,
+                "svgPx": 990,
+                "cardsPx": 0,
+                "viewBoxHeight": 660
+              },
+              "viewBoxWidth": 934,
+              "workflowLanes": [
+                {
+                  "frameId": "lane-0",
+                  "heightPx": 159,
+                  "nodeCount": 3,
+                  "nodeIds": [
+                    "load",
+                    "plan_lesson",
+                    "auto_review"
+                  ],
+                  "nodeSpanPx": 102,
+                  "spaceAboveNodesPx": 51,
+                  "spaceBelowNodesPx": 6
+                },
+                {
+                  "frameId": "lane-1",
+                  "heightPx": 159,
+                  "nodeCount": 2,
+                  "nodeIds": [
+                    "write_explanations",
+                    "write_scripts"
+                  ],
+                  "nodeSpanPx": 78,
+                  "spaceAboveNodesPx": 63,
+                  "spaceBelowNodesPx": 18
+                },
+                {
+                  "frameId": "lane-2",
+                  "heightPx": 159,
+                  "nodeCount": 3,
+                  "nodeIds": [
+                    "briefing",
+                    "write_slides",
+                    "write_slide_scripts"
+                  ],
+                  "nodeSpanPx": 102,
+                  "spaceAboveNodesPx": 51,
+                  "spaceBelowNodesPx": 6
+                },
+                {
+                  "frameId": "lane-3",
+                  "heightPx": 159,
+                  "nodeCount": 1,
+                  "nodeIds": [
+                    "human_review"
+                  ],
+                  "nodeSpanPx": 102,
+                  "spaceAboveNodesPx": 51,
+                  "spaceBelowNodesPx": 6
+                }
+              ],
+              "minimumProjectedNodeTextPx": 7,
+              "minimumProjectedNonEdgeTextPx": 7,
+              "minimumProjectedEdgeTextPx": 8,
+              "minimumProjectedNodeText": "코드 점검 + LLM 의견",
+              "minimumProjectedNodeTextDetail": "context",
+              "minimumProjectedNodeTextOwner": {
+                "kind": "node",
+                "id": "auto_review"
+              },
+              "minimumRequiredNodeTextPx": 6,
+              "readabilityOk": true,
+              "hasLegend": true,
+              "hasNavigationDock": true,
+              "legendDockIntersectionArea": 0,
+              "dockStageIntersectionArea": 0,
+              "dockStageGap": 34,
+              "requiredDockStageGap": 10,
+              "viewerChromeStageOk": true,
+              "viewerChromeReserve": 0,
+              "viewerChromeActive": false,
+              "viewerChromeOk": true,
+              "resolvedTheme": "light"
+            }
+          ]
+        },
+        "themeStates": {
+          "status": "pass",
+          "viewports": [
+            {
+              "width": 1440,
+              "height": 900,
+              "requestedTheme": "light",
+              "resolvedTheme": "light",
+              "ok": true
+            },
+            {
+              "width": 1600,
+              "height": 1000,
+              "requestedTheme": "light",
+              "resolvedTheme": "light",
+              "ok": true
+            },
+            {
+              "width": 1920,
+              "height": 1080,
+              "requestedTheme": "light",
+              "resolvedTheme": "light",
+              "ok": true
+            },
+            {
+              "width": 2048,
+              "height": 1320,
+              "requestedTheme": "light",
+              "resolvedTheme": "light",
+              "ok": true
+            },
+            {
+              "width": 1440,
+              "height": 900,
+              "requestedTheme": "dark",
+              "resolvedTheme": "dark",
+              "ok": true
+            },
+            {
+              "width": 2048,
+              "height": 1320,
+              "requestedTheme": "dark",
+              "resolvedTheme": "dark",
+              "ok": true
+            }
+          ]
+        },
+        "readability": {
+          "status": "pass",
+          "minimumProjectedNodeTextPx": 6,
+          "viewports": [
+            {
+              "width": 1440,
+              "height": 900,
+              "theme": "light",
+              "innerWidth": 1440,
+              "innerHeight": 900,
+              "scrollWidth": 1440,
+              "scrollHeight": 1094,
+              "overflowX": false,
+              "overflowY": true,
+              "verticalScrollAccepted": true,
+              "overflowDisposition": "readable-vertical-scroll",
+              "readerLayout": "adaptive",
+              "readerOverflow": "authored",
+              "readerFit": "width-first",
+              "ok": true,
+              "readerWidth": 1376,
+              "diagramWidth": 1346,
+              "pageComposition": {
+                "bodyPaddingPx": 12,
+                "headerPx": 52,
+                "diagramChromePx": 78,
+                "svgPx": 951,
+                "cardsPx": 0,
+                "viewBoxHeight": 660
+              },
+              "viewBoxWidth": 934,
+              "workflowLanes": [
+                {
+                  "frameId": "lane-0",
+                  "heightPx": 153,
+                  "nodeCount": 3,
+                  "nodeIds": [
+                    "load",
+                    "plan_lesson",
+                    "auto_review"
+                  ],
+                  "nodeSpanPx": 98,
+                  "spaceAboveNodesPx": 49,
+                  "spaceBelowNodesPx": 6
+                },
+                {
+                  "frameId": "lane-1",
+                  "heightPx": 153,
+                  "nodeCount": 2,
+                  "nodeIds": [
+                    "write_explanations",
+                    "write_scripts"
+                  ],
+                  "nodeSpanPx": 75,
+                  "spaceAboveNodesPx": 61,
+                  "spaceBelowNodesPx": 17
+                },
+                {
+                  "frameId": "lane-2",
+                  "heightPx": 153,
+                  "nodeCount": 3,
+                  "nodeIds": [
+                    "briefing",
+                    "write_slides",
+                    "write_slide_scripts"
+                  ],
+                  "nodeSpanPx": 98,
+                  "spaceAboveNodesPx": 49,
+                  "spaceBelowNodesPx": 6
+                },
+                {
+                  "frameId": "lane-3",
+                  "heightPx": 153,
+                  "nodeCount": 1,
+                  "nodeIds": [
+                    "human_review"
+                  ],
+                  "nodeSpanPx": 98,
+                  "spaceAboveNodesPx": 49,
+                  "spaceBelowNodesPx": 6
+                }
+              ],
+              "minimumProjectedNodeTextPx": 7,
+              "minimumProjectedNonEdgeTextPx": 7,
+              "minimumProjectedEdgeTextPx": 8,
+              "minimumProjectedNodeText": "코드 점검 + LLM 의견",
+              "minimumProjectedNodeTextDetail": "context",
+              "minimumProjectedNodeTextOwner": {
+                "kind": "node",
+                "id": "auto_review"
+              },
+              "minimumRequiredNodeTextPx": 6,
+              "readabilityOk": true,
+              "hasLegend": true,
+              "hasNavigationDock": true,
+              "legendDockIntersectionArea": 0,
+              "dockStageIntersectionArea": 0,
+              "dockStageGap": 10,
+              "requiredDockStageGap": 10,
+              "viewerChromeStageOk": true,
+              "viewerChromeReserve": 54,
+              "viewerChromeActive": true,
+              "viewerChromeOk": true,
+              "resolvedTheme": "light"
+            },
+            {
+              "width": 1600,
+              "height": 1000,
+              "theme": "light",
+              "innerWidth": 1600,
+              "innerHeight": 1000,
+              "scrollWidth": 1600,
+              "scrollHeight": 1199,
+              "overflowX": false,
+              "overflowY": true,
+              "verticalScrollAccepted": true,
+              "overflowDisposition": "readable-vertical-scroll",
+              "readerLayout": "adaptive",
+              "readerOverflow": "authored",
+              "readerFit": "width-first",
+              "ok": true,
+              "readerWidth": 1536,
+              "diagramWidth": 1401,
+              "pageComposition": {
+                "bodyPaddingPx": 64,
+                "headerPx": 60,
+                "diagramChromePx": 84,
+                "svgPx": 990,
+                "cardsPx": 0,
+                "viewBoxHeight": 660
+              },
+              "viewBoxWidth": 934,
+              "workflowLanes": [
+                {
+                  "frameId": "lane-0",
+                  "heightPx": 159,
+                  "nodeCount": 3,
+                  "nodeIds": [
+                    "load",
+                    "plan_lesson",
+                    "auto_review"
+                  ],
+                  "nodeSpanPx": 102,
+                  "spaceAboveNodesPx": 51,
+                  "spaceBelowNodesPx": 6
+                },
+                {
+                  "frameId": "lane-1",
+                  "heightPx": 159,
+                  "nodeCount": 2,
+                  "nodeIds": [
+                    "write_explanations",
+                    "write_scripts"
+                  ],
+                  "nodeSpanPx": 78,
+                  "spaceAboveNodesPx": 63,
+                  "spaceBelowNodesPx": 18
+                },
+                {
+                  "frameId": "lane-2",
+                  "heightPx": 159,
+                  "nodeCount": 3,
+                  "nodeIds": [
+                    "briefing",
+                    "write_slides",
+                    "write_slide_scripts"
+                  ],
+                  "nodeSpanPx": 102,
+                  "spaceAboveNodesPx": 51,
+                  "spaceBelowNodesPx": 6
+                },
+                {
+                  "frameId": "lane-3",
+                  "heightPx": 159,
+                  "nodeCount": 1,
+                  "nodeIds": [
+                    "human_review"
+                  ],
+                  "nodeSpanPx": 102,
+                  "spaceAboveNodesPx": 51,
+                  "spaceBelowNodesPx": 6
+                }
+              ],
+              "minimumProjectedNodeTextPx": 7,
+              "minimumProjectedNonEdgeTextPx": 7,
+              "minimumProjectedEdgeTextPx": 8,
+              "minimumProjectedNodeText": "코드 점검 + LLM 의견",
+              "minimumProjectedNodeTextDetail": "context",
+              "minimumProjectedNodeTextOwner": {
+                "kind": "node",
+                "id": "auto_review"
+              },
+              "minimumRequiredNodeTextPx": 6,
+              "readabilityOk": true,
+              "hasLegend": true,
+              "hasNavigationDock": true,
+              "legendDockIntersectionArea": 0,
+              "dockStageIntersectionArea": 0,
+              "dockStageGap": 10,
+              "requiredDockStageGap": 10,
+              "viewerChromeStageOk": true,
+              "viewerChromeReserve": 54,
+              "viewerChromeActive": true,
+              "viewerChromeOk": true,
+              "resolvedTheme": "light"
+            },
+            {
+              "width": 1920,
+              "height": 1080,
+              "theme": "light",
+              "innerWidth": 1920,
+              "innerHeight": 1080,
+              "scrollWidth": 1920,
+              "scrollHeight": 1199,
+              "overflowX": false,
+              "overflowY": true,
+              "verticalScrollAccepted": true,
+              "overflowDisposition": "readable-vertical-scroll",
+              "readerLayout": "adaptive",
+              "readerOverflow": "authored",
+              "readerFit": "width-first",
+              "ok": true,
+              "readerWidth": 1856,
+              "diagramWidth": 1401,
+              "pageComposition": {
+                "bodyPaddingPx": 64,
+                "headerPx": 60,
+                "diagramChromePx": 84,
+                "svgPx": 990,
+                "cardsPx": 0,
+                "viewBoxHeight": 660
+              },
+              "viewBoxWidth": 934,
+              "workflowLanes": [
+                {
+                  "frameId": "lane-0",
+                  "heightPx": 159,
+                  "nodeCount": 3,
+                  "nodeIds": [
+                    "load",
+                    "plan_lesson",
+                    "auto_review"
+                  ],
+                  "nodeSpanPx": 102,
+                  "spaceAboveNodesPx": 51,
+                  "spaceBelowNodesPx": 6
+                },
+                {
+                  "frameId": "lane-1",
+                  "heightPx": 159,
+                  "nodeCount": 2,
+                  "nodeIds": [
+                    "write_explanations",
+                    "write_scripts"
+                  ],
+                  "nodeSpanPx": 78,
+                  "spaceAboveNodesPx": 63,
+                  "spaceBelowNodesPx": 18
+                },
+                {
+                  "frameId": "lane-2",
+                  "heightPx": 159,
+                  "nodeCount": 3,
+                  "nodeIds": [
+                    "briefing",
+                    "write_slides",
+                    "write_slide_scripts"
+                  ],
+                  "nodeSpanPx": 102,
+                  "spaceAboveNodesPx": 51,
+                  "spaceBelowNodesPx": 6
+                },
+                {
+                  "frameId": "lane-3",
+                  "heightPx": 159,
+                  "nodeCount": 1,
+                  "nodeIds": [
+                    "human_review"
+                  ],
+                  "nodeSpanPx": 102,
+                  "spaceAboveNodesPx": 51,
+                  "spaceBelowNodesPx": 6
+                }
+              ],
+              "minimumProjectedNodeTextPx": 7,
+              "minimumProjectedNonEdgeTextPx": 7,
+              "minimumProjectedEdgeTextPx": 8,
+              "minimumProjectedNodeText": "코드 점검 + LLM 의견",
+              "minimumProjectedNodeTextDetail": "context",
+              "minimumProjectedNodeTextOwner": {
+                "kind": "node",
+                "id": "auto_review"
+              },
+              "minimumRequiredNodeTextPx": 6,
+              "readabilityOk": true,
+              "hasLegend": true,
+              "hasNavigationDock": true,
+              "legendDockIntersectionArea": 0,
+              "dockStageIntersectionArea": 0,
+              "dockStageGap": 10,
+              "requiredDockStageGap": 10,
+              "viewerChromeStageOk": true,
+              "viewerChromeReserve": 54,
+              "viewerChromeActive": true,
+              "viewerChromeOk": true,
+              "resolvedTheme": "light"
+            },
+            {
+              "width": 2048,
+              "height": 1320,
+              "theme": "light",
+              "innerWidth": 2048,
+              "innerHeight": 1320,
+              "scrollWidth": 2048,
+              "scrollHeight": 1320,
+              "overflowX": false,
+              "overflowY": false,
+              "verticalScrollAccepted": false,
+              "overflowDisposition": "contained",
+              "readerLayout": "adaptive",
+              "readerOverflow": null,
+              "readerFit": "width-first",
+              "ok": true,
+              "readerWidth": 1920,
+              "diagramWidth": 1401,
+              "pageComposition": {
+                "bodyPaddingPx": 64,
+                "headerPx": 68,
+                "diagramChromePx": 186,
+                "svgPx": 990,
+                "cardsPx": 0,
+                "viewBoxHeight": 660
+              },
+              "viewBoxWidth": 934,
+              "workflowLanes": [
+                {
+                  "frameId": "lane-0",
+                  "heightPx": 159,
+                  "nodeCount": 3,
+                  "nodeIds": [
+                    "load",
+                    "plan_lesson",
+                    "auto_review"
+                  ],
+                  "nodeSpanPx": 102,
+                  "spaceAboveNodesPx": 51,
+                  "spaceBelowNodesPx": 6
+                },
+                {
+                  "frameId": "lane-1",
+                  "heightPx": 159,
+                  "nodeCount": 2,
+                  "nodeIds": [
+                    "write_explanations",
+                    "write_scripts"
+                  ],
+                  "nodeSpanPx": 78,
+                  "spaceAboveNodesPx": 63,
+                  "spaceBelowNodesPx": 18
+                },
+                {
+                  "frameId": "lane-2",
+                  "heightPx": 159,
+                  "nodeCount": 3,
+                  "nodeIds": [
+                    "briefing",
+                    "write_slides",
+                    "write_slide_scripts"
+                  ],
+                  "nodeSpanPx": 102,
+                  "spaceAboveNodesPx": 51,
+                  "spaceBelowNodesPx": 6
+                },
+                {
+                  "frameId": "lane-3",
+                  "heightPx": 159,
+                  "nodeCount": 1,
+                  "nodeIds": [
+                    "human_review"
+                  ],
+                  "nodeSpanPx": 102,
+                  "spaceAboveNodesPx": 51,
+                  "spaceBelowNodesPx": 6
+                }
+              ],
+              "minimumProjectedNodeTextPx": 7,
+              "minimumProjectedNonEdgeTextPx": 7,
+              "minimumProjectedEdgeTextPx": 8,
+              "minimumProjectedNodeText": "코드 점검 + LLM 의견",
+              "minimumProjectedNodeTextDetail": "context",
+              "minimumProjectedNodeTextOwner": {
+                "kind": "node",
+                "id": "auto_review"
+              },
+              "minimumRequiredNodeTextPx": 6,
+              "readabilityOk": true,
+              "hasLegend": true,
+              "hasNavigationDock": true,
+              "legendDockIntersectionArea": 0,
+              "dockStageIntersectionArea": 0,
+              "dockStageGap": 34,
+              "requiredDockStageGap": 10,
+              "viewerChromeStageOk": true,
+              "viewerChromeReserve": 0,
+              "viewerChromeActive": false,
+              "viewerChromeOk": true,
+              "resolvedTheme": "light"
+            }
+          ]
+        },
+        "viewerChrome": {
+          "status": "pass",
+          "viewports": [
+            {
+              "width": 1440,
+              "height": 900,
+              "theme": "light",
+              "innerWidth": 1440,
+              "innerHeight": 900,
+              "scrollWidth": 1440,
+              "scrollHeight": 1094,
+              "overflowX": false,
+              "overflowY": true,
+              "verticalScrollAccepted": true,
+              "overflowDisposition": "readable-vertical-scroll",
+              "readerLayout": "adaptive",
+              "readerOverflow": "authored",
+              "readerFit": "width-first",
+              "ok": true,
+              "readerWidth": 1376,
+              "diagramWidth": 1346,
+              "pageComposition": {
+                "bodyPaddingPx": 12,
+                "headerPx": 52,
+                "diagramChromePx": 78,
+                "svgPx": 951,
+                "cardsPx": 0,
+                "viewBoxHeight": 660
+              },
+              "viewBoxWidth": 934,
+              "workflowLanes": [
+                {
+                  "frameId": "lane-0",
+                  "heightPx": 153,
+                  "nodeCount": 3,
+                  "nodeIds": [
+                    "load",
+                    "plan_lesson",
+                    "auto_review"
+                  ],
+                  "nodeSpanPx": 98,
+                  "spaceAboveNodesPx": 49,
+                  "spaceBelowNodesPx": 6
+                },
+                {
+                  "frameId": "lane-1",
+                  "heightPx": 153,
+                  "nodeCount": 2,
+                  "nodeIds": [
+                    "write_explanations",
+                    "write_scripts"
+                  ],
+                  "nodeSpanPx": 75,
+                  "spaceAboveNodesPx": 61,
+                  "spaceBelowNodesPx": 17
+                },
+                {
+                  "frameId": "lane-2",
+                  "heightPx": 153,
+                  "nodeCount": 3,
+                  "nodeIds": [
+                    "briefing",
+                    "write_slides",
+                    "write_slide_scripts"
+                  ],
+                  "nodeSpanPx": 98,
+                  "spaceAboveNodesPx": 49,
+                  "spaceBelowNodesPx": 6
+                },
+                {
+                  "frameId": "lane-3",
+                  "heightPx": 153,
+                  "nodeCount": 1,
+                  "nodeIds": [
+                    "human_review"
+                  ],
+                  "nodeSpanPx": 98,
+                  "spaceAboveNodesPx": 49,
+                  "spaceBelowNodesPx": 6
+                }
+              ],
+              "minimumProjectedNodeTextPx": 7,
+              "minimumProjectedNonEdgeTextPx": 7,
+              "minimumProjectedEdgeTextPx": 8,
+              "minimumProjectedNodeText": "코드 점검 + LLM 의견",
+              "minimumProjectedNodeTextDetail": "context",
+              "minimumProjectedNodeTextOwner": {
+                "kind": "node",
+                "id": "auto_review"
+              },
+              "minimumRequiredNodeTextPx": 6,
+              "readabilityOk": true,
+              "hasLegend": true,
+              "hasNavigationDock": true,
+              "legendDockIntersectionArea": 0,
+              "dockStageIntersectionArea": 0,
+              "dockStageGap": 10,
+              "requiredDockStageGap": 10,
+              "viewerChromeStageOk": true,
+              "viewerChromeReserve": 54,
+              "viewerChromeActive": true,
+              "viewerChromeOk": true,
+              "resolvedTheme": "light"
+            },
+            {
+              "width": 1600,
+              "height": 1000,
+              "theme": "light",
+              "innerWidth": 1600,
+              "innerHeight": 1000,
+              "scrollWidth": 1600,
+              "scrollHeight": 1199,
+              "overflowX": false,
+              "overflowY": true,
+              "verticalScrollAccepted": true,
+              "overflowDisposition": "readable-vertical-scroll",
+              "readerLayout": "adaptive",
+              "readerOverflow": "authored",
+              "readerFit": "width-first",
+              "ok": true,
+              "readerWidth": 1536,
+              "diagramWidth": 1401,
+              "pageComposition": {
+                "bodyPaddingPx": 64,
+                "headerPx": 60,
+                "diagramChromePx": 84,
+                "svgPx": 990,
+                "cardsPx": 0,
+                "viewBoxHeight": 660
+              },
+              "viewBoxWidth": 934,
+              "workflowLanes": [
+                {
+                  "frameId": "lane-0",
+                  "heightPx": 159,
+                  "nodeCount": 3,
+                  "nodeIds": [
+                    "load",
+                    "plan_lesson",
+                    "auto_review"
+                  ],
+                  "nodeSpanPx": 102,
+                  "spaceAboveNodesPx": 51,
+                  "spaceBelowNodesPx": 6
+                },
+                {
+                  "frameId": "lane-1",
+                  "heightPx": 159,
+                  "nodeCount": 2,
+                  "nodeIds": [
+                    "write_explanations",
+                    "write_scripts"
+                  ],
+                  "nodeSpanPx": 78,
+                  "spaceAboveNodesPx": 63,
+                  "spaceBelowNodesPx": 18
+                },
+                {
+                  "frameId": "lane-2",
+                  "heightPx": 159,
+                  "nodeCount": 3,
+                  "nodeIds": [
+                    "briefing",
+                    "write_slides",
+                    "write_slide_scripts"
+                  ],
+                  "nodeSpanPx": 102,
+                  "spaceAboveNodesPx": 51,
+                  "spaceBelowNodesPx": 6
+                },
+                {
+                  "frameId": "lane-3",
+                  "heightPx": 159,
+                  "nodeCount": 1,
+                  "nodeIds": [
+                    "human_review"
+                  ],
+                  "nodeSpanPx": 102,
+                  "spaceAboveNodesPx": 51,
+                  "spaceBelowNodesPx": 6
+                }
+              ],
+              "minimumProjectedNodeTextPx": 7,
+              "minimumProjectedNonEdgeTextPx": 7,
+              "minimumProjectedEdgeTextPx": 8,
+              "minimumProjectedNodeText": "코드 점검 + LLM 의견",
+              "minimumProjectedNodeTextDetail": "context",
+              "minimumProjectedNodeTextOwner": {
+                "kind": "node",
+                "id": "auto_review"
+              },
+              "minimumRequiredNodeTextPx": 6,
+              "readabilityOk": true,
+              "hasLegend": true,
+              "hasNavigationDock": true,
+              "legendDockIntersectionArea": 0,
+              "dockStageIntersectionArea": 0,
+              "dockStageGap": 10,
+              "requiredDockStageGap": 10,
+              "viewerChromeStageOk": true,
+              "viewerChromeReserve": 54,
+              "viewerChromeActive": true,
+              "viewerChromeOk": true,
+              "resolvedTheme": "light"
+            },
+            {
+              "width": 1920,
+              "height": 1080,
+              "theme": "light",
+              "innerWidth": 1920,
+              "innerHeight": 1080,
+              "scrollWidth": 1920,
+              "scrollHeight": 1199,
+              "overflowX": false,
+              "overflowY": true,
+              "verticalScrollAccepted": true,
+              "overflowDisposition": "readable-vertical-scroll",
+              "readerLayout": "adaptive",
+              "readerOverflow": "authored",
+              "readerFit": "width-first",
+              "ok": true,
+              "readerWidth": 1856,
+              "diagramWidth": 1401,
+              "pageComposition": {
+                "bodyPaddingPx": 64,
+                "headerPx": 60,
+                "diagramChromePx": 84,
+                "svgPx": 990,
+                "cardsPx": 0,
+                "viewBoxHeight": 660
+              },
+              "viewBoxWidth": 934,
+              "workflowLanes": [
+                {
+                  "frameId": "lane-0",
+                  "heightPx": 159,
+                  "nodeCount": 3,
+                  "nodeIds": [
+                    "load",
+                    "plan_lesson",
+                    "auto_review"
+                  ],
+                  "nodeSpanPx": 102,
+                  "spaceAboveNodesPx": 51,
+                  "spaceBelowNodesPx": 6
+                },
+                {
+                  "frameId": "lane-1",
+                  "heightPx": 159,
+                  "nodeCount": 2,
+                  "nodeIds": [
+                    "write_explanations",
+                    "write_scripts"
+                  ],
+                  "nodeSpanPx": 78,
+                  "spaceAboveNodesPx": 63,
+                  "spaceBelowNodesPx": 18
+                },
+                {
+                  "frameId": "lane-2",
+                  "heightPx": 159,
+                  "nodeCount": 3,
+                  "nodeIds": [
+                    "briefing",
+                    "write_slides",
+                    "write_slide_scripts"
+                  ],
+                  "nodeSpanPx": 102,
+                  "spaceAboveNodesPx": 51,
+                  "spaceBelowNodesPx": 6
+                },
+                {
+                  "frameId": "lane-3",
+                  "heightPx": 159,
+                  "nodeCount": 1,
+                  "nodeIds": [
+                    "human_review"
+                  ],
+                  "nodeSpanPx": 102,
+                  "spaceAboveNodesPx": 51,
+                  "spaceBelowNodesPx": 6
+                }
+              ],
+              "minimumProjectedNodeTextPx": 7,
+              "minimumProjectedNonEdgeTextPx": 7,
+              "minimumProjectedEdgeTextPx": 8,
+              "minimumProjectedNodeText": "코드 점검 + LLM 의견",
+              "minimumProjectedNodeTextDetail": "context",
+              "minimumProjectedNodeTextOwner": {
+                "kind": "node",
+                "id": "auto_review"
+              },
+              "minimumRequiredNodeTextPx": 6,
+              "readabilityOk": true,
+              "hasLegend": true,
+              "hasNavigationDock": true,
+              "legendDockIntersectionArea": 0,
+              "dockStageIntersectionArea": 0,
+              "dockStageGap": 10,
+              "requiredDockStageGap": 10,
+              "viewerChromeStageOk": true,
+              "viewerChromeReserve": 54,
+              "viewerChromeActive": true,
+              "viewerChromeOk": true,
+              "resolvedTheme": "light"
+            },
+            {
+              "width": 2048,
+              "height": 1320,
+              "theme": "light",
+              "innerWidth": 2048,
+              "innerHeight": 1320,
+              "scrollWidth": 2048,
+              "scrollHeight": 1320,
+              "overflowX": false,
+              "overflowY": false,
+              "verticalScrollAccepted": false,
+              "overflowDisposition": "contained",
+              "readerLayout": "adaptive",
+              "readerOverflow": null,
+              "readerFit": "width-first",
+              "ok": true,
+              "readerWidth": 1920,
+              "diagramWidth": 1401,
+              "pageComposition": {
+                "bodyPaddingPx": 64,
+                "headerPx": 68,
+                "diagramChromePx": 186,
+                "svgPx": 990,
+                "cardsPx": 0,
+                "viewBoxHeight": 660
+              },
+              "viewBoxWidth": 934,
+              "workflowLanes": [
+                {
+                  "frameId": "lane-0",
+                  "heightPx": 159,
+                  "nodeCount": 3,
+                  "nodeIds": [
+                    "load",
+                    "plan_lesson",
+                    "auto_review"
+                  ],
+                  "nodeSpanPx": 102,
+                  "spaceAboveNodesPx": 51,
+                  "spaceBelowNodesPx": 6
+                },
+                {
+                  "frameId": "lane-1",
+                  "heightPx": 159,
+                  "nodeCount": 2,
+                  "nodeIds": [
+                    "write_explanations",
+                    "write_scripts"
+                  ],
+                  "nodeSpanPx": 78,
+                  "spaceAboveNodesPx": 63,
+                  "spaceBelowNodesPx": 18
+                },
+                {
+                  "frameId": "lane-2",
+                  "heightPx": 159,
+                  "nodeCount": 3,
+                  "nodeIds": [
+                    "briefing",
+                    "write_slides",
+                    "write_slide_scripts"
+                  ],
+                  "nodeSpanPx": 102,
+                  "spaceAboveNodesPx": 51,
+                  "spaceBelowNodesPx": 6
+                },
+                {
+                  "frameId": "lane-3",
+                  "heightPx": 159,
+                  "nodeCount": 1,
+                  "nodeIds": [
+                    "human_review"
+                  ],
+                  "nodeSpanPx": 102,
+                  "spaceAboveNodesPx": 51,
+                  "spaceBelowNodesPx": 6
+                }
+              ],
+              "minimumProjectedNodeTextPx": 7,
+              "minimumProjectedNonEdgeTextPx": 7,
+              "minimumProjectedEdgeTextPx": 8,
+              "minimumProjectedNodeText": "코드 점검 + LLM 의견",
+              "minimumProjectedNodeTextDetail": "context",
+              "minimumProjectedNodeTextOwner": {
+                "kind": "node",
+                "id": "auto_review"
+              },
+              "minimumRequiredNodeTextPx": 6,
+              "readabilityOk": true,
+              "hasLegend": true,
+              "hasNavigationDock": true,
+              "legendDockIntersectionArea": 0,
+              "dockStageIntersectionArea": 0,
+              "dockStageGap": 34,
+              "requiredDockStageGap": 10,
+              "viewerChromeStageOk": true,
+              "viewerChromeReserve": 0,
+              "viewerChromeActive": false,
+              "viewerChromeOk": true,
+              "resolvedTheme": "light"
+            }
+          ]
+        },
+        "captures": {
+          "status": "not-requested",
+          "screenshots": [],
+          "contactSheet": null
+        },
+        "sidecars": {
+          "receipt": "lesson-prep-workflow.browser-check.json",
+          "files": []
+        }
+      }
+    }
+  },
+  "browserCheck": {
+    "requested": true,
+    "ran": true
+  },
+  "diagnostics": [],
+  "evidence": {
+    "receipt": "/Users/somi/workspace/ai-service-test/docs/diagrams/lesson-prep-workflow.finalize.json",
+    "summaryReceipt": "/Users/somi/workspace/ai-service-test/docs/diagrams/lesson-prep-workflow.finalize-summary.json",
+    "browserCheckReceipt": "/Users/somi/workspace/ai-service-test/docs/diagrams/lesson-prep-workflow.browser-check.json"
+  },
+  "visualReview": "not-requested",
+  "finishedAt": "2026-10-21T08:41:40.672Z",
+  "durationMs": 4014,
+  "update": {
+    "status": "current",
+    "installedVersion": "3.2.0",
+    "availableVersion": "3.2.0",
+    "releaseNotes": null,
+    "checkedAt": "2026-10-21T08:40:35.928Z",
+    "source": "cache",
+    "noticeRequired": false,
+    "noticeText": null
+  }
+}

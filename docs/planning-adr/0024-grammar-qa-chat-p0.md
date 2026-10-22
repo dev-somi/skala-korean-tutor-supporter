@@ -1,5 +1,6 @@
 # ADR-0024: 교재 근거 문법 질문 챗봇을 P0로 — "이거랑 이거 뭐가 달라?"에 교재로 답한다
 - 상태: Accepted (2026-10-21)
+- 일부 구체화: [기획 ADR-0036](0036-ai-explanation-when-no-textbook-evidence.md) (2026-10-22) — 근거 없는 문법의 "AI 보충"을 AI 설명·예문으로
 - 관련 모듈: `ai-server/app/agent/grammar_qa.py`, `backend` (chat), `frontend` (ChatWidget, GrammarSourcesPanel)
 - 기술 설계: [docs/adr/0024](../adr/0024-japanese-handbook-and-grammar-qa.md)
 - 관련 ADR: [ADR-0008](0008-dashboard-plus-chat.md), [ADR-0013](0013-sejong-public-materials.md), [ADR-0017](0017-examples-from-materials-not-generated.md)

@@ -1,0 +1,17 @@
+{
+  "schemaVersion": 1,
+  "receiptId": "4215d6af-31d7-4d32-a6a1-fd728d557142",
+  "status": "current",
+  "command": "deliver",
+  "type": "workflow",
+  "input": "/Users/somi/workspace/ai-service-test/docs/diagrams/lesson-prep.workflow.json",
+  "output": "/Users/somi/workspace/ai-service-test/docs/diagrams/lesson-prep-workflow.html",
+  "specification": {
+    "sha256": "4f419e6ed8ca99c482cf25ec109e4414f332949db5305a9d2953829a9644d947",
+    "bytes": 5051
+  },
+  "artifact": {
+    "sha256": "821556d551d22b6ebf2b46ad1b73482bf9175ab7dd9b766acfb4763d5136126a",
+    "bytes": 827817
+  }
+}

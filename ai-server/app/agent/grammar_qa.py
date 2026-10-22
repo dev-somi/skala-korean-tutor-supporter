@@ -13,6 +13,7 @@
 분기·루프가 없어서 그래프 대신 함수로 둔다 (intake와 같은 방식).
 """
 
+import os
 import re
 from functools import lru_cache
 
@@ -26,7 +27,7 @@ from app.rag.handbook import split_item
 from app.standard import l1_notes
 from app.standard.levels import grammar_items
 
-MAX_FORMS = 3  # 한 질문에서 비교할 문법 수
+MAX_FORMS = 4  # 한 질문에서 비교할 문법 수 ("너라면, 너라서, 너니까, 너거나")
 MAX_HANDBOOK = 2  # 형태 하나에 붙일 핸드북 항목 수 (1권 기본 + 2권 확장·비교)
 MAX_GUIDE = 2  # 형태 하나에 붙일 지침서 구역 수
 QUOTE_CHARS = 700  # 지침서 인용 길이
@@ -34,6 +35,7 @@ QUOTE_CHARS = 700  # 지침서 인용 길이
 HYPHEN_FORM = re.compile(r"-(?:\(으\)|\(이\))?(?:[가-힣]/)*[가-힣ㄴㄹㅂ]+(?:\s[가-힣]+)?-?")  # -아서, -(으)니까, -던-, -기 나름이다, -아/어서
 SLASH_FORM = re.compile(r"(?<![-/가-힣])[가-힣]+(?:/[가-힣]+)+")  # 은/는, 이/가 (-아/어서 의 뒷부분은 빼고)
 QUOTED_FORM = re.compile(r"['‘\"“「]([가-힣]{1,4})['’\"”」]")  # '도'
+LIST_SEP = re.compile(r"[\s,，、/]+")  # 너라면, 너라서 / 너라면 너라서
 
 
 class FormsDraft(BaseModel):
@@ -42,11 +44,35 @@ class FormsDraft(BaseModel):
     )
 
 
-class GrammarAnswer(BaseModel):
-    """학생 모국어 설명은 LLM에게 맡기지 않는다. 핸드북 원문(explain_native)을 코드가 그대로 보여 준다 (작은 모델의 일본어가 틀린다)."""
+class FormUsage(BaseModel):
+    form: str = Field(description='근거 자료 제목(## 뒤)의 문법 표기 그대로. 예: "-라서"')
+    usage: str = Field(description="이 문법이 언제 쓰이는지 한 줄 (25자 안팎, \"뜻 · 쓰임 조건\" 모양). 그 문법의 근거 자료에서만")
 
-    points: list[str] = Field(description="쓰임과 차이를 한국어 요점 2~4개로. 요점 하나는 한 문장. 근거 자료에 있는 내용과 예문만")
+
+class GrammarAnswer(BaseModel):
+    """
+    화면은 비교표(문법·등급·쓰임·교재 예문) → 핵심 차이 → 근거(접힘)다 (기술 ADR-0043).
+    예문은 LLM이 쓰지 않고 코드가 핸드북 예문을 넣는다. 학생 모국어 설명도 핸드북 원문(explain_native)을 그대로 보여 준다.
+    """
+
+    forms: list[FormUsage] = Field(description="근거 자료의 문법마다 하나씩, 쓰임 한 줄")
+    differences: list[str] = Field(description="문법끼리 무엇이 다른지 한 문장씩 1~3개. 문법이 하나면 가르칠 때 주의할 점. 근거 자료에 있는 내용만")
     ai_note: str = Field(default="", description="근거 자료에 없지만 보충한 내용. 없으면 빈 문자열")
+
+
+class AiFormExplanation(BaseModel):
+    form: str = Field(description="질문에 나온 문법 표기 그대로")
+    usage: str = Field(description='언제 쓰는지 한 줄 ("뜻 · 쓰임 조건", 25자 안팎)')
+    explanation: str = Field(description="선생님이 학생에게 설명할 말 2~3문장 (한국어)")
+    examples: list[str] = Field(description="그 문법이 든 짧은 해요체 예문 1~2개")
+    caution: str = Field(default="", description="자주 틀리는 점이나 확인이 필요한 점 한 문장. 없으면 빈 문자열")
+
+
+class AiExplanation(BaseModel):
+    """교재 근거가 없는 문법의 AI 설명 (기획 ADR-0036). 화면에서 "AI 설명 · 검수 필요"로 따로 보인다. 학생 모국어 설명은 쓰지 않는다."""
+
+    forms: list[AiFormExplanation]
+    comparison: str = Field(default="", description="질문이 차이를 물으면 이 문법들과 다른 문법의 차이 한두 문장. 아니면 빈 문자열")
 
 
 SENSE_NO = re.compile(r"\d+(?:\(\d+\))?$")  # 표준 목록의 뜻 번호: "-다가1(1)", "-다가1(2)"
@@ -105,10 +131,15 @@ def match_forms(candidates: list[str]) -> list[dict]:
         seen.add(frozenset(keys))
         items = [item for key in sorted(keys) for item in _standard_by_key().get(key, [])]
         lowest = min(items, key=lambda i: i["level"]) if items else None
+        # 관련형으로 맞았으면 ("-라서" → -어서 항목) 대표형 키로도 교재를 찾는다. 교재는 대표형 제목으로 가르친다
+        head = SENSE_NO.sub("", lowest["form"]) if lowest else None
+        head_keys = {k for f in standard_forms(lowest["form"]) for k in form_keys(f)} if lowest else set()
         found.append(
             {
                 "form": "/".join(matched),
                 "keys": sorted(keys),
+                "search_keys": sorted(keys | head_keys),
+                "standard_form": head if head_keys - keys else None,  # 대표형이 다를 때만 ("-라서"의 "-어서")
                 "level": lowest["level"] if lowest else None,  # 표준 목록에 없으면 등급을 모른다
                 "meaning": lowest.get("meaning") if lowest else None,
             }
@@ -116,9 +147,79 @@ def match_forms(candidates: list[str]) -> list[dict]:
     return found[:MAX_FORMS]
 
 
+def listed_endings(question: str) -> list[str]:
+    """
+    "너라면, 너라서, 너니까"처럼 같은 말에 끝만 바꿔 나열하면, 같은 앞부분을 떼고 남은 끝을 어미로 본다 → -라면, -라서, -니까.
+    명사 뒤의 "이"는 서술격 조사 '이다'라서 뗀다: "학생이라서" → "-라서" (받침 없는 명사 뒤에서는 원래 빠진다: "너라서").
+    쉼표·띄어쓰기 어느 쪽으로 나열해도 된다. 이어진 낱말 중 앞부분이 같은 묶음만 보고, 끝이 2개 이상 맞아야 쓴다.
+    끝을 그대로 키로 맞춰 볼 뿐 자르지 않는다 (아는 형태가 아니면 버린다).
+    """
+    out = []
+    for line in question.splitlines():
+        words = [w for w in LIST_SEP.split(line) if re.fullmatch(r"[가-힣]+", w)]
+        i = 0
+        while i < len(words):
+            j = i + 1  # words[i:j]: 앞부분이 같은 이어진 낱말 묶음
+            while j < len(words) and os.path.commonprefix(words[i : j + 1]):
+                j += 1
+            group, i = words[i:j], max(j, i + 1)
+            stem = os.path.commonprefix(group)
+            if len(group) < 2 or any(len(w) == len(stem) for w in group):
+                continue
+            endings = [_ending(w[len(stem):]) for w in group]
+            if sum(e is not None for e in endings) >= 2:
+                out += [e for e in endings if e]
+    return out
+
+
+def _ending(tail: str) -> str | None:
+    """나열에서 뗀 끝 → 아는 어미. 명사 뒤 "이"(이다)는 떼고, 묻는 말에 붙은 조사("먹어서랑")도 떼어 본다."""
+    for t in [tail, re.sub(r"(이랑|랑|하고|와|과)$", "", tail)]:
+        for cand in [f"-{t}", f"-{t[1:]}" if t.startswith("이") and len(t) > 1 else None]:
+            if cand and len(cand) > 1 and known(form_keys(cand)):
+                return cand
+    return None
+
+
+LINK = re.compile(r"(이랑|랑|하고|와|과)$")  # "라면이랑 니까" 의 이랑
+OBJECT = re.compile(r"(을|를|은|는|이|가|의|이랑|랑|하고|와|과)$")  # "니까를" 의 를
+
+
+def paired_forms(question: str) -> list[str]:
+    """
+    "라면이랑 니까를 어떻게 설명해?"처럼 형태를 맨몸으로 "A랑 B" 비교하면, 붙은 조사를 떼고 두 낱말을 형태로 맞춘다.
+    한 글자 조사("은이랑 는")는 조사로, 나머지는 어미로 먼저 본다 ("라면" → -라면). 둘 다 맞아야 쓴다 ("나랑 너" 같은 말을 거른다).
+    """
+    words = re.findall(r"[가-힣]+", question)
+    out = []
+    for a, b in zip(words, words[1:]):
+        if not LINK.search(a):
+            continue
+        a, b = LINK.sub("", a), b if _bare_form(b) else OBJECT.sub("", b)
+        left, right = _bare_form(a), _bare_form(b)
+        if left and right:
+            if left.startswith("-") != right.startswith("-"):  # 짝이 어미면 한 글자도 어미로 ("다가랑 고" → -고)
+                left, right = _bare_form(a, ending=True) or left, _bare_form(b, ending=True) or right
+            out += [left, right]
+    return out
+
+
+def _bare_form(word: str, ending: bool = False) -> str | None:
+    if not word:
+        return None
+    if len(word) == 1 and not ending and known(form_keys(word)):
+        return word  # 은, 는, 도
+    if known(form_keys(f"-{word}")):
+        return f"-{word}"
+    return word if known(form_keys(word)) else None
+
+
 def forms_in_text(question: str) -> list[str]:
-    """질문에 형태가 적혀 있으면 코드로 뽑는다 (-아서, 은/는, '도')."""
-    return HYPHEN_FORM.findall(question) + SLASH_FORM.findall(question) + QUOTED_FORM.findall(question)
+    """질문에 형태가 적혀 있으면 코드로 뽑는다 (-아서, 은/는, '도', 너라면·너라서, 라면이랑 니까)."""
+    return (
+        HYPHEN_FORM.findall(question) + SLASH_FORM.findall(question) + QUOTED_FORM.findall(question)
+        + listed_endings(question) + paired_forms(question)
+    )
 
 
 @traceable(run_type="tool")
@@ -147,10 +248,40 @@ def excerpt(text: str, keys: set[str]) -> str:
     return text[:QUOTE_CHARS]
 
 
+def text_pattern(form: str) -> re.Pattern | None:
+    """"-을래야" → 본문에서 '-을래야', ‘을래야’처럼 붙임표나 여는 따옴표 바로 뒤에 적힌 꼴. 두 글자 미만(조사 '도')은 너무 흔해서 찾지 않는다.
+    "-(으)니까"는 "으니까", "니까" 둘 다. "-아서/-어서"는 조각마다."""
+    surfaces = set()
+    for part in form.split("/"):
+        part = part.strip().lstrip("-")
+        for v in {OPTIONAL_PART.sub(r"\1", part), OPTIONAL_PART.sub("", part)}:
+            if len(v) >= 2 and re.fullmatch(r"[가-힣 ]+", v):
+                surfaces.add(v)
+    if not surfaces:
+        return None
+    return re.compile(r"[-'‘\"“「]\s*(?:" + "|".join(map(re.escape, sorted(surfaces, key=len, reverse=True))) + r")(?![가-힣])")
+
+
+OPTIONAL_PART = re.compile(r"\(([가-힣]{1,2})\)")
+
+
+TEXT_BEFORE = 450  # 글자로 찾은 자리 앞쪽 인용 길이. "말할 때 -을래야로 발음" 같은 덧붙임 줄 위에 본 설명(-으려야)이 있다
+
+
+def text_excerpt(text: str, pattern: re.Pattern) -> str:
+    """그 형태가 처음 나온 자리 앞뒤를 줄 단위로 잘라 인용한다."""
+    match = pattern.search(text)
+    if not match:
+        return text[:QUOTE_CHARS]
+    start = text.rfind("\n", 0, max(match.start() - TEXT_BEFORE, 0)) + 1
+    return text[start : start + QUOTE_CHARS]
+
+
 @traceable(run_type="tool")
 def collect_evidence(form: dict, others: set[str], lang: str) -> dict:
-    """형태 하나의 근거. others = 같은 질문의 다른 형태 키 (그 형태를 언급한 비교 설명을 앞에 둔다)."""
-    keys = set(form["keys"])
+    """형태 하나의 근거. others = 같은 질문의 다른 형태 키 (그 형태를 언급한 비교 설명을 앞에 둔다).
+    관련형이면 대표형 키로도 찾는다 ("-라서" → -어서 구역)."""
+    keys = set(form.get("search_keys", form["keys"]))
     sources = []
     for h in rag_index.find_by_form(keys, kind="handbook", others=others)[:MAX_HANDBOOK]:
         part = split_item(h["text"], h["section"])
@@ -179,12 +310,18 @@ def collect_evidence(form: dict, others: set[str], lang: str) -> dict:
                 sources.append({"kind": "guide", "source": found["source"], "book": found["book"], "pages": found["pages"], "quote": excerpt(found["text"], keys)})
                 break
 
+    if not sources and (pattern := text_pattern(form["form"])):
+        # 그래도 없으면 본문에 그 형태 글자가 붙임표·따옴표와 함께 적힌 구역 (태그가 빠진 구역, 기술 ADR-0044)
+        for found in rag_index.find_by_text(pattern, f"{form['form']} 문법 설명", k=MAX_GUIDE):
+            sources.append({"kind": "text", "source": found["source"], "book": found["book"], "pages": found["pages"], "quote": text_excerpt(found["text"], pattern)})
+
     notes = l1_notes.notes_for_keys(keys, lang)
     return {
         "form": form["form"],
         "key": "|".join(form["keys"]),
         "level": form["level"],
         "meaning": form["meaning"],
+        "standard_form": form.get("standard_form"),
         "sources": sources,
         "l1_notes": notes,
         "grounded": bool(sources or notes),
@@ -196,16 +333,30 @@ def _evidence_text(evidence: list[dict]) -> str:
     for ev in evidence:
         level = f"표준 {ev['level']}급" if ev["level"] is not None else "등급 모름"
         head = f"## {ev['form']} ({level}{' · ' + ev['meaning'] if ev['meaning'] else ''})"
+        if ev.get("standard_form"):
+            head += f"\n{ev['form']}은 {ev['standard_form']}의 관련형이다. 아래 근거는 {ev['standard_form']}을 설명한다."
         body = []
         for src in ev["sources"]:
             if src["kind"] == "handbook":
                 body.append(f"[{src['source']}]\n예문: {' / '.join(src['examples'])}\n설명: {src['explain_ko']}\n모국어 설명: {src['explain_native']}")
+            elif src["kind"] == "text":
+                body.append(f"[{src['source']} · 본문에 '{ev['form']}'가 나온 곳. 이 문법(또는 같은 뜻의 표준 표기)을 설명한 부분만 쓴다]\n{src['quote']}")
             else:
                 body.append(f"[{src['source']}]\n{src['quote']}")
         for note in ev["l1_notes"]:
             body.append("[검수 데이터] 자주 틀리는 점: " + " / ".join(note.get("common_mistakes", [])) + f"\n설명 팁: {note.get('explain_tip', '')}")
         blocks.append(head + "\n" + ("\n\n".join(body) if body else "(근거 자료 없음)"))
     return "\n\n".join(blocks)
+
+
+EXAMPLE_PREFIX = re.compile(r"^[•·\-\s]*(?:[가-힣]{1,2}\s*:\s*)?")  # "• 가: ", "나: "
+
+
+def first_example(ev: dict) -> str:
+    """비교표의 교재 예문: 핸드북 예문 중 첫 대답 줄 ("가: 왜 배워요?" 같은 질문 줄은 건너뛴다). LLM이 만들지 않는다 (기획 ADR-0017)."""
+    examples = [EXAMPLE_PREFIX.sub("", ex).strip() for src in ev["sources"] if src["kind"] == "handbook" for ex in src["examples"]]
+    examples = [ex for ex in examples if ex]
+    return next((ex for ex in examples if not ex.endswith("?")), examples[0] if examples else "")
 
 
 QUOTE_MARK = re.compile(r"['‘’\"“”]")
@@ -252,13 +403,14 @@ def answer_question(question: str, native_language: str = "ja", student_level: i
             "grounded": False,
         }
 
-    all_keys = {key for form in forms for key in form["keys"]}
-    evidence = [collect_evidence(form, all_keys - set(form["keys"]), native_language) for form in forms]
+    all_keys = {key for form in forms for key in form["search_keys"]}
+    evidence = [collect_evidence(form, all_keys - set(form["search_keys"]), native_language) for form in forms]
     out_of_level = [
         {"form": ev["form"], "level": ev["level"]}
         for ev in evidence
         if student_level is not None and ev["level"] is not None and ev["level"] > student_level
     ]
+    # 근거가 하나도 없으면 근거 정리는 건너뛰고 AI 설명만 만든다
     result = llm.call_llm(
         "grammar_answer",
         GrammarAnswer,
@@ -267,16 +419,56 @@ def answer_question(question: str, native_language: str = "ja", student_level: i
             "lang_name": llm.LANG_NAMES.get(native_language, native_language),
             "evidence": _evidence_text(evidence),
         },
-    )
-    points, removed = check_examples(result["points"], _evidence_text(evidence))
+    ) if any(ev["grounded"] for ev in evidence) else {"forms": [], "differences": [], "ai_note": ""}
+    evidence_text = _evidence_text(evidence)
+    points, removed = check_examples(result["differences"], evidence_text)
+    usages = {u["form"].strip(): u["usage"].strip() for u in result["forms"]}
+    for ev in evidence:
+        usage = usages.get(ev["form"], "")
+        ev["usage"] = usage if usage and not check_examples([usage], evidence_text)[1] else ""
+        ev["example"] = first_example(ev)
     ungrounded = [ev["form"] for ev in evidence if not ev["grounded"]]
+    ai_comparison = explain_ungrounded(question, evidence, native_language) if ungrounded else ""
     return {
-        "points": points,
-        "ai_note": result.get("ai_note", ""),
+        "points": points,  # 핵심 차이 (Spring이 글로 보낸다)
+        "ai_note": "\n".join(note for note in [result.get("ai_note", "").strip(), ai_comparison] if note and "근거 자료 없음" not in note),
         "removed_points": removed,  # 근거에 없는 예문이 들어 있어 뺀 요점 (화면에 "검수 필요"로)
         "forms": evidence,
         "out_of_level": out_of_level,
         "ungrounded_forms": ungrounded,  # 교재 근거가 없는 형태: 이 형태에 대한 요점은 AI 설명이다
         "grounded": not ungrounded,
     }
+
+
+@traceable(run_type="tool")
+def explain_ungrounded(question: str, evidence: list[dict], lang: str) -> str:
+    """
+    교재 근거가 없는 문법은 AI가 설명을 만든다 (기획 ADR-0036). 시스템 프롬프트에 역할·규칙을 두고 한 번 부른다.
+    결과는 그 형태의 ev["ai"]에 붙는다 (화면은 "AI 설명 · 검수 필요", 예문은 "AI 예문"). 교재 예문 칸(ev["example"])에는 넣지 않는다.
+    돌려주는 값은 문법끼리 차이(comparison) — ai_note에 붙인다.
+    """
+    targets = [ev for ev in evidence if not ev["grounded"]]
+    result = llm.call_llm(
+        "grammar_ai_explain",
+        AiExplanation,
+        {
+            "question": question,
+            "forms": ", ".join(ev["form"] for ev in targets),
+            "grounded_forms": ", ".join(ev["form"] for ev in evidence if ev["grounded"]) or "없음",
+            "lang_name": llm.LANG_NAMES.get(lang, lang),
+        },
+        system="grammar_ai_system",
+    )
+    by_form = {item["form"].strip(): item for item in result["forms"]}
+    if len(targets) == len(result["forms"]):  # 표기를 바꿔 답해도 ("라면" → "-라면") 순서로 맞춘다
+        by_form = {ev["form"]: by_form.get(ev["form"], item) for ev, item in zip(targets, result["forms"])}
+    for ev in targets:
+        if item := by_form.get(ev["form"]):
+            ev["ai"] = {
+                "usage": item["usage"].strip(),
+                "explanation": item["explanation"].strip(),
+                "examples": [ex.strip() for ex in item["examples"] if ex.strip()][:2],
+                "caution": item["caution"].strip(),
+            }
+    return result.get("comparison", "").strip()
 

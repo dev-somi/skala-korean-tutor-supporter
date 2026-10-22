@@ -2,7 +2,7 @@
 - 상태: Accepted (2026-10-21)
 - 관련 모듈: `ai-server/app/agent/lesson_prep/lesson_frame.py`, `nodes.py` (`write_slides`, `plan_lesson`, `code_checks`), `graph.py`, `schemas.py` (`SlidePlanOutput`), `prompts/write_slides.md`, `frontend/src/components/SlidePlan.vue`
 - 기획: [기획 ADR-0032](../planning-adr/0032-slide-plan-from-reference.md)
-- 관련 ADR: [ADR-0015](0015-lesson-prep-ends-at-approval.md) (7단계 틀 부분을 이 ADR이 대체), [ADR-0013](0013-process-over-model.md), [ADR-0021](0021-auto-review-llm-advisory.md), [ADR-0033](0033-observe-judge-understanding.md)
+- 관련 ADR: [ADR-0015](0015-lesson-prep-ends-at-approval.md) (7단계 틀 부분을 이 ADR이 대체), [ADR-0013](0013-process-over-model.md), [ADR-0021](0021-auto-review-llm-advisory.md), [ADR-0033](0033-observe-judge-understanding.md), [ADR-0035](0035-slide-script-node.md) (`write_slides` 뒤에 장별 대본 노드를 붙임)
 
 ## 배경 (Context)
 - 기획 ADR-0032로 결과가 7단계 진행표에서 15장 슬라이드 구성안(학생 화면 문구 + 교사 노트 7칸)이 됐다.

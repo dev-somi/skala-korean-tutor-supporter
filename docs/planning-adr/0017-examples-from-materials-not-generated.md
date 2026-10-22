@@ -1,5 +1,6 @@
 # ADR-0017: 예문은 AI가 만들지 않고 세종학당 자료에서 찾아오며, 학생 등급을 넘는 예문은 거른다
 - 상태: Accepted (2026-10-20)
+- 예외: [기획 ADR-0036](0036-ai-explanation-when-no-textbook-evidence.md) (2026-10-22) — 문법 질문에서 교재 근거가 없을 때만 "AI 예문"을 자동으로 만든다
 - 관련 모듈: `ai-server/app/standard/levels.py`, `ai-server/app/rag/`, `ai-server/app/agent/lesson_prep/` (explain, briefing)
 - 대체: [ADR-0014](0014-personalization-scope.md) (함께 [ADR-0016](0016-persona-anchor-textbook-standard-levels.md))
 - 기술 설계: [docs/adr/0016](../adr/0016-standard-level-list-and-item-ids.md)

@@ -110,6 +110,28 @@ class StudentAndPrepFlowTest {
     }
 
     @Test
+    void lessonsInRangeForCalendar() throws Exception {
+        long studentId = createStudent();
+        long inRange = createLessonOn(studentId, "\"2031-05-10\"");
+        long outOfRange = createLessonOn(studentId, "\"2031-06-02\"");
+        long undated = createLessonOn(studentId, "null");
+
+        mvc.perform(get("/api/lessons").param("from", "2031-05-01").param("to", "2031-05-31"))
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$[?(@.id == %d)].studentName".formatted(inRange)).value("사토 유이"))
+                .andExpect(jsonPath("$[?(@.id == %d)]".formatted(outOfRange)).doesNotExist())
+                .andExpect(jsonPath("$[?(@.id == %d)]".formatted(undated)).exists());
+    }
+
+    long createLessonOn(long studentId, String lessonDateJson) throws Exception {
+        String res = mvc.perform(post("/api/students/{id}/lessons", studentId).contentType(MediaType.APPLICATION_JSON)
+                        .content("{\"lessonDate\":" + lessonDateJson + "}"))
+                .andExpect(status().isCreated())
+                .andReturn().getResponse().getContentAsString();
+        return json.readTree(res).get("id").asLong();
+    }
+
+    @Test
     @SuppressWarnings("unchecked")
     void prepFlowSavesResultAndTimeLog() throws Exception {
         long studentId = createStudent();

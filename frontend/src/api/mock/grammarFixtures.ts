@@ -1,4 +1,5 @@
 // 채팅 mock 시나리오 (기술 ADR-0027). fixtures/*.json 은 2026-10-21 로컬 ai-server POST /grammar-qa 응답을 그대로 저장한 것이다.
+// 2026-10-21 저장본이라 forms[].usage·example(기술 ADR-0043)이 없다. 화면은 표준 뜻으로 대신 보여 준다.
 // RAG가 응답 모양을 바꾸면 여기와 api/types.ts 의 채팅 SSE 계약을 먼저 고친다.
 import type { ChatRouting, GrammarQaResult } from '../types'
 import compare from './fixtures/compare-aseo-nikka.json'

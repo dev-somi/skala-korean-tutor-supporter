@@ -89,12 +89,27 @@ def test_textbook_examples_are_level_1():
     assert len(over) / len(sentences) < 0.05, over
 
 
-def test_api_grammar_filter_and_textbook_links(client):
+# 단원 시트는 저장소에 넣지 않으므로 (data/curriculum은 .gitignore) 가짜 시트로 교재 과 연결을 본다
+FAKE_SHEETS = [
+    {"book": "ko1", "unit_no": 3, "status": "reviewed", "grammar": [{"id": "std-g-007", "standard_ids": ["std-g-007"]}], "vocabulary": [{"id": "std-v-00001"}]},
+    {"book": "ko2", "unit_no": 20, "status": "draft", "grammar": [{"id": "std-g-007", "standard_ids": ["std-g-007"]}, {"id": "ko2-u20-x01", "standard_ids": []}], "vocabulary": []},
+]
+
+
+def test_api_grammar_filter_and_textbook_links(client, monkeypatch):
+    from app.curriculum import sheets
+
+    monkeypatch.setattr(sheets, "all_sheets", lambda: FAKE_SHEETS)
     body = client.get("/standard/grammar", params={"level": 1}).json()
     assert body["total"] == 45
     assert body["source"]["license"].startswith("공공누리")
     eul = next(g for g in body["items"] if g["id"] == "std-g-007")
-    assert eul["textbook"] == [{"book": "바로 배워 바로 쓰는 세종학당 한국어 1", "item_id": "u03-g02", "unit_no": 3}]
+    assert eul["textbook"] == [
+        {"book": "ko1", "title": "세종학당 한국어 1", "short": "한국어 1", "unit_no": 3, "status": "reviewed"},
+        {"book": "ko2", "title": "세종학당 한국어 2", "short": "한국어 2", "unit_no": 20, "status": "draft"},
+    ]
+    shop = next(v for v in client.get("/standard/vocab", params={"q": "가게"}).json()["items"] if v["id"] == "std-v-00001")
+    assert [(t["book"], t["unit_no"]) for t in shop["textbook"]] == [("ko1", 3)]
     # 관련형으로도 찾는다 ("를" → 을)
     found = client.get("/standard/grammar", params={"q": "를"}).json()["items"]
     assert "std-g-007" in [g["id"] for g in found]

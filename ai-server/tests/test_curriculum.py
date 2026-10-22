@@ -115,3 +115,25 @@ def test_missing_sheet_is_a_clear_error():
 
     with pytest.raises(nodes.MissingUnitSheet, match="99과"):
         nodes.load_textbook({"profile": sheet_profile(), "unit_no": 99, "book": "ko1"})
+
+
+def test_dialogue_lines_need_repeated_speaker_names():
+    """한 번만 줄 맨 앞에 나온 낱말은 이름이 아니다 (줄이 바뀐 문장의 첫 낱말)"""
+    from app.curriculum.materials import dialogue_lines
+
+    lines = ["나타샤 언제부터", "한국 드라마를 봤어요?", "쯔엉 작년부터요.", "나타샤", "재미있어요?", "쯔엉 네."]
+    assert dialogue_lines(lines) == [
+        {"speaker": "나타샤", "text": "언제부터 한국 드라마를 봤어요?"},
+        {"speaker": "쯔엉", "text": "작년부터요."},
+        {"speaker": "나타샤", "text": "재미있어요?"},
+        {"speaker": "쯔엉", "text": "네."},
+    ]
+
+
+@needs_index
+@pytest.mark.parametrize("unit_no", [2, 3, 4])
+def test_script_dialogues_match_hand_made_units(unit_no):
+    from app.agent.lesson_prep.textbook import load_unit
+    from app.curriculum.materials import script_dialogues
+
+    assert [d["lines"] for d in script_dialogues("ko1_textbook", unit_no)] == [d["lines"] for d in load_unit(unit_no)["dialogues"]]

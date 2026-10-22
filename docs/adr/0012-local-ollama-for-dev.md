@@ -12,6 +12,7 @@
   - backend: `spring.ai.model.chat=${LLM_PROVIDER}`로 ChatModel을 고르고, `OllamaChatModel`이면 `OllamaChatOptions`(numCtx, 생각 끄기)를 쓴다.
 - 두 티어 모두 `qwen3:8b` 하나를 쓴다. 16GB에서 모델 두 개를 번갈아 올리면 느려지고, 0.6b 같은 작은 모델은 이 프로젝트의 중첩 JSON 출력을 못 맞춘다.
 - `num_ctx`는 16384로 올린다. Ollama 기본값 4096은 교재 목록이 든 프롬프트를 잘라 버린다.
+- `repeat_penalty`는 1.1로, `num_predict`(출력 상한)는 4096으로 둔다. `temperature=0`에서 qwen3가 같은 문단을 끝없이 되풀이해 수업 준비가 멈췄다 ([TS-0008](../troubleshooting/0008-ollama-runaway-generation.md), 2026-10-22 추가).
 - qwen3의 생각(thinking) 출력은 끈다. 구조화 출력에서 시간만 늘린다.
 - 데모 녹화와 평가 수치(PRD 10장) 보고는 Anthropic으로 한다.
 

@@ -1,6 +1,7 @@
 # ADR-0029: 주 메뉴를 "학생 / 수업 준비"로 나누고, 수업 준비 결과는 브리핑부터 보여 준다
-- 상태: Accepted (2026-10-21)
+- 상태: Accepted (2026-10-21). 결정 1의 주 메뉴 구성은 [ADR-0038](0038-nav-standard-tab.md)로 바뀜 (2026-10-22)
 - 관련 모듈: `ai-server/app/api/textbook.py`, `backend/.../textbook/TextbookController.java`, `frontend/src/stores/itemLabels.ts`, `frontend/src/components/ItemChips.vue`, `frontend/src/App.vue`, `frontend/src/router.ts`, `frontend/src/pages/PrepPage.vue`, `frontend/src/components/PrepDialog.vue`, `frontend/src/pages/LessonReviewPage.vue`, `frontend/src/pages/StudentDetailPage.vue`, `frontend/src/pages/LessonRecordPage.vue`
+- 이후 변경: 주 메뉴에 AI 채팅 추가 → [ADR-0042](0042-nav-chat-tab-shared-conversation.md)
 - 관련 ADR: [기획 ADR-0008](../planning-adr/0008-dashboard-plus-chat.md) (대시보드 + 채팅), [기획 ADR-0026](../planning-adr/0026-transcript-text-upload.md) (녹취록 텍스트 올리기)
 
 ## 배경 (Context)

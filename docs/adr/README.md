@@ -38,3 +38,13 @@
 | [0032](0032-unit-sheets-and-standard-ids.md) | 단원 시트 — 지침서에서 코드 규칙으로 뽑은 과별 데이터(draft/reviewed), 문법·어휘 ID는 표준 ID | Accepted (2026-10-21) |
 | [0033](0033-observe-judge-understanding.md) | 이해도는 LLM이 장면을 인용하고(observe) 코드가 판정한다(judge) — lesson.understanding에 저장해 복습 우선순위에 쓴다 | Accepted (2026-10-21) |
 | [0034](0034-slide-plan-node.md) | write_slides 노드 — 15장 슬라이드 구성안은 틀은 코드, 문구는 LLM 한 번, 승인 때 초안이 달라졌으면 다시 | Accepted (2026-10-21) |
+| [0035](0035-slide-script-node.md) | write_slide_scripts 노드 — 15장 대본은 구성안이 정해진 뒤 장마다 따로 부르고, 한 장이 실패해도 나머지는 남긴다 | Accepted (2026-10-21) |
+| [0036](0036-standard-list-textbook-links-from-sheets.md) | 등급 목록의 "교재" 칸은 단원 시트에서 거꾸로 찾는다 — 문법·어휘 모두, 「한국어 1·2」 전 과 | Accepted (2026-10-22) |
+| [0037](0037-listed-conjugations-and-head-form-evidence.md) | 문법 질문 — 나열한 활용형("너라면, 너라서")은 같은 앞부분을 떼서 어미로 보고, 관련형은 대표형 교재 구역도 근거로 찾는다 | Accepted (2026-10-22) |
+| [0038](0038-nav-standard-tab.md) | 어휘·문법을 더보기에서 꺼내 주 메뉴의 수업 준비 오른쪽에 둔다 | Accepted (2026-10-22) |
+| [0039](0039-lessons-range-endpoint.md) | 대시보드 달력은 `GET /api/lessons?from&to` 하나로 받고, 수업 상태는 프론트가 정한다 | Accepted (2026-10-22) |
+| [0040](0040-unit-sheets-from-textbook-3a-6b.md) | 「세종학당 한국어」 3A~6B 단원 시트는 지침서가 아니라 본책 쪽에서 뽑는다 — 쪽 머리말로 과, 조각 문형은 3급 이상 조각만 | Accepted (2026-10-22) |
+| [0041](0041-chat-history-in-postgres.md) | 채팅 기록을 Postgres에 저장하고, LLM 문맥(ChatMemory)도 같은 표에서 읽는다 | Accepted (2026-10-22) |
+| [0042](0042-nav-chat-tab-shared-conversation.md) | 주 메뉴에 AI 채팅 탭을 두고, 플로팅 위젯과 한 스토어로 같은 대화를 쓴다 | Accepted (2026-10-22) |
+| [0043](0043-grammar-answer-comparison-table.md) | 문법 질문 답은 비교표 → 핵심 차이 → 접힌 근거로 — 쓰임 한 줄은 LLM, 예문은 코드가 핸드북에서 | Accepted (2026-10-22) |
+| [0044](0044-grammar-evidence-text-fallback.md) | 문법 근거를 태그로 못 찾으면 본문 글자로 찾고, 여러 개면 벡터 점수로 고른다 | Accepted (2026-10-22) |

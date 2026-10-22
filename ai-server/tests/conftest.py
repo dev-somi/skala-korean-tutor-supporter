@@ -97,6 +97,19 @@ def fake_slides(homework_pages: str) -> dict:
     }
 
 
+def fake_slide_script(no: int) -> dict:
+    """가짜 write_slide_script 결과: 선생님 발화 + 학생 예상 답."""
+    return {
+        "lines": [
+            {"who": "teacher", "ko": f"{no}번입니다. 무엇을 좋아합니까?", "hint": "", "wait": True},
+            {"who": "student_expected", "ko": "비빔밥을 좋아합니다.", "hint": "", "wait": False},
+        ],
+        "transition": "다음 장으로 갈게요.",
+        "fallback": [{"who": "teacher", "ko": "음식을 골라 보세요.", "hint": "", "wait": False}],
+        "needs_check": [],
+    }
+
+
 class FakeLLM:
     """llm.call_llm 대신 쓰는 가짜. 어떤 프롬프트로 몇 번 불렸는지 기록한다."""
 
@@ -106,6 +119,7 @@ class FakeLLM:
         self.counter = 0  # 생성할 때마다 다른 글이 나오도록 붙이는 번호
         self.tiers = []  # (프롬프트 이름, 모델 티어) 기록
         self.validator_fail_times = 0  # 피드백 Validator를 처음 몇 번 불합격시킬지
+        self.failing_slides = set()  # 대본 생성을 실패시킬 슬라이드 번호
         self.homework_pages = "p.40"  # 가짜 슬라이드 구성안의 숙제 쪽수 ("" 이면 확인 필요로 표시)
 
     def count(self, prompt_name: str) -> int:
@@ -134,6 +148,11 @@ class FakeLLM:
 
         if prompt_name == "write_slides":
             return fake_slides(self.homework_pages)
+
+        if prompt_name == "write_slide_script":
+            if values["slide_no"] in self.failing_slides:
+                raise RuntimeError("가짜 대본 생성 실패")
+            return fake_slide_script(values["slide_no"])
 
         if prompt_name == "student_intake":
             return FAKE_INTAKE

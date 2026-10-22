@@ -79,6 +79,7 @@ def fake_index(monkeypatch, parents):
 
     monkeypatch.setattr(grammar_qa.rag_index, "find_by_form", find_by_form)
     monkeypatch.setattr(grammar_qa.rag_index, "search", lambda *a, **k: [])
+    monkeypatch.setattr(grammar_qa.rag_index, "find_by_text", lambda pattern, query, k=3: [p for p in parents if pattern.search(p["text"])][:k])
     monkeypatch.setattr(grammar_qa.rag_index, "known_keys", lambda: {k for p in parents for k in p["teaches"]})
 
 
@@ -128,9 +129,18 @@ def test_answer_uses_comparison_section_first_and_marks_levels(monkeypatch):
     plain = {"kind": "guide", "book": "ko1_guide", "pages": [40], "teaches": ["-는"], "mentions": [], "source": "지침서 A", "text": "'-는'을 설명한다."}
     compare = {"kind": "guide", "book": "ko2_guide", "pages": [41], "teaches": ["-는"], "mentions": ["-던"], "source": "지침서 B", "text": "'-는'과 '-던'을 비교한다."}
     fake_index(monkeypatch, [handbook, plain, compare])
-    monkeypatch.setattr(grammar_qa.llm, "call_llm", lambda name, schema, values, tier="quality": (
-        {"forms": ["-는", "-던"]} if name == "grammar_forms" else {"points": ["-는은 현재를 나타낸다."], "ai_note": "-던은 과거 회상"}
-    ))
+    calls = []
+
+    def fake_llm(name, schema, values, tier="quality", system=None):
+        calls.append((name, system, values.get("forms")))
+        if name == "grammar_forms":
+            return {"forms": ["-는", "-던"]}
+        if name == "grammar_ai_explain":
+            return {"forms": [{"form": "-던", "usage": "과거 회상", "explanation": "지난 일을 떠올릴 때 써요.", "examples": ["자주 가던 식당이에요.", "", "셋째"], "caution": ""}],
+                    "comparison": "-는은 지금, -던은 지난 일이에요."}
+        return {"forms": [{"form": "-는", "usage": "현재 · 동사 뒤"}, {"form": "-던", "usage": ""}], "differences": ["-는은 현재, -던은 과거 회상이다."], "ai_note": ""}
+
+    monkeypatch.setattr(grammar_qa.llm, "call_llm", fake_llm)
 
     result = grammar_qa.answer_question("사는이랑 살던 차이", "ja", 1)
     neun, deon = result["forms"]
@@ -138,6 +148,19 @@ def test_answer_uses_comparison_section_first_and_marks_levels(monkeypatch):
     assert neun["sources"][0]["explain_native"] == "「-는」は現在を表す。"
     assert result["ungrounded_forms"] == ["-던"] and result["grounded"] is False
     assert result["out_of_level"] == [{"form": "-는", "level": 2}, {"form": "-던", "level": 3}]
+    # 비교표: 쓰임은 LLM 한 줄, 예문은 코드가 핸드북에서 (질문 줄 "가: …?"는 건너뛰지만 그것뿐이면 그것)
+    assert (neun["usage"], neun["example"]) == ("현재 · 동사 뒤", "지금 사는 곳이 어디예요?")
+    assert (deon["usage"], deon["example"]) == ("", "")
+    assert result["points"] == ["-는은 현재, -던은 과거 회상이다."]
+    # 근거 없는 -던만 AI 설명 (시스템 프롬프트로 한 번). AI 예문은 ai에만, 교재 예문 칸에는 넣지 않는다
+    assert calls[-1] == ("grammar_ai_explain", "grammar_ai_system", "-던")
+    assert deon["ai"] == {"usage": "과거 회상", "explanation": "지난 일을 떠올릴 때 써요.", "examples": ["자주 가던 식당이에요.", "셋째"], "caution": ""}
+    assert "ai" not in neun and result["ai_note"] == "-는은 지금, -던은 지난 일이에요."
+
+
+def test_first_example_prefers_answer_line():
+    ev = {"sources": [{"kind": "handbook", "examples": ["• 가: 왜 한국어를 배워요?", "나: 한국 노래를 좋아해서 한국어를 배워요."]}]}
+    assert grammar_qa.first_example(ev) == "한국 노래를 좋아해서 한국어를 배워요."
 
 
 def test_no_forms_returns_guidance_without_answer_llm(monkeypatch):
@@ -147,3 +170,67 @@ def test_no_forms_returns_guidance_without_answer_llm(monkeypatch):
     result = grammar_qa.answer_question("안녕하세요", "ja", None)
     assert result["forms"] == [] and "찾지 못했어요" in result["points"][0]
     assert calls == ["grammar_forms"]
+
+
+def test_listed_conjugations_strip_shared_stem_and_copula(monkeypatch):
+    """'너라면, 너라서, 너니까'는 같은 앞부분을 떼고 남은 끝을 어미로 본다. 명사 뒤 '이'(이다)는 뗀다. LLM은 부르지 않는다."""
+    fake_index(monkeypatch, [])
+    monkeypatch.setattr(grammar_qa.llm, "call_llm", lambda *a, **k: (_ for _ in ()).throw(AssertionError("LLM 불림")))
+    found = grammar_qa.extract_forms("너라면, 너라서, 너니까, 너거나\n차이 설명해줘")
+    assert [(f["form"], f["level"]) for f in found] == [("-라면", 4), ("-라서", 1), ("-니까", 1), ("-거나", 2)]
+    assert grammar_qa.listed_endings("학생이라서, 학생이니까 차이") == ["-라서", "-니까"]
+    assert grammar_qa.listed_endings("사과, 사람 차이") == []
+
+
+def test_related_form_also_searches_head_form_evidence(monkeypatch):
+    """'-라서'는 표준 목록에서 -어서의 관련형이라, 교재의 -어서 구역을 근거로 찾는다."""
+    guide = {"kind": "guide", "book": "ko1_guide", "pages": [40], "teaches": ["-어서"], "mentions": [], "source": "지침서 A", "text": "'-어서'를 설명한다."}
+    fake_index(monkeypatch, [guide])
+    form = grammar_qa.match_forms(["-라서"])[0]
+    assert form["standard_form"] == "-어서" and "-어서" in form["search_keys"]
+    ev = grammar_qa.collect_evidence(form, set(), "ja")
+    assert [s["source"] for s in ev["sources"]] == ["지침서 A"] and ev["grounded"]
+    assert "-어서의 관련형" in grammar_qa._evidence_text([ev])
+
+
+def test_listed_conjugations_work_with_spaces_and_particles(monkeypatch):
+    fake_index(monkeypatch, [])
+    assert grammar_qa.listed_endings("너라면 너라서 너니까 너거나\n차이 설명해줘") == ["-라면", "-라서", "-니까", "-거나"]
+    assert grammar_qa.listed_endings("먹어서랑 먹으니까 차이") == ["-어서", "-으니까"]
+    assert grammar_qa.listed_endings("이거 어떻게 가르쳐?") == []
+
+
+def test_bare_forms_compared_with_rang_are_matched(monkeypatch):
+    """'라면이랑 니까를'처럼 맨몸 형태를 'A랑 B'로 비교하면 붙은 조사를 떼고 맞춘다. 둘 다 맞아야 쓴다."""
+    fake_index(monkeypatch, [])
+    assert grammar_qa.paired_forms("라면이랑 니까를 일본어로 어떻게 설명할까?") == ["-라면", "-니까"]
+    assert grammar_qa.paired_forms("도랑 만 차이") == ["도", "만"]
+    assert grammar_qa.paired_forms("다가랑 고 차이") == ["-다가", "-고"]  # 짝이 어미면 한 글자도 어미
+    assert grammar_qa.paired_forms("나랑 너 차이") == [] and grammar_qa.paired_forms("선생님이랑 학생 차이") == []
+
+
+def test_all_ungrounded_skips_evidence_summary(monkeypatch):
+    """근거가 하나도 없으면 근거 정리 LLM은 부르지 않고 AI 설명만 만든다."""
+    fake_index(monkeypatch, [])
+    calls = []
+
+    def fake_llm(name, schema, values, tier="quality", system=None):
+        calls.append(name)
+        return {"forms": [{"form": "-다시피", "usage": "아는 대로", "explanation": "설명", "examples": ["보시다시피 비가 와요."], "caution": ""}], "comparison": ""}
+
+    monkeypatch.setattr(grammar_qa.llm, "call_llm", fake_llm)
+    result = grammar_qa.answer_question("-다시피 어떻게 설명해?", "ja", None)
+    assert calls == ["grammar_ai_explain"] and result["forms"][0]["ai"]["usage"] == "아는 대로"
+    assert result["points"] == [] and result["ai_note"] == ""
+
+
+def test_untagged_section_is_found_by_text(monkeypatch):
+    """태그가 빠진 구역도 본문에 '-을래야'처럼 적혀 있으면 근거로 쓴다 (OCR이 닫는 따옴표를 놓친 경우)."""
+    manual = {"kind": "guide", "book": "ko4b_manual", "pages": [25], "teaches": ["-려야"], "mentions": [], "source": "4B 매뉴얼 16과 25쪽",
+              "text": "었어요\n'-으려야'가 표준어이지만 구어에서는 주로 '-을래야 로\n쓴다."}
+    other = {"kind": "guide", "book": "ko1_guide", "pages": [1], "teaches": [], "mentions": [], "source": "엉뚱한 곳", "text": "먹을래야지"}
+    fake_index(monkeypatch, [manual, other])
+    ev = grammar_qa.collect_evidence(grammar_qa.match_forms(["-을래야"])[0], set(), "ja")
+    assert [s["source"] for s in ev["sources"]] == ["4B 매뉴얼 16과 25쪽"] and ev["sources"][0]["kind"] == "text" and ev["grounded"]
+    assert ev["sources"][0]["quote"].startswith("었어요")  # 찾은 자리 앞 줄부터 (앞쪽 본 설명을 담는다)
+    assert grammar_qa.text_pattern("도") is None and grammar_qa.text_pattern("-(으)니까").search("'니까'")

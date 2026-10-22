@@ -30,6 +30,7 @@ NODE_LABELS = {
     "auto_review": "자동 검토",
     "briefing": "선생님 브리핑 만들기",
     "write_slides": "15장 슬라이드 구성안 쓰기",
+    "write_slide_scripts": "장별 수업 대본 쓰기",
     "human_review": "선생님 검토 반영",
 }
 

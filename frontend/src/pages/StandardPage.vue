@@ -4,9 +4,9 @@ import InputText from 'primevue/inputtext'
 import SelectButton from 'primevue/selectbutton'
 import DataTable, { type DataTablePageEvent } from 'primevue/datatable'
 import Column from 'primevue/column'
-import Tag from 'primevue/tag'
 import ErrorBox from '../components/ErrorBox.vue'
 import StandardGuide from '../components/StandardGuide.vue'
+import TextbookTags from '../components/TextbookTags.vue'
 import { standardApi } from '../api/endpoints'
 import type { StandardGrammar, StandardSource, StandardVocab } from '../api/types'
 import { toUiError, type UiError } from '../utils'
@@ -146,9 +146,7 @@ function onPage(e: DataTablePageEvent) {
       <Column header="관련형"><template #body="{ data }">{{ data.related.join(', ') }}</template></Column>
       <Column field="meaning" header="의미" />
       <Column header="교재">
-        <template #body="{ data }">
-          <Tag v-for="t in data.textbook" :key="t.item_id" :value="`한국어 1 · ${t.unit_no}과`" severity="info" class="mr-1 !text-xs" v-tooltip.top="`${t.book} ${t.item_id}`" />
-        </template>
+        <template #body="{ data }"><TextbookTags :links="data.textbook" /></template>
       </Column>
     </DataTable>
 
@@ -176,6 +174,9 @@ function onPage(e: DataTablePageEvent) {
       </Column>
       <Column field="pos" header="품사" style="width: 8rem" />
       <Column field="guide" header="길잡이말" />
+      <Column header="교재">
+        <template #body="{ data }"><TextbookTags :links="data.textbook" /></template>
+      </Column>
     </DataTable>
   </section>
 

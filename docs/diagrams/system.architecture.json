@@ -1,0 +1,321 @@
+{
+  "schema_version": 1,
+  "diagram_type": "architecture",
+  "meta": {
+    "title": "수업 노트 AI 시스템 구조",
+    "locale": "ko",
+    "output": "docs/diagrams/system-architecture.html",
+    "quality_profile": "showcase"
+  },
+  "components": [
+    {
+      "id": "pg",
+      "type": "database",
+      "label": "Postgres",
+      "sublabel": "학생·수업·기록·채팅 기록",
+      "pos": [
+        485,
+        40
+      ],
+      "size": [
+        270,
+        100
+      ],
+      "tag": "Flyway V1~V7",
+      "brand": "postgresql"
+    },
+    {
+      "id": "teacher",
+      "type": "external",
+      "label": "선생님",
+      "sublabel": "브라우저",
+      "pos": [
+        40,
+        240
+      ],
+      "size": [
+        120,
+        100
+      ]
+    },
+    {
+      "id": "web",
+      "type": "frontend",
+      "label": "frontend",
+      "sublabel": "Vue 3 · Vite :5173",
+      "pos": [
+        210,
+        240
+      ],
+      "size": [
+        220,
+        100
+      ],
+      "tag": "채팅 탭 · 캘린더",
+      "brand": "vue"
+    },
+    {
+      "id": "api",
+      "type": "backend",
+      "label": "backend",
+      "sublabel": "Spring Boot 4 :8080",
+      "pos": [
+        520,
+        240
+      ],
+      "size": [
+        200,
+        100
+      ],
+      "tag": "Spring AI 채팅",
+      "brand": "spring"
+    },
+    {
+      "id": "ai",
+      "type": "backend",
+      "label": "ai-server",
+      "sublabel": "FastAPI :8000",
+      "pos": [
+        1140,
+        240
+      ],
+      "size": [
+        260,
+        100
+      ],
+      "tag": "AI 작업 전부",
+      "brand": "fastapi"
+    },
+    {
+      "id": "ckpt",
+      "type": "database",
+      "label": "체크포인트",
+      "sublabel": "승인 대기 상태",
+      "pos": [
+        650,
+        450
+      ],
+      "size": [
+        160,
+        100
+      ],
+      "brand": "sqlite"
+    },
+    {
+      "id": "prep",
+      "type": "backend",
+      "label": "lesson_prep",
+      "sublabel": "15장 구성안 + 브리핑",
+      "pos": [
+        840,
+        450
+      ],
+      "size": [
+        200,
+        100
+      ],
+      "tag": "LangGraph · 승인에서 멈춤",
+      "brand": {
+        "url": "https://www.langchain.com/langgraph",
+        "sha256": "0c60295f8003df255890bff79d9b006d5b3459f90e02c31c850e05b4365c9029"
+      }
+    },
+    {
+      "id": "post",
+      "type": "backend",
+      "label": "post_lesson",
+      "sublabel": "메모 → 기록 초안",
+      "pos": [
+        1510,
+        450
+      ],
+      "size": [
+        190,
+        100
+      ],
+      "tag": "LangGraph",
+      "brand": {
+        "url": "https://www.langchain.com/langgraph",
+        "sha256": "0c60295f8003df255890bff79d9b006d5b3459f90e02c31c850e05b4365c9029"
+      }
+    },
+    {
+      "id": "misc",
+      "type": "backend",
+      "label": "grammar_qa",
+      "sublabel": "문법 질문 · 학생 등록",
+      "pos": [
+        1280,
+        450
+      ],
+      "size": [
+        200,
+        100
+      ],
+      "tag": "근거 없으면 AI 설명"
+    },
+    {
+      "id": "llm",
+      "type": "cloud",
+      "label": "LLM",
+      "sublabel": "Ollama qwen3:8b · .env로 Anthropic 전환",
+      "pos": [
+        570,
+        660
+      ],
+      "size": [
+        1130,
+        100
+      ],
+      "brand": "ollama"
+    },
+    {
+      "id": "rag",
+      "type": "database",
+      "label": "교수 자료 색인",
+      "sublabel": "지침서·문화·교재 · bge-m3",
+      "pos": [
+        1070,
+        450
+      ],
+      "size": [
+        180,
+        100
+      ]
+    }
+  ],
+  "boundaries": [
+    {
+      "kind": "region",
+      "label": "ai-server (프로세스 + 색인 파일)",
+      "wraps": [
+        "ai",
+        "prep",
+        "rag",
+        "misc",
+        "post"
+      ]
+    },
+    {
+      "kind": "region",
+      "label": "docker-compose",
+      "wraps": [
+        "pg"
+      ]
+    }
+  ],
+  "connections": [
+    {
+      "id": "teacher-web",
+      "from": "teacher",
+      "to": "web",
+      "label": "화면",
+      "variant": "emphasis"
+    },
+    {
+      "id": "web-api",
+      "from": "web",
+      "to": "api",
+      "label": "REST · SSE",
+      "variant": "emphasis"
+    },
+    {
+      "id": "api-ai",
+      "from": "api",
+      "to": "ai",
+      "label": "HTTP · SSE 중계",
+      "variant": "emphasis"
+    },
+    {
+      "id": "api-pg",
+      "from": "api",
+      "to": "pg",
+      "label": "JPA"
+    },
+    {
+      "id": "api-llm",
+      "from": "api",
+      "to": "llm",
+      "label": "채팅 분류·답변"
+    },
+    {
+      "id": "ai-prep",
+      "from": "ai",
+      "to": "prep"
+    },
+    {
+      "id": "ai-post",
+      "from": "ai",
+      "to": "post"
+    },
+    {
+      "id": "ai-misc",
+      "from": "ai",
+      "to": "misc"
+    },
+    {
+      "id": "prep-ckpt",
+      "from": "prep",
+      "to": "ckpt",
+      "variant": "dashed"
+    },
+    {
+      "id": "prep-llm",
+      "from": "prep",
+      "to": "llm",
+      "label": "생성"
+    },
+    {
+      "id": "post-llm",
+      "from": "post",
+      "to": "llm",
+      "label": "추출"
+    },
+    {
+      "id": "misc-llm",
+      "from": "misc",
+      "to": "llm"
+    },
+    {
+      "id": "prep-rag",
+      "from": "prep",
+      "to": "rag",
+      "variant": "emphasis"
+    },
+    {
+      "id": "misc-rag",
+      "from": "misc",
+      "to": "rag",
+      "variant": "default"
+    }
+  ],
+  "cards": [
+    {
+      "dot": "cyan",
+      "title": "호출 규칙",
+      "items": [
+        "브라우저는 backend만 호출한다 (ADR-0001, 0006)",
+        "AI 스트리밍은 backend가 SSE로 중계한다",
+        "채팅 의도 분류와 조회 답변은 backend의 Spring AI가 직접 LLM을 부른다"
+      ]
+    },
+    {
+      "dot": "emerald",
+      "title": "데이터 소유",
+      "items": [
+        "DB는 backend만 쓴다. AI는 DB에 직접 쓰지 않는다 (ADR-0005)",
+        "채팅 대화와 LLM 문맥(최근 20개)은 Postgres chat_message에 저장한다 (ADR-0041)",
+        "수업 준비 그래프는 승인 대기 상태를 SQLite 체크포인트에 남긴다"
+      ]
+    },
+    {
+      "dot": "amber",
+      "title": "AI 근거",
+      "items": [
+        "수업 준비 브리핑과 문법 질문은 세종학당 교재·지침서 색인을 검색한다",
+        "교재 근거가 없는 문법은 'AI 설명 · 검수 필요'로 따로 만든다 (기획 ADR-0036)",
+        "단원 시트는 1·2권은 지침서, 3A~6B는 본책에서 뽑는다 (ADR-0040)"
+      ]
+    }
+  ]
+}

@@ -2,6 +2,7 @@
 - 상태: Accepted (2026-10-21)
 - 관련 모듈: `ai-server/app/agent/lesson_prep/` (lesson_frame, write_slides), `frontend` (수업안 검토 화면)
 - 기술 설계: [docs/adr/0034](../adr/0034-slide-plan-node.md)
+- 이어진 결정: [ADR-0033](0033-per-slide-teaching-script.md) (장마다 대본 추가)
 - 관련 ADR: [ADR-0015](0015-no-ppt-fixed-lesson-frame.md) (7단계 틀, 이 ADR이 대체), [ADR-0017](0017-examples-from-materials-not-generated.md), [ADR-0023](0023-culture-point-from-sejong-materials.md)
 - 출처: [docs/reference/온라인_한국어_1대1_수업_PPT_제작_기준.md](../reference/온라인_한국어_1대1_수업_PPT_제작_기준.md)
 

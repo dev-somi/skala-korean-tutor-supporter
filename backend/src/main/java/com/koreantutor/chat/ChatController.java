@@ -22,11 +22,12 @@ public class ChatController {
     }
 
     public record ChatRequest(@NotBlank @Size(max = 4000) String message,
-                              @NotBlank @Pattern(regexp = "[A-Za-z0-9_-]{1,64}") String conversationId) {
+                              @NotBlank @Pattern(regexp = "[A-Za-z0-9_-]{1,64}") String conversationId,
+                              @Pattern(regexp = "auto|ja|en") String lang) {
     }
 
     @PostMapping(value = "/stream", produces = MediaType.TEXT_EVENT_STREAM_VALUE)
     public SseEmitter stream(@Valid @RequestBody ChatRequest req) {
-        return service.chat(req.message(), req.conversationId());
+        return service.chat(req.message(), req.conversationId(), req.lang() == null ? ChatService.LANG_AUTO : req.lang());
     }
 }

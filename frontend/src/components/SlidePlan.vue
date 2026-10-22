@@ -3,7 +3,7 @@ import { ref } from 'vue'
 import { useToast } from 'primevue/usetoast'
 import Button from 'primevue/button'
 import Tag from 'primevue/tag'
-import { SLIDE_LAYOUT_NAMES, type CultureNote, type SlidePlan } from '../api/types'
+import { SLIDE_LAYOUT_NAMES, type CultureNote, type ScriptLine, type SlidePlan } from '../api/types'
 import SourceLink from './SourceLink.vue'
 
 // 15장 슬라이드 구성안 (기획 ADR-0032). 학생 화면 문구와 교사 노트를 한 줄씩 펼쳐 본다.
@@ -47,6 +47,36 @@ function asText(): string {
   return lines.join('\n')
 }
 
+/** 대본 한 줄을 글로. 학생 예상 답은 들여쓰고, 모국어 보조는 괄호로 붙인다 */
+function lineText(l: ScriptLine): string {
+  const mark = l.who === 'teacher' ? '교사' : '  학생(예상)'
+  return `${mark}: ${l.ko}${l.hint ? ` (${l.hint})` : ''}${l.wait ? '  ↳ 학생 답 기다리기' : ''}`
+}
+
+/** 수업 중에 그대로 읽을 수 있게 15장 대본만 이어서 글로 만든다 */
+function scriptText(): string {
+  const lines: string[] = []
+  for (const s of props.plan.slides) {
+    lines.push(`── ${s.no}. ${s.name} (${s.minutes}분) ──`)
+    if (s.script) {
+      lines.push(...s.script.lines.map(lineText))
+      if (s.script.fallback.length) lines.push('[어려워하면]', ...s.script.fallback.map(lineText))
+      if (s.script.transition) lines.push(`[넘어가기] ${s.script.transition}`)
+    } else {
+      lines.push('(대본 없음)')
+    }
+    lines.push('')
+  }
+  return lines.join('\n')
+}
+
+const hasScripts = () => props.plan.slides.some(s => s.script)
+
+async function copyScript() {
+  await navigator.clipboard.writeText(scriptText())
+  toast.add({ severity: 'success', summary: '15장 대본을 복사했어요', life: 2000 })
+}
+
 async function copy() {
   await navigator.clipboard.writeText(asText())
   toast.add({ severity: 'success', summary: '구성안을 복사했어요', life: 2000 })
@@ -58,6 +88,7 @@ async function copy() {
     <div class="mb-3 flex items-center gap-2">
       <h3 class="m-0 text-base font-bold"><i class="pi pi-list mr-1 text-primary-600" />수업 구성안 ({{ plan.slides.length }}장 · {{ totalMinutes() }}분)</h3>
       <div class="flex-1" />
+      <Button v-if="hasScripts()" label="대본 복사" icon="pi pi-comment" size="small" severity="secondary" outlined @click="copyScript" />
       <Button label="글로 복사" icon="pi pi-copy" size="small" severity="secondary" outlined @click="copy" />
     </div>
 
@@ -81,6 +112,7 @@ async function copy() {
             <div class="flex flex-wrap items-center gap-2">
               <span class="font-semibold">{{ s.name }}</span>
               <Tag :value="SLIDE_LAYOUT_NAMES[s.layout] ?? s.layout" severity="secondary" />
+              <Tag v-if="s.script" value="대본 있음" severity="info" />
               <Tag v-if="s.needs_check.length" value="확인 필요" severity="warn" />
             </div>
             <p class="m-0 mt-0.5 text-sm text-surface-500">{{ s.activity }}</p>
@@ -91,6 +123,28 @@ async function copy() {
           </div>
           <i :class="open === s.no ? 'pi pi-chevron-up' : 'pi pi-chevron-down'" class="mt-1 text-xs text-surface-400" />
         </button>
+
+        <div v-if="open === s.no && s.script" class="space-y-1 border-t border-surface-100 p-3 text-sm">
+          <div class="font-semibold text-surface-500"><i class="pi pi-comment mr-1" />수업 대본</div>
+          <template v-for="(l, j) in s.script.lines" :key="j">
+            <p v-if="l.who === 'teacher'" class="m-0 text-base">
+              {{ l.ko }}
+              <span v-if="l.hint" class="block text-xs text-surface-500">{{ l.hint }}</span>
+              <span v-if="l.wait" class="block text-xs text-primary-700">↳ 학생 답 기다리기</span>
+            </p>
+            <p v-else class="m-0 ml-6 text-surface-600">
+              학생(예상): {{ l.ko }}
+              <span v-if="l.hint" class="block text-xs text-surface-500">{{ l.hint }}</span>
+            </p>
+          </template>
+          <div v-if="s.script.fallback.length" class="mt-2 rounded bg-amber-50 p-2">
+            <div class="text-xs font-semibold text-amber-800">어려워하면</div>
+            <p v-for="(l, j) in s.script.fallback" :key="j" class="m-0">
+              {{ l.ko }}<span v-if="l.hint" class="block text-xs text-surface-500">{{ l.hint }}</span>
+            </p>
+          </div>
+          <p v-if="s.script.transition" class="m-0 mt-2 text-surface-500">넘어가기: {{ s.script.transition }}</p>
+        </div>
 
         <dl v-if="open === s.no" class="m-0 grid gap-x-3 gap-y-1 border-t border-surface-100 bg-surface-50 p-3 text-sm sm:grid-cols-[7rem_1fr]">
           <dt class="font-semibold text-surface-500">소요 시간</dt><dd class="m-0">{{ s.minutes }}분</dd>

@@ -143,6 +143,20 @@ export interface SlideNote {
   source: string
 }
 
+/** 장별 대본의 한 줄 (기획 ADR-0033). teacher = 선생님이 읽는 말, student_expected = 학생이 할 법한 답 */
+export interface ScriptLine {
+  who: 'teacher' | 'student_expected'
+  ko: string
+  hint: string
+  wait: boolean
+}
+
+export interface SlideScript {
+  lines: ScriptLine[]
+  transition: string
+  fallback: ScriptLine[]
+}
+
 /** 15장 슬라이드 구성안의 한 장 (기획 ADR-0032). 번호·단계·시간은 코드, 문구와 노트는 LLM */
 export interface Slide {
   no: number
@@ -155,6 +169,8 @@ export interface Slide {
   activity: string
   note: SlideNote
   needs_check: string[]
+  /** 수업에서 읽을 대본. 예전 수업이나 생성에 실패한 장은 없다 */
+  script?: SlideScript | null
 }
 
 export interface SlidePlan {
@@ -474,7 +490,7 @@ export interface StandardGrammar {
   has_homonyms: boolean // 같은 글자가 목록에 두 번 이상 있을 때만 true → 이때만 번호를 보여 준다
   related: string[]
   meaning: string | null
-  textbook: { book: string; item_id: string; unit_no: number }[]
+  textbook: StandardTextbookLink[]
 }
 export interface StandardVocab {
   id: string
@@ -484,6 +500,15 @@ export interface StandardVocab {
   has_homonyms: boolean // 같은 글자가 목록에 두 번 이상 있을 때만 true → 이때만 번호를 보여 준다
   pos: string | null
   guide: string | null
+  textbook: StandardTextbookLink[]
+}
+// 이 표준 항목을 다루는 교재 과 (단원 시트에서 거꾸로 찾음, 기술 ADR-0036)
+export interface StandardTextbookLink {
+  book: string // ko1, ko2
+  title: string // 세종학당 한국어 1
+  short: string // 한국어 1
+  unit_no: number
+  status: 'draft' | 'reviewed' // draft = 선생님 검수 전 시트
 }
 export interface StandardList<T> {
   source: StandardSource
@@ -497,7 +522,7 @@ export interface StandardList<T> {
 
 // ── 채팅 SSE 계약 (POST /api/chat/stream, 기술 ADR-0006·0027) ──────────────────────
 // 프론트·Spring·ai-server가 함께 지키는 모양. 바꾸려면 이 타입과 api/mock/fixtures 를 먼저 고친다.
-//   routing_decided  {intent, student_id, student_name, reason}           ChatService.handle
+//   routing_decided  {intent, student_id, student_name, reason, lang}     ChatService.handle
 //   sources          GrammarSources (grammar_qa만)                        ChatService.grammarQa ← ai-server /grammar-qa
 //   token            {text}                                                답 글 (여러 번 올 수 있다)
 //   action           ChatAction                                            작업 의도 → 화면으로 넘김 (ADR-0010)
@@ -511,6 +536,35 @@ export interface ChatRouting {
   student_id: number | null
   student_name: string | null
   reason: string
+  /** 이 답에 쓴 설명 언어 (토글 또는 학생 모국어, 기획 ADR-0035) */
+  lang?: 'ja' | 'en'
+}
+
+/** 채팅 설명 언어 토글. auto = 학생 모국어, 학생이 없으면 일본어 */
+export type ChatLang = 'auto' | 'ja' | 'en'
+
+/** 저장된 대화 (GET /api/chat/conversations, 기술 ADR-0041) */
+export interface ChatConversation {
+  id: string
+  title: string
+  createdAt: string
+  updatedAt: string
+}
+
+/** 저장된 메시지. 답의 meta에는 화면에 보였던 태그·근거·버튼이 들어 있다 */
+export interface StoredChatMessage {
+  id: number
+  role: 'user' | 'assistant'
+  text: string
+  meta: {
+    intent?: ChatIntent
+    studentName?: string | null
+    lang?: 'ja' | 'en'
+    sources?: GrammarSources
+    actions?: ChatAction[]
+    error?: { message: string; retryable: boolean }
+  }
+  createdAt: string
 }
 
 export interface ChatAction {
@@ -524,7 +578,7 @@ export interface ChatAction {
 
 /** 문법 질문(grammar_qa)의 교재 근거. ai-server app/agent/grammar_qa.py 의 응답 모양 (PRD F6-4) */
 export interface GrammarSource {
-  kind: 'handbook' | 'guide'
+  kind: 'handbook' | 'guide' | 'text' // text = 태그 없이 본문 글자로 찾은 구역 (기술 ADR-0044)
   source: string
   /** 원본 PDF를 그 쪽으로 열 때 쓴다 (기술 ADR-0030). 예전에 저장된 응답에는 없다 */
   book?: string
@@ -541,6 +595,13 @@ export interface GrammarForm {
   key: string // 내부 형태 키 (화면에 보이지 않음, 기술 ADR-0025)
   meaning: string | null
   level: number | null // 표준 목록과 맞지 않으면 null
+  /** 비교표 한 줄 (기술 ADR-0043). usage = LLM이 쓴 쓰임 한 줄, example = 코드가 핸드북에서 고른 예문. 예전에 저장된 응답에는 없다 */
+  usage?: string
+  example?: string
+  /** 관련형이면 근거를 찾은 대표형 ("-라서" → "-어서", 기술 ADR-0037) */
+  standard_form?: string | null
+  /** 교재 근거가 없을 때만: AI가 만든 설명 (기획 ADR-0036). 예문은 AI 예문이라 교재 예문 칸에 넣지 않는다 */
+  ai?: { usage: string; explanation: string; examples: string[]; caution: string }
   sources: GrammarSource[]
   l1_notes: { form: string; reviewed: boolean; common_mistakes: string[]; explain_tip: string }[]
   grounded: boolean

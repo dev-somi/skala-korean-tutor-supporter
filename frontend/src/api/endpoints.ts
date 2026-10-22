@@ -1,8 +1,8 @@
-import { del, get, post, put } from './http'
+import { del, get, patch, post, put } from './http'
 import { streamSse, type SseHandler } from './sse'
 import type {
-  ApproveRequest, Category, CurriculumBook, Decision, IntakeResult, LessonView, LevelTest, LevelTestResult, LevelTestScore, MaterialOpenResult, PrepState, ProgressReport, QualityMetrics, RecordView,
-  StandardGrammar, StandardList, StandardVocab, TextbookItem,
+  ApproveRequest, Category, ChatConversation, ChatLang, CurriculumBook, Decision, IntakeResult, LessonView, LevelTest, LevelTestResult, LevelTestScore, MaterialOpenResult, PrepState, ProgressReport, QualityMetrics, RecordView,
+  StandardGrammar, StandardList, StoredChatMessage, StandardVocab, TextbookItem,
   StudentDetail, StudentRequest, StudentSummary, TimeMetrics, Todos, TraceDetail, TraceList,
 } from './types'
 
@@ -63,6 +63,8 @@ export const materialsApi = {
 
 export const lessonsApi = {
   listByStudent: (studentId: number) => get<LessonView[]>(`/students/${studentId}/lessons`),
+  /** 대시보드 달력: from~to(YYYY-MM-DD) 수업 + 날짜 미정 수업 (기술 ADR-0039) */
+  listRange: (from: string, to: string) => get<LessonView[]>(`/lessons${qs({ from, to })}`),
   create: (studentId: number, body: { book?: string; unitNo?: number; minutes?: number; targetLang?: string; lessonDate?: string } = {}) =>
     post<LessonView>(`/students/${studentId}/lessons`, body),
   get: (id: number) => get<LessonView>(`/lessons/${id}`),
@@ -92,13 +94,21 @@ export const dashboardApi = {
 export const CHAT_MOCK = import.meta.env.DEV && new URLSearchParams(location.search).has('mock')
 
 export const chatApi = {
-  stream: async (message: string, conversationId: string, onEvent: SseHandler, signal?: AbortSignal) => {
+  stream: async (message: string, conversationId: string, lang: ChatLang, onEvent: SseHandler, signal?: AbortSignal) => {
     if (import.meta.env.DEV && CHAT_MOCK) {
       const { mockStream } = await import('./mock/chatMock')
       return mockStream(message, onEvent, signal)
     }
-    return streamSse('/chat/stream', { message, conversationId }, onEvent, signal)
+    return streamSse('/chat/stream', { message, conversationId, lang }, onEvent, signal)
   },
+}
+
+/** 채팅 대화 기록 (AI 채팅 탭, 기술 ADR-0041) */
+export const chatHistoryApi = {
+  list: () => get<ChatConversation[]>('/chat/conversations'),
+  messages: (id: string) => get<StoredChatMessage[]>(`/chat/conversations/${id}`),
+  rename: (id: string, title: string) => patch<ChatConversation>(`/chat/conversations/${id}`, { title }),
+  remove: (id: string) => del(`/chat/conversations/${id}`),
 }
 
 /** AI 추적 (LangSmith 실행 기록, 기술 ADR-0028) */

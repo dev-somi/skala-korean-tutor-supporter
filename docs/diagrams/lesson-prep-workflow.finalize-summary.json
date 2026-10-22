@@ -1,0 +1,51 @@
+{
+  "schemaVersion": 1,
+  "ok": true,
+  "command": "finalize",
+  "status": "pass",
+  "type": "workflow",
+  "quality": "showcase",
+  "specification": {
+    "path": "/Users/somi/workspace/ai-service-test/docs/diagrams/lesson-prep.workflow.json",
+    "sha256": "4f419e6ed8ca99c482cf25ec109e4414f332949db5305a9d2953829a9644d947",
+    "bytes": 5051
+  },
+  "artifact": {
+    "path": "/Users/somi/workspace/ai-service-test/docs/diagrams/lesson-prep-workflow.html",
+    "sha256": "821556d551d22b6ebf2b46ad1b73482bf9175ab7dd9b766acfb4763d5136126a",
+    "bytes": 827817
+  },
+  "gates": {
+    "validate": "pass",
+    "deliver": "pass",
+    "check": "pass",
+    "browser-check": "pass"
+  },
+  "diagnostics": [],
+  "diagnosticSummary": {
+    "total": 0,
+    "shown": 0,
+    "truncated": false
+  },
+  "evidence": {
+    "receipt": "/Users/somi/workspace/ai-service-test/docs/diagrams/lesson-prep-workflow.finalize.json",
+    "summaryReceipt": "/Users/somi/workspace/ai-service-test/docs/diagrams/lesson-prep-workflow.finalize-summary.json",
+    "browserCheckReceipt": "/Users/somi/workspace/ai-service-test/docs/diagrams/lesson-prep-workflow.browser-check.json"
+  },
+  "update": {
+    "status": "current",
+    "installedVersion": "3.2.0",
+    "availableVersion": "3.2.0",
+    "releaseNotes": null,
+    "checkedAt": "2026-10-21T08:40:35.928Z",
+    "source": "cache",
+    "noticeRequired": false,
+    "noticeText": null
+  },
+  "visualReview": "not-requested",
+  "durationMs": 4014,
+  "browserCheck": {
+    "requested": true,
+    "ran": true
+  }
+}

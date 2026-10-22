@@ -176,6 +176,40 @@ def slide_checks(plan: dict, lesson_minutes: int) -> list[dict]:
     return checks
 
 
+LINES_PER_MINUTE = 3  # 1:1 수업은 학생이 답하는 시간이 길어서 분당 대본 줄 수를 적게 잡는다
+SCRIPT_CHECK_NAMES = ("대본 구성", "대본 분량")
+
+
+def max_script_lines(minutes: int) -> int:
+    """슬라이드 시간(분)에 맞는 대본 줄 수 상한. 선생님 발화와 예상 학생 답을 합친 수."""
+    return max(4, minutes * LINES_PER_MINUTE)
+
+
+def script_checks(slides: list[dict]) -> list[dict]:
+    """슬라이드마다 붙은 대본을 코드로 점검한다. 실패해도 다시 만들지 않고 경고만 한다 (기술 ADR-0021, 0035)."""
+    missing = [s["no"] for s in slides if not s.get("script")]
+    broken = [
+        s["no"]
+        for s in slides
+        if s.get("script")
+        and (not any(line["who"] == "teacher" for line in s["script"]["lines"]) or any(not line["ko"].strip() for line in s["script"]["lines"]))
+    ]
+    long = [s["no"] for s in slides if s.get("script") and len(s["script"]["lines"]) > max_script_lines(s["minutes"])]
+    problems = []
+    if missing:
+        problems.append(f"대본이 없는 슬라이드: {missing}")
+    if broken:
+        problems.append(f"선생님 발화가 없거나 빈 줄이 있는 슬라이드: {broken}")
+    return [
+        {"name": SCRIPT_CHECK_NAMES[0], "passed": not problems, "reason": " / ".join(problems) or "15장 모두 선생님 발화가 있는 대본이 있습니다."},
+        {
+            "name": SCRIPT_CHECK_NAMES[1],
+            "passed": not long,
+            "reason": f"시간에 비해 대본이 긴 슬라이드: {long}" if long else "대본 분량이 슬라이드 시간 안에 들어갑니다.",
+        },
+    ]
+
+
 def drafts_fingerprint(drafts: dict) -> str:
     """4범주 초안이 바뀌었는지 알아보는 지문. 슬라이드를 만든 뒤 선생님이 고쳤으면 승인 때 슬라이드를 다시 만든다."""
     text = json.dumps(drafts, ensure_ascii=False, sort_keys=True)

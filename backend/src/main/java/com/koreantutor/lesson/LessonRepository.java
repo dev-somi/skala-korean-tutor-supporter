@@ -25,4 +25,12 @@ public interface LessonRepository extends JpaRepository<Lesson, Long> {
 
     @Query("select l from Lesson l join fetch l.student where l.status = 'prepared' and (l.lessonDate is null or l.lessonDate <= :today) order by l.lessonDate")
     List<Lesson> findToRecord(java.time.LocalDate today);
+
+    /** 대시보드 달력: 기간 안의 수업 + 날짜를 안 정한 수업 전 수업. 쉬는 학생은 뺀다 (기술 ADR-0039) */
+    @Query("""
+            select l from Lesson l join fetch l.student s
+            where s.status <> 'paused'
+              and ((l.lessonDate between :from and :to) or (l.lessonDate is null and l.status in ('planned', 'prepared')))
+            order by l.lessonDate, l.id""")
+    List<Lesson> findInRange(java.time.LocalDate from, java.time.LocalDate to);
 }
